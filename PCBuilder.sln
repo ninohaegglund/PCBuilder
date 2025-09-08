@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36414.22
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Gateway", "Gateway", "{616FB049-8A3C-4581-B9AF-EA0875E39A63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration", "{4B6D2E3D-F4D2-4D61-8B9B-97AA45991038}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{49B97C85-B683-4FB5-880C-65FF5158791D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.TestAPI", "PCBuilder.Services.TestAPI\PCBuilder.Services.TestAPI.csproj", "{EB347345-7644-4988-A5DF-D8D789308E53}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB347345-7644-4988-A5DF-D8D789308E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB347345-7644-4988-A5DF-D8D789308E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB347345-7644-4988-A5DF-D8D789308E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB347345-7644-4988-A5DF-D8D789308E53}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EB347345-7644-4988-A5DF-D8D789308E53} = {49B97C85-B683-4FB5-880C-65FF5158791D}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4686CC4A-22DE-4353-BD20-9D7730ED8B2E}
+	EndGlobalSection
+EndGlobal
