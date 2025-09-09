@@ -6,13 +6,14 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Monitors;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 
 public class DataContext : DbContext
 {
@@ -34,7 +35,7 @@ public class DataContext : DbContext
 
     public DbSet<GPU> GPUs { get; set; } = null!;
     public DbSet<RAM> RAMModules { get; set; } = null!;
-    public DbSet<Storage> Storages { get; set; } = null!;
+    public DbSet<StorageDevice> Storages { get; set; } = null!;
     public DbSet<ChassiCooling> CaseFans { get; set; } = null!;
     public DbSet<PCIeCable> PCIeCables { get; set; } = null!;
     public DbSet<PowerCable> PowerCables { get; set; } = null!;
