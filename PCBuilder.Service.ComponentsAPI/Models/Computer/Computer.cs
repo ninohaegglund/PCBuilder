@@ -3,14 +3,14 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Monitors;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Storage;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 
 namespace PCBuilder.Services.ComponentsAPI.Models
 {
@@ -29,7 +29,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models
         // Multi-instance components
         public List<GPU> GPU { get; set; } = null!;
         public List<RAM> RamModules { get; set; } = null!;
-        public List<Storage> Storage { get; set; } = null!;
+        public List<StorageDevice> Storage { get; set; } = null!;
         public List<ChassiCooling> CaseFans { get; set; } = null!;
         public List<PCIeCable> PCIeCables { get; set; } = null!;
         public List<PowerCable> PowerCables { get; set; } = null!;

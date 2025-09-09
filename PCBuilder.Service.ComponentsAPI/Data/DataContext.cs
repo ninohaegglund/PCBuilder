@@ -5,7 +5,6 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;

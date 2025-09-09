@@ -1,12 +1,11 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM
+﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
+
+public class RAM
 {
-    public class RAM
-    {
-        public int Id { get; set; }
-        public string ModelName { get; set; } = null!;
-        public string Manufacturer { get; set; } = null!;
-        public int CapacityGb { get; set; }
-        public int SpeedMHz { get; set; }
-        public string Type { get; set; } = null!; 
-    }
+    public int Id { get; set; }
+    public string ModelName { get; set; } = null!;
+    public string Manufacturer { get; set; } = null!;
+    public int CapacityGb { get; set; }
+    public int SpeedMHz { get; set; }
+    public string Type { get; set; } = null!; 
 }
