@@ -7,6 +7,6 @@
         public string Manufacturer { get; set; } = null!;
         public int CapacityGb { get; set; }
         public int SpeedMHz { get; set; }
-        public string Type { get; set; } = null!; // DDR3, DDR4, DDR5
+        public string Type { get; set; } = null!; 
     }
 }
