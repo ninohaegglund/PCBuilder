@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Integration", "Integration"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{49B97C85-B683-4FB5-880C-65FF5158791D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.TestAPI", "PCBuilder.Services.TestAPI\PCBuilder.Services.TestAPI.csproj", "{EB347345-7644-4988-A5DF-D8D789308E53}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Service.ComponentsAPI", "PCBuilder.Service.ComponentsAPI\PCBuilder.Service.ComponentsAPI.csproj", "{46FA9B65-AA17-454E-9D05-71953E5FA1A3}"
 EndProject
 Global
@@ -21,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EB347345-7644-4988-A5DF-D8D789308E53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EB347345-7644-4988-A5DF-D8D789308E53}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EB347345-7644-4988-A5DF-D8D789308E53}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EB347345-7644-4988-A5DF-D8D789308E53}.Release|Any CPU.Build.0 = Release|Any CPU
 		{46FA9B65-AA17-454E-9D05-71953E5FA1A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{46FA9B65-AA17-454E-9D05-71953E5FA1A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46FA9B65-AA17-454E-9D05-71953E5FA1A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -34,7 +28,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{EB347345-7644-4988-A5DF-D8D789308E53} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 		{46FA9B65-AA17-454E-9D05-71953E5FA1A3} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
