@@ -1,0 +1,23 @@
+﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs
+{
+    public abstract class PSU
+    {
+        public int Id { get; set; }
+        public string ModelName { get; set; } = null!;
+        public string Manufacturer { get; set; } = null!;
+        public int Wattage { get; set; }         
+        public string EfficiencyRating { get; set; } = null!;
+        public int PowerConsumptionW { get; set; } 
+    }
+
+    public class ModularPSU : PSU
+    {
+        public bool FullyModular { get; set; }
+        public int NumberOfCables { get; set; } 
+    }
+
+    public class NonModularPSU : PSU
+    {
+        public int FixedCables { get; set; } 
+    }
+}
