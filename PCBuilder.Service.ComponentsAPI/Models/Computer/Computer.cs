@@ -16,7 +16,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models
 {
     public class Computer
     {
-        // Single-instance components
+        public int Id { get; set; }
         public CPU? Cpu { get; set; }
         public Motherboard? Motherboard { get; set; }
         public PSU? PSU { get; set; }
@@ -26,7 +26,6 @@ namespace PCBuilder.Services.ComponentsAPI.Models
         public Mouse? Mouse { get; set; }
         public Headset? Headset { get; set; }
 
-        // Multi-instance components
         public List<GPU> GPU { get; set; } = null!;
         public List<RAM> RamModules { get; set; } = null!;
         public List<StorageDevice> Storage { get; set; } = null!;
