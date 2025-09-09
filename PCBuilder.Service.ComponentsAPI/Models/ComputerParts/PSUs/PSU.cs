@@ -1,6 +1,6 @@
 ﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 
-public abstract class PSU
+public class PSU
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;

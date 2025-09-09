@@ -1,6 +1,6 @@
 ﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 
-public abstract class GPUCooling
+public  class GPUCooling
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;

@@ -1,6 +1,6 @@
 ﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 
-public abstract class Motherboard
+public class Motherboard
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;

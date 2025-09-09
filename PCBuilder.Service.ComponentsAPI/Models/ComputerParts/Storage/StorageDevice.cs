@@ -1,5 +1,5 @@
 ﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
-public abstract class StorageDevice
+public class StorageDevice
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
