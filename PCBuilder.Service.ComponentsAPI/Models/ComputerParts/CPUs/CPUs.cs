@@ -6,7 +6,7 @@
     public int Threads { get; set; }
     public double BaseClockGhz { get; set; }
     public double BoostClockGhz { get; set; }
-    public int TdpW { get; set; } 
+    public int TDP { get; set; } 
     public int PowerConsumptionW { get; set; }
     public string Socket { get; set; } = null!;
 }

@@ -6,7 +6,7 @@
     public string VramType { get; set; } = null!;
     public int LengthMm { get; set; }
     public int PowerConsumptionW { get; set; }
-    public int TdpW { get; set; } 
+    public int TDP { get; set; } 
     public string Interface { get; set; } = null!;
 }
 

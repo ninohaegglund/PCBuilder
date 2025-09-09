@@ -6,9 +6,9 @@
         {
             public int Id { get; set; }
             public string ModelName { get; set; } = null!;
-            public string CoolerType { get; set; } = null!; // t.ex. Blower, Triple-Fan, Waterblock
-            public int CoolingCapacityW { get; set; } // how much heat the cooler can dissipate
-            public int NoiseLevelDb { get; set; } // sound level max rpm
+            public string CoolerType { get; set; } = null!; 
+            public int CoolingCapacityW { get; set; } 
+            public int NoiseLevelDb { get; set; } 
             public int PowerConsumptionW { get; set; } 
         }
 
@@ -26,5 +26,4 @@
             public int FanCount { get; set; }
         }
     }
-
 }

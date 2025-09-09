@@ -4,7 +4,7 @@
     {
         public int Id { get; set; }
         public string ModelName { get; set; } = null!;
-        public int TdpWatts { get; set; } // how much heat the cooler can dissipate
+        public int CoolingCapacityW { get; set; } // how much heat the cooler can dissipate
     }
 
     public class AirCooler : CPUCooling
