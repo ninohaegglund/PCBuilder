@@ -1,10 +1,12 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 
 public  class GPUCooling
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
-    public string CoolerType { get; set; } = null!;
+    public CoolingType CoolerType { get; set; }
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }
     public int PowerConsumptionW { get; set; }

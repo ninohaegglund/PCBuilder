@@ -11,7 +11,6 @@ public enum CPUSocket
     TRX40
 }
 
-// Typ av CPU-kylare
 public enum CoolingType
 {
     Air,
