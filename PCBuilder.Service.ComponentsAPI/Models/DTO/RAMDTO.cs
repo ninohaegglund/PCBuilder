@@ -1,8 +1,8 @@
 ﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
 
-namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
+namespace PCBuilder.Service.ComponentsAPI.Models.DTO;
 
-public class RAM
+public class RAMDTO
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
