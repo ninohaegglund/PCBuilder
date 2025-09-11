@@ -4,6 +4,7 @@ public class CPUCooling
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
+    public string Manufacturer { get; set; } = null!;
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }
     public CoolingType Type { get; set; }

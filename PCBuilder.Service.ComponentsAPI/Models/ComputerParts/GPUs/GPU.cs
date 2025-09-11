@@ -3,6 +3,7 @@ public class GPU
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
+    public string Manufacturer { get; set; } = null!;
     public int VramGb { get; set; }
     public VRAMType VramType { get; set; }
     public int LengthMm { get; set; }
