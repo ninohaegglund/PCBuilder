@@ -5,7 +5,6 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Monitors;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;

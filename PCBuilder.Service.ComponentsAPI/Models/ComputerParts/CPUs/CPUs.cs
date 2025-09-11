@@ -1,4 +1,6 @@
-﻿public class CPU
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+
+public class CPU
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
@@ -6,10 +8,11 @@
     public int Threads { get; set; }
     public double BaseClockGhz { get; set; }
     public double BoostClockGhz { get; set; }
-    public int TDP { get; set; } 
+    public int TDP { get; set; }
     public int PowerConsumptionW { get; set; }
-    public string Socket { get; set; } = null!;
+    public CPUSocket Socket { get; set; }
 }
+
 
 public class IntelCpu : CPU
 {

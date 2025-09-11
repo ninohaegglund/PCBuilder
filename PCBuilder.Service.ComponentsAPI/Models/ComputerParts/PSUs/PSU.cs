@@ -1,4 +1,6 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 
 public class PSU
 {
@@ -6,7 +8,7 @@ public class PSU
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
     public int Wattage { get; set; }         
-    public string EfficiencyRating { get; set; } = null!;
+    public EfficiencyRating EfficiencyRating { get; set; }
     public int PowerConsumptionW { get; set; } 
 }
 

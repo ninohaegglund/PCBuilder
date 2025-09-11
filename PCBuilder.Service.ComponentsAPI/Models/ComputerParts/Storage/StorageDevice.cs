@@ -1,11 +1,13 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 public class StorageDevice
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
     public int CapacityGb { get; set; }
-    public string Interface { get; set; } = null!;
+    public StorageInterface Interface { get; set; }
     public int PowerConsumptionW { get; set; }
     public int ReadSpeedMb { get; set; }
     public int WriteSpeedMb { get; set; }
@@ -13,7 +15,7 @@ public class StorageDevice
 
 public class SSD : StorageDevice
 {
-    public string FormFactor { get; set; } = null!;
+    public SSDFormFactor FormFactor { get; set; }
     public string NandType { get; set; } = null!;
 }
 

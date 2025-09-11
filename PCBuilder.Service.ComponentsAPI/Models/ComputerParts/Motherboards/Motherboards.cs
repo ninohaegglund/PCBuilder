@@ -1,17 +1,20 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 
 public class Motherboard
 {
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
-    public string Socket { get; set; } = null!;
+    public CPUSocket Socket { get; set; }
     public string Chipset { get; set; } = null!;
     public int RamSlots { get; set; }
-    public string SupportedRamType { get; set; } = null!;
+    public RAMType SupportedRamType { get; set; }
     public int MaxRamCapacityGb { get; set; }
     public int PcieSlots { get; set; }
 }
+
 
 public class AtxMotherboard : Motherboard
 {

@@ -74,3 +74,40 @@ public enum MonitorResolution
     R1440p,
     R2160p 
 }
+
+public enum RefreshRate
+{
+    R60Hz,
+    R120Hz,
+    R144Hz,
+    R180Hz,
+    R240Hz,
+    R360Hz
+}
+
+public enum EfficiencyRating
+{
+    Bronze,
+    Silver,
+    Gold,
+    Platinum,
+    Titanium
+}
+
+public enum ChassiMaterial
+{
+    Steel,
+    Aluminum,
+    Plastic,
+    TemperedGlass
+}
+
+public enum VRAMType
+{
+    GDDR5,
+    GDDR5X,
+    GDDR6,
+    GDDR6X,
+    HBM2,
+    HBM2E
+}
