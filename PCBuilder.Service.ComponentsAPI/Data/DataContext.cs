@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Services.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
@@ -30,7 +31,7 @@ public class DataContext : DbContext
     public DbSet<GPU> GPUs { get; set; } = null!;
     public DbSet<RAM> RAMModules { get; set; } = null!;
     public DbSet<StorageDevice> Storages { get; set; } = null!;
-    public DbSet<ChassiCooling> CaseFans { get; set; } = null!;
+    public DbSet<ChassiCooling> ChassiCooling { get; set; } = null!;
     public DbSet<PCIeCable> PCIeCables { get; set; } = null!;
     public DbSet<PowerCable> PowerCables { get; set; } = null!;
     public DbSet<SataCable> SataCables { get; set; } = null!;
@@ -52,6 +53,6 @@ public class DataContext : DbContext
                     property.SetValueConverter(converter);
                 }
             }
-        }
+        }        
     }
 }

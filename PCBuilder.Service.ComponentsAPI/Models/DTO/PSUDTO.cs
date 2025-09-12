@@ -12,13 +12,13 @@ public class PSUDTO
     public int PowerConsumptionW { get; set; }
 }
 
-public class ModularPSU : PSUDTO
+public class ModularPSUDTO : PSUDTO
 {
     public bool FullyModular { get; set; }
     public int NumberOfCables { get; set; }
 }
 
-public class NonModularPSU : PSUDTO
+public class NonModularPSUDTO : PSUDTO
 {
     public int FixedCables { get; set; }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250911113709_NewMigrationWithEnums")]
+    partial class NewMigrationWithEnums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -368,7 +371,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasIndex("ComputerId");
 
-                    b.ToTable("ChassiCooling");
+                    b.ToTable("CaseFans");
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", b =>

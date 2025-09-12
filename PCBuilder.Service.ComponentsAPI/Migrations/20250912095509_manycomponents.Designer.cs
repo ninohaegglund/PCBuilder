@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -9,9 +10,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20250912095509_manycomponents")]
+    partial class manycomponents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -369,6 +372,17 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.HasIndex("ComputerId");
 
                     b.ToTable("ChassiCooling");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CoolingCapacityW = 40,
+                            FanSizeMm = 120,
+                            Manufacturer = "Noctua",
+                            ModelName = "Noctua NF-A12x25 PWM",
+                            Rpm = 2000
+                        });
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", b =>

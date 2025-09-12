@@ -14,13 +14,13 @@ namespace PCBuilder.Service.ComponentsAPI.Models.DTO
         public int WriteSpeedMb { get; set; }
     }
 
-    public class SSD : StorageDTO
+    public class SSDDTO : StorageDTO
     {
         public SSDFormFactor FormFactor { get; set; }
         public string NandType { get; set; } = null!;
     }
 
-    public class HDD : StorageDTO
+    public class HDDDTO : StorageDTO
     {
         public int Rpm { get; set; }
         public int CacheMb { get; set; }

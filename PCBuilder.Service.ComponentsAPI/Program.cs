@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,3 +23,19 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+void ApplyMigrations()
+{
+    using var scope = app.Services.CreateScope();
+    var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
+    if (dbContext.Database.GetPendingMigrations().Count() > 0)
+    {
+        dbContext.Database.Migrate();
+    }
+}
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<DataContext>();
+    DbSeeder.Seed(db);
+}
