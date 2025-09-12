@@ -15,13 +15,13 @@ namespace PCBuilder.Service.ComponentsAPI.Models.DTO
         public GPUInterface Interface { get; set; }
     }
 
-    public class NvidiaGpu : GPU
+    public class NvidiaGpuDTO : GPUDto
     {
         public int CudaCores { get; set; }
         public int TensorCores { get; set; }
     }
 
-    public class AmdGpu : GPU
+    public class AmdGpuDTO : GPUDto
     {
         public int StreamProcessors { get; set; }
         public bool InfinityCache { get; set; }

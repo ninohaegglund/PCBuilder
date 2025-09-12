@@ -16,19 +16,19 @@ namespace PCBuilder.Service.ComponentsAPI.Models.DTO
     }
 
 
-    public class AtxMotherboard : MotherboardDTO
+    public class AtxMotherboardDTO : MotherboardDTO
     {
         public bool SupportsMultiGpu { get; set; }
         public int MaxPcieLengthMm { get; set; }
     }
 
-    public class MicroAtxMotherboard : MotherboardDTO
+    public class MicroAtxMotherboardDTO : MotherboardDTO
     {
         public bool SupportsMultiGpu { get; set; }
         public int MaxPcieLengthMm { get; set; }
     }
 
-    public class MiniItxMotherboard : MotherboardDTO
+    public class MiniItxMotherboardDTO : MotherboardDTO
     {
         public bool SupportsMultiGpu { get; set; }
         public int MaxPcieLengthMm { get; set; }
