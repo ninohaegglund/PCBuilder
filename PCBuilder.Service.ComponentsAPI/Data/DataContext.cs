@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Services.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
@@ -39,9 +38,11 @@ public class DataContext : DbContext
     public DbSet<Speaker> Speakers { get; set; } = null!;
 
 
-    //saves enum as string in the database instead of int
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+
+        // Exempel: spara enum som string
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entityType.GetProperties())
@@ -53,6 +54,6 @@ public class DataContext : DbContext
                     property.SetValueConverter(converter);
                 }
             }
-        }        
+        }
     }
 }
