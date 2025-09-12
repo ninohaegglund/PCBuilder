@@ -1,4 +1,5 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+﻿using PCBuilder.Services.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.Components;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;

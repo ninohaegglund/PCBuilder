@@ -7,6 +7,10 @@ public class PSU
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+
+    public int? ComputerId { get; set; }
+    public Computer? Computer { get; set; }
+
     public int Wattage { get; set; }         
     public EfficiencyRating EfficiencyRating { get; set; }
     public int PowerConsumptionW { get; set; } 
