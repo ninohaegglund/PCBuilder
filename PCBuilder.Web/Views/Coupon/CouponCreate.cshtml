@@ -1,0 +1,44 @@
+﻿@using PCBuilder.Web.Models.Dto
+@model CouponDto
+
+<form asp-action="CouponCreate">
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light text-dark text-center">
+                <h2>Create Coupon</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="CouponCode" class="form-label fw-bold"></label>
+                    <input asp-for="CouponCode" class="form-control" />
+                    <span asp-validation-for="CouponCode" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Discount" class="form-label fw-bold"></label>
+                    <input asp-for="Discount" class="form-control" />
+                    <span asp-validation-for="Discount" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MinAmount" class="form-label fw-bold"></label>
+                    <input asp-for="MinAmount" class="form-control" />
+                    <span asp-validation-for="MinAmount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="CouponIndex" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <button asp-action="CouponCreate" type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg"></i> Create
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name ="_ValidationScriptsPartial" />
+}
+
