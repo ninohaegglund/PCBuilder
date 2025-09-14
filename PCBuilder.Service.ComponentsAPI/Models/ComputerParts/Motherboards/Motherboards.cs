@@ -4,7 +4,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 
 public class Motherboard
 {
-    public int MotherboardId { get; set; }
+    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
     public CPUSocket Socket { get; set; }

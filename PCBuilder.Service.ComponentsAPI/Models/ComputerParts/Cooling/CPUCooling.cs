@@ -1,10 +1,15 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+﻿using PCBuilder.Services.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.Components;
 
 public class CPUCooling
 {
-    public int CPUCoolerId { get; set; }
+    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+
+    public int? ComputerId { get; set; }
+    public Computer? Computer { get; set; }
+
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }
     public CoolingType Type { get; set; }

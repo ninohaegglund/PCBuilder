@@ -2,9 +2,13 @@
 
 public class Headset
 {
-    public int HeadsetId { get; set; }
+    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+
+    public int? ComputerId { get; set; }
+    public Computer? Computer { get; set; }
+
     public bool IsWireless { get; set; }
     public bool HasMicrophone { get; set; }
 }

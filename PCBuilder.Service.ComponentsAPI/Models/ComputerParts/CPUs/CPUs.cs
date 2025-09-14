@@ -3,9 +3,13 @@ using PCBuilder.Services.ComponentsAPI.Models.Components;
 
 public class CPU
 {
-    public int CPUId { get; set; }
+    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+
+    public int? ComputerId { get; set; }
+    public Computer? Computer { get; set; }
+
     public int Cores { get; set; }
     public int Threads { get; set; }
     public double BaseClockGhz { get; set; }

@@ -4,9 +4,12 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards
 {
     public class Keyboard
     {
-        public int KeyboardId { get; set; }
+        public int Id { get; set; }
         public string ModelName { get; set; } = null!;
         public string Manufacturer { get; set; } = null!;
+
+        public int? ComputerId { get; set; }
+        public Computer? Computer { get; set; }
 
         public bool IsMechanical { get; set; }
         public SwitchType SwitchType { get; set; }
