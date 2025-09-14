@@ -2,7 +2,7 @@
 
 public class Mouse
 {
-    public int Id { get; set; }
+    public int MouseId { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
     public int Dpi { get; set; }

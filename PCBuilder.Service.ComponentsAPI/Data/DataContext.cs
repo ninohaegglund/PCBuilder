@@ -42,7 +42,7 @@ public class DataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Exempel: spara enum som string
+        // Enums sparas som string
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entityType.GetProperties())
@@ -55,5 +55,92 @@ public class DataContext : DbContext
                 }
             }
         }
+
+        // --- 1-to-1 relationer ---
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Cpu)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Motherboard)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.PSU)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Case)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.CPUCooler)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Keyboard)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Mouse)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Headset)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.Id);
+
+        // --- 1-to-many relationer ---
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.GPU)
+            .WithOne(g => g.Computer)
+            .HasForeignKey(g => g.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.RamModules)
+            .WithOne(r => r.Computer)
+            .HasForeignKey(r => r.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.Storage)
+            .WithOne(s => s.Computer)
+            .HasForeignKey(s => s.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.CaseFans)
+            .WithOne(cf => cf.Computer)
+            .HasForeignKey(cf => cf.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.PCIeCables)
+            .WithOne(pc => pc.Computer)
+            .HasForeignKey(pc => pc.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.PowerCables)
+            .WithOne(pc => pc.Computer)
+            .HasForeignKey(pc => pc.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.Satacables)
+            .WithOne(sc => sc.Computer)
+            .HasForeignKey(sc => sc.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.Monitor)
+            .WithOne(m => m.Computer)
+            .HasForeignKey(m => m.ComputerId);
+
+        modelBuilder.Entity<Computer>()
+            .HasMany(c => c.Speakers)
+            .WithOne(s => s.Computer)
+            .HasForeignKey(s => s.ComputerId);
     }
 }

@@ -4,7 +4,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 
     public class Chassi
     {
-        public int Id { get; set; }
+        public int CaseId { get; set; }
         public string Manufacturer { get; set; } = null!;
         public string ModelName { get; set; } = null!;
 

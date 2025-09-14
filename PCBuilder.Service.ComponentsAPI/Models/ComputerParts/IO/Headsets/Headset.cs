@@ -2,7 +2,7 @@
 
 public class Headset
 {
-    public int Id { get; set; }
+    public int HeadsetId { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
     public bool IsWireless { get; set; }

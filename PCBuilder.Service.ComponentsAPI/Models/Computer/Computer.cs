@@ -11,28 +11,41 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 
-namespace PCBuilder.Services.ComponentsAPI.Models
-{
-    public class Computer
-    {
-        public int Id { get; set; }
-        public CPU? Cpu { get; set; }
-        public Motherboard? Motherboard { get; set; }
-        public PSU? PSU { get; set; }
-        public Chassi? Case { get; set; }
-        public CPUCooling? CPUCooler { get; set; }
-        public Keyboard? Keyboard { get; set; }
-        public Mouse? Mouse { get; set; }
-        public Headset? Headset { get; set; }
+namespace PCBuilder.Services.ComponentsAPI.Models;
 
-        public List<GPU> GPU { get; set; } = null!;
-        public List<RAM> RamModules { get; set; } = null!;
-        public List<StorageDevice> Storage { get; set; } = null!;
-        public List<ChassiCooling> CaseFans { get; set; } = null!;
-        public List<PCIeCable> PCIeCables { get; set; } = null!;
-        public List<PowerCable> PowerCables { get; set; } = null!;
-        public List<SataCable> Satacables { get; set; } = null!;
-        public List<DisplayMonitor> Monitor { get; set; } = null!;
-        public List<Speaker> Speakers { get; set; } = null!;  
-    }
+public class Computer
+{
+    public int Id { get; set; }
+    public int? CPUId { get; set; }
+    public CPU? Cpu { get; set; }
+
+    public int? MotherboardId { get; set; }
+    public Motherboard? Motherboard { get; set; }
+
+    public int? PSUId { get; set; }
+    public PSU? PSU { get; set; }
+
+    public int? CaseId { get; set; }
+    public Chassi? Case { get; set; }
+
+    public int? CpuCoolerId { get; set; }
+    public CPUCooling? CPUCooler { get; set; }
+
+    public int? KeyboardId { get; set; }
+    public Keyboard? Keyboard { get; set; }
+
+    public int? MouseId { get; set; }
+    public Mouse? Mouse { get; set; }
+
+    public int? HeadsetId { get; set; }
+    public Headset? Headset { get; set; }
+    public List<GPU> GPU { get; set; } = new();
+    public List<RAM> RamModules { get; set; } = new();
+    public List<StorageDevice> Storage { get; set; } = new();
+    public List<ChassiCooling> CaseFans { get; set; } = new();
+    public List<PCIeCable> PCIeCables { get; set; } = new();
+    public List<PowerCable> PowerCables { get; set; } = new();
+    public List<SataCable> SataCables { get; set; } = new();
+    public List<DisplayMonitor> Monitor { get; set; } = new();
+    public List<Speaker> Speakers { get; set; } = new();
 }

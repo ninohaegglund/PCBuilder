@@ -4,7 +4,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards
 {
     public class Keyboard
     {
-        public int Id { get; set; }
+        public int KeyboardId { get; set; }
         public string ModelName { get; set; } = null!;
         public string Manufacturer { get; set; } = null!;
 
