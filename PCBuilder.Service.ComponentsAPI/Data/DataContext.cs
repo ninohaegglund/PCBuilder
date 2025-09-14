@@ -56,44 +56,48 @@ public class DataContext : DbContext
             }
         }
 
-        // --- 1-to-1 relationer ---
-        modelBuilder.Entity<CPU>()
-    .HasOne(c => c.Computer)
-    .WithOne(c => c.Cpu)
-    .HasForeignKey<CPU>(c => c.ComputerId);
 
-        modelBuilder.Entity<CPUCooling>()
-            .HasOne(c => c.Computer)
-            .WithOne(c => c.CPUCooler)
-            .HasForeignKey<CPUCooling>(c => c.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Cpu)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.CPUId);
 
-        modelBuilder.Entity<PSU>()
-            .HasOne(p => p.Computer)
-            .WithOne(c => c.PSU)
-            .HasForeignKey<PSU>(p => p.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.PSU)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.PSUId);
 
-        modelBuilder.Entity<Chassi>()
-            .HasOne(c => c.Computer)
-            .WithOne(c => c.Case)
-            .HasForeignKey<Chassi>(c => c.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Motherboard)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.MotherboardId);
 
-        modelBuilder.Entity<Keyboard>()
-            .HasOne(k => k.Computer)
-            .WithOne(c => c.Keyboard)
-            .HasForeignKey<Keyboard>(k => k.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Case)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.CaseId);
 
-        modelBuilder.Entity<Mouse>()
-            .HasOne(m => m.Computer)
-            .WithOne(c => c.Mouse)
-            .HasForeignKey<Mouse>(m => m.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.CPUCooler)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.CpuCoolerId);
 
-        modelBuilder.Entity<Headset>()
-            .HasOne(h => h.Computer)
-            .WithOne(c => c.Headset)
-            .HasForeignKey<Headset>(h => h.ComputerId);
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Keyboard)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.KeyboardId);
 
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Mouse)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.MouseId);
 
-        //  1-to-many relationer
+        modelBuilder.Entity<Computer>()
+            .HasOne(c => c.Headset)
+            .WithOne()
+            .HasForeignKey<Computer>(c => c.HeadsetId);
+
+        // 1-many relationer
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.GPU)
             .WithOne(g => g.Computer)
@@ -111,8 +115,8 @@ public class DataContext : DbContext
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.CaseFans)
-            .WithOne(cf => cf.Computer)
-            .HasForeignKey(cf => cf.ComputerId);
+            .WithOne(f => f.Computer)
+            .HasForeignKey(f => f.ComputerId);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.PCIeCables)

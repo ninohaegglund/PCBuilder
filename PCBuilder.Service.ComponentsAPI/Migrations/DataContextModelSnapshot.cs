@@ -34,9 +34,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<double>("BoostClockGhz")
                         .HasColumnType("float");
 
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Cores")
                         .HasColumnType("int");
 
@@ -63,10 +60,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
-
                     b.ToTable("CPUs");
                 });
 
@@ -81,9 +74,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.PrimitiveCollection<string>("CompatibleSockets")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
 
                     b.Property<int>("CoolingCapacityW")
                         .HasColumnType("int");
@@ -104,10 +94,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
 
                     b.ToTable("CPUCoolers");
                 });
@@ -229,7 +215,37 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MotherboardId");
+                    b.HasIndex("CPUId")
+                        .IsUnique()
+                        .HasFilter("[CPUId] IS NOT NULL");
+
+                    b.HasIndex("CaseId")
+                        .IsUnique()
+                        .HasFilter("[CaseId] IS NOT NULL");
+
+                    b.HasIndex("CpuCoolerId")
+                        .IsUnique()
+                        .HasFilter("[CpuCoolerId] IS NOT NULL");
+
+                    b.HasIndex("HeadsetId")
+                        .IsUnique()
+                        .HasFilter("[HeadsetId] IS NOT NULL");
+
+                    b.HasIndex("KeyboardId")
+                        .IsUnique()
+                        .HasFilter("[KeyboardId] IS NOT NULL");
+
+                    b.HasIndex("MotherboardId")
+                        .IsUnique()
+                        .HasFilter("[MotherboardId] IS NOT NULL");
+
+                    b.HasIndex("MouseId")
+                        .IsUnique()
+                        .HasFilter("[MouseId] IS NOT NULL");
+
+                    b.HasIndex("PSUId")
+                        .IsUnique()
+                        .HasFilter("[PSUId] IS NOT NULL");
 
                     b.ToTable("Computers");
                 });
@@ -320,9 +336,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Manufacturer")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -335,10 +348,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
 
                     b.ToTable("Cases");
                 });
@@ -386,9 +395,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("HasMicrophone")
                         .HasColumnType("bit");
 
@@ -405,10 +411,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
-
                     b.ToTable("Headsets");
                 });
 
@@ -419,9 +421,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
 
                     b.Property<bool>("HasBacklight")
                         .HasColumnType("bit");
@@ -453,10 +452,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
-
                     b.ToTable("Keyboards");
                 });
 
@@ -467,9 +462,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Dpi")
                         .HasColumnType("int");
@@ -489,10 +481,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
 
                     b.ToTable("Mice");
                 });
@@ -579,9 +567,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EfficiencyRating")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -601,10 +586,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComputerId")
-                        .IsUnique()
-                        .HasFilter("[ComputerId] IS NOT NULL");
 
                     b.ToTable("PSUs");
                 });
@@ -687,24 +668,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.ToTable("Storages");
                 });
 
-            modelBuilder.Entity("CPU", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("Cpu")
-                        .HasForeignKey("CPU", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("CPUCooling", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("CPUCooler")
-                        .HasForeignKey("CPUCooling", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
             modelBuilder.Entity("DisplayMonitor", b =>
                 {
                     b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
@@ -725,11 +688,53 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.Computer", b =>
                 {
+                    b.HasOne("CPU", "Cpu")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "CPUId");
+
+                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", "Case")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "CaseId");
+
+                    b.HasOne("CPUCooling", "CPUCooler")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "CpuCoolerId");
+
+                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", "Headset")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "HeadsetId");
+
+                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", "Keyboard")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "KeyboardId");
+
                     b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards.Motherboard", "Motherboard")
-                        .WithMany()
-                        .HasForeignKey("MotherboardId");
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "MotherboardId");
+
+                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", "Mouse")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "MouseId");
+
+                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", "PSU")
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.Computer", "PSUId");
+
+                    b.Navigation("CPUCooler");
+
+                    b.Navigation("Case");
+
+                    b.Navigation("Cpu");
+
+                    b.Navigation("Headset");
+
+                    b.Navigation("Keyboard");
 
                     b.Navigation("Motherboard");
+
+                    b.Navigation("Mouse");
+
+                    b.Navigation("PSU");
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe.PCIeCable", b =>
@@ -759,15 +764,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Navigation("Computer");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("Case")
-                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.ChassiCooling", b =>
                 {
                     b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
@@ -777,47 +773,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Navigation("Computer");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("Headset")
-                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("Keyboard")
-                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("Mouse")
-                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", "ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers.Speaker", b =>
                 {
                     b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
                         .WithMany("Speakers")
                         .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithOne("PSU")
-                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", "ComputerId");
 
                     b.Navigation("Computer");
                 });
@@ -842,27 +802,13 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.Computer", b =>
                 {
-                    b.Navigation("CPUCooler");
-
-                    b.Navigation("Case");
-
                     b.Navigation("CaseFans");
-
-                    b.Navigation("Cpu");
 
                     b.Navigation("GPU");
 
-                    b.Navigation("Headset");
-
-                    b.Navigation("Keyboard");
-
                     b.Navigation("Monitor");
 
-                    b.Navigation("Mouse");
-
                     b.Navigation("PCIeCables");
-
-                    b.Navigation("PSU");
 
                     b.Navigation("PowerCables");
 

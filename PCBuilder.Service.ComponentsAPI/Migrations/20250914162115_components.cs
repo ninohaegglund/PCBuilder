@@ -16,9 +16,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Brand = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Material = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ChassiMaterial = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MaxGpuLengthMm = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -33,9 +33,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CoolingCapacityW = table.Column<int>(type: "int", nullable: false),
                     NoiseLevelDb = table.Column<int>(type: "int", nullable: false),
-                    SocketType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CompatibleSockets = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,6 +51,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Cores = table.Column<int>(type: "int", nullable: false),
                     Threads = table.Column<int>(type: "int", nullable: false),
                     BaseClockGhz = table.Column<double>(type: "float", nullable: false),
@@ -158,11 +161,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CpuId = table.Column<int>(type: "int", nullable: true),
-                    MotherboardId = table.Column<int>(type: "int", nullable: true),
+                    CPUId = table.Column<int>(type: "int", nullable: true),
                     PSUId = table.Column<int>(type: "int", nullable: true),
+                    MotherboardId = table.Column<int>(type: "int", nullable: true),
                     CaseId = table.Column<int>(type: "int", nullable: true),
-                    CPUCoolerId = table.Column<int>(type: "int", nullable: true),
+                    CpuCoolerId = table.Column<int>(type: "int", nullable: true),
                     KeyboardId = table.Column<int>(type: "int", nullable: true),
                     MouseId = table.Column<int>(type: "int", nullable: true),
                     HeadsetId = table.Column<int>(type: "int", nullable: true)
@@ -171,13 +174,13 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     table.PrimaryKey("PK_Computers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Computers_CPUCoolers_CPUCoolerId",
-                        column: x => x.CPUCoolerId,
+                        name: "FK_Computers_CPUCoolers_CpuCoolerId",
+                        column: x => x.CpuCoolerId,
                         principalTable: "CPUCoolers",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Computers_CPUs_CpuId",
-                        column: x => x.CpuId,
+                        name: "FK_Computers_CPUs_CPUId",
+                        column: x => x.CPUId,
                         principalTable: "CPUs",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -213,23 +216,23 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CaseFans",
+                name: "ChassiCooling",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     FanSizeMm = table.Column<int>(type: "int", nullable: false),
                     Rpm = table.Column<int>(type: "int", nullable: false),
-                    CoolingCapacityW = table.Column<int>(type: "int", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    CoolingCapacityW = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CaseFans", x => x.Id);
+                    table.PrimaryKey("PK_ChassiCooling", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_CaseFans_Computers_ComputerId",
+                        name: "FK_ChassiCooling_Computers_ComputerId",
                         column: x => x.ComputerId,
                         principalTable: "Computers",
                         principalColumn: "Id");
@@ -242,13 +245,14 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     VramGb = table.Column<int>(type: "int", nullable: false),
                     VramType = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LengthMm = table.Column<int>(type: "int", nullable: false),
                     PowerConsumptionW = table.Column<int>(type: "int", nullable: false),
                     TDP = table.Column<int>(type: "int", nullable: false),
-                    Interface = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    Interface = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -268,10 +272,10 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     SizeInches = table.Column<double>(type: "float", nullable: false),
-                    RefreshRateHz = table.Column<int>(type: "int", nullable: false),
-                    Resolution = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    Hz = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Resolution = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -289,9 +293,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     ConnectorType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LengthCm = table.Column<int>(type: "int", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    LengthCm = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -309,9 +313,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     ConnectorType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LengthCm = table.Column<int>(type: "int", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    LengthCm = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -331,10 +335,10 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     CapacityGb = table.Column<int>(type: "int", nullable: false),
                     SpeedMHz = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -352,9 +356,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     LengthCm = table.Column<int>(type: "int", nullable: false),
-                    IsRightAngled = table.Column<bool>(type: "bit", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    IsRightAngled = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -374,9 +378,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     Watt = table.Column<int>(type: "int", nullable: false),
-                    IsWireless = table.Column<bool>(type: "bit", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    IsWireless = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -396,12 +400,12 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ComputerId = table.Column<int>(type: "int", nullable: true),
                     CapacityGb = table.Column<int>(type: "int", nullable: false),
                     Interface = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PowerConsumptionW = table.Column<int>(type: "int", nullable: false),
                     ReadSpeedMb = table.Column<int>(type: "int", nullable: false),
-                    WriteSpeedMb = table.Column<int>(type: "int", nullable: false),
-                    ComputerId = table.Column<int>(type: "int", nullable: true)
+                    WriteSpeedMb = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -414,49 +418,65 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_CaseFans_ComputerId",
-                table: "CaseFans",
+                name: "IX_ChassiCooling_ComputerId",
+                table: "ChassiCooling",
                 column: "ComputerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_CaseId",
                 table: "Computers",
-                column: "CaseId");
+                column: "CaseId",
+                unique: true,
+                filter: "[CaseId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Computers_CPUCoolerId",
+                name: "IX_Computers_CpuCoolerId",
                 table: "Computers",
-                column: "CPUCoolerId");
+                column: "CpuCoolerId",
+                unique: true,
+                filter: "[CpuCoolerId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Computers_CpuId",
+                name: "IX_Computers_CPUId",
                 table: "Computers",
-                column: "CpuId");
+                column: "CPUId",
+                unique: true,
+                filter: "[CPUId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_HeadsetId",
                 table: "Computers",
-                column: "HeadsetId");
+                column: "HeadsetId",
+                unique: true,
+                filter: "[HeadsetId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_KeyboardId",
                 table: "Computers",
-                column: "KeyboardId");
+                column: "KeyboardId",
+                unique: true,
+                filter: "[KeyboardId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_MotherboardId",
                 table: "Computers",
-                column: "MotherboardId");
+                column: "MotherboardId",
+                unique: true,
+                filter: "[MotherboardId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_MouseId",
                 table: "Computers",
-                column: "MouseId");
+                column: "MouseId",
+                unique: true,
+                filter: "[MouseId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_PSUId",
                 table: "Computers",
-                column: "PSUId");
+                column: "PSUId",
+                unique: true,
+                filter: "[PSUId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GPUs_ComputerId",
@@ -503,7 +523,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CaseFans");
+                name: "ChassiCooling");
 
             migrationBuilder.DropTable(
                 name: "GPUs");

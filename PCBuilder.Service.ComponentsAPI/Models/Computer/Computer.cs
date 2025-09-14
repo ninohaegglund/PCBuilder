@@ -16,14 +16,16 @@ namespace PCBuilder.Services.ComponentsAPI.Models;
 public class Computer
 {
     public int Id { get; set; }
+
+    // 1-1 relationer
     public int? CPUId { get; set; }
     public CPU? Cpu { get; set; }
 
-    public int? MotherboardId { get; set; }
-    public Motherboard? Motherboard { get; set; }
-
     public int? PSUId { get; set; }
     public PSU? PSU { get; set; }
+
+    public int? MotherboardId { get; set; }
+    public Motherboard? Motherboard { get; set; }
 
     public int? CaseId { get; set; }
     public Chassi? Case { get; set; }
@@ -39,6 +41,8 @@ public class Computer
 
     public int? HeadsetId { get; set; }
     public Headset? Headset { get; set; }
+
+    // 1-many relationer
     public List<GPU> GPU { get; set; } = new();
     public List<RAM> RamModules { get; set; } = new();
     public List<StorageDevice> Storage { get; set; } = new();
