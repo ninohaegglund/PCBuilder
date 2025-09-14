@@ -129,7 +129,7 @@ public class DataContext : DbContext
             .HasForeignKey(pc => pc.ComputerId);
 
         modelBuilder.Entity<Computer>()
-            .HasMany(c => c.Satacables)
+            .HasMany(c => c.SataCables)
             .WithOne(sc => sc.Computer)
             .HasForeignKey(sc => sc.ComputerId);
 
