@@ -5,7 +5,7 @@ using PCBuilder.Services.TestAPI.Models;
 using PCBuilder.Services.TestAPI.Models.Dto;
 
 namespace PCBuilder.Services.TestAPI.Controllers;
-[Route("api/[controller]")]
+[Route("api/coupon")]
 [ApiController]
 public class CouponAPIController : Controller
 {
@@ -118,6 +118,7 @@ public class CouponAPIController : Controller
     }
 
     [HttpDelete]
+    [Route("{id:int}")]
     public ResponseDto Delete(int id)
     {
         try

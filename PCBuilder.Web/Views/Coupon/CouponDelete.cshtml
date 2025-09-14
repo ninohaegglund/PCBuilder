@@ -1,0 +1,40 @@
+﻿@using PCBuilder.Web.Models.Dto
+@model CouponDto
+
+<form asp-action="CouponDelete">
+    <div class="container mt-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light text-dark text-center">
+                <h2>Delete Coupon</h2>
+                <input asp-for="CouponId" hidden />
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label asp-for="CouponCode" disabled class="form-label fw-bold"></label>
+                    <input asp-for="CouponCode" disabled class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Discount" disabled class="form-label fw-bold"></label>
+                    <input asp-for="Discount" disabled class="form-control" />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MinAmount" disabled class="form-label fw-bold"></label>
+                    <input asp-for="MinAmount" disabled class="form-control" />
+                    <span asp-validation-for="MinAmount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="CouponIndex" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+                <button asp-action="CouponDelete" value="Delete" class="btn btn-danger">
+                    <i class="bi bi-check-lg"></i> Delete
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+
+
