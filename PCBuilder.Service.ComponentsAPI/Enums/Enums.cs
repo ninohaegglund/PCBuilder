@@ -16,31 +16,23 @@ public enum CoolingType
     Air,
     Liquid
 }
-
-// RAM-typer
 public enum RAMType
 {
     DDR3,
     DDR4,
     DDR5
 }
-
-// GPU-gränssnitt
 public enum GPUInterface
 {
     PCIe3,
     PCIe4,
     PCIe5
 }
-
-// Storage interface
 public enum StorageInterface
 {
     SATA,
     NVMe
 }
-
-// Form factor för SSD
 public enum SSDFormFactor
 {
     M2_2280,
@@ -48,8 +40,6 @@ public enum SSDFormFactor
     M2_2242,
     _2_5Inch 
 }
-
-// Chassi storlek
 public enum CaseFormFactor
 {
     MiniITX,
@@ -57,16 +47,12 @@ public enum CaseFormFactor
     ATX,
     EATX
 }
-
-// Keyboard switch-typ
 public enum SwitchType
 {
     Linear,
     Tactile,
     Clicky
 }
-
-// Monitor resolution
 public enum MonitorResolution
 {
     R1080p,

@@ -1,4 +1,4 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models;
+﻿using PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.Components;
 
 public class CPUCooling
@@ -11,7 +11,7 @@ public class CPUCooling
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }
     public CoolingType Type { get; set; }
-    public List<CPUSocket> CompatibleSockets { get; set; } = new();
+    public List<CoolerSocketCompatibility> CompatibleSockets { get; set; } = new();
 }
 
 public class AirCooler : CPUCooling

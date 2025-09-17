@@ -1,4 +1,5 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models;
+﻿using PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
+using PCBuilder.Services.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.Components;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
@@ -98,12 +99,67 @@ public static class DbSeeder
         if (!context.CPUCoolers.Any())
         {
             context.CPUCoolers.AddRange(
-                new AirCooler { ModelName = "Noctua NH-D15", Manufacturer = "Noctua", CoolingCapacityW = 250, NoiseLevelDb = 24, Type = CoolingType.Air, CompatibleSockets = new List<CPUSocket> { CPUSocket.LGA1700, CPUSocket.AM5 }, FanSizeMm = 140, Rpm = 1500 },
-                new AirCooler { ModelName = "be quiet! Dark Rock Pro 4", Manufacturer = "be quiet!", CoolingCapacityW = 250, NoiseLevelDb = 24, Type = CoolingType.Air, CompatibleSockets = new List<CPUSocket> { CPUSocket.LGA1700, CPUSocket.AM5 }, FanSizeMm = 135, Rpm = 1500 },
-                new WaterCooler { ModelName = "Corsair H150i Elite", Manufacturer = "Corsair", CoolingCapacityW = 300, NoiseLevelDb = 22, Type = CoolingType.Liquid, CompatibleSockets = new List<CPUSocket> { CPUSocket.LGA1700, CPUSocket.AM5 }, RadiatorSizeMm = 360 },
-                new WaterCooler { ModelName = "NZXT Kraken Z73", Manufacturer = "NZXT", CoolingCapacityW = 280, NoiseLevelDb = 21, Type = CoolingType.Liquid, CompatibleSockets = new List<CPUSocket> { CPUSocket.LGA1700, CPUSocket.AM5 }, RadiatorSizeMm = 360 }
+                new AirCooler
+                {
+                    ModelName = "Noctua NH-D15",
+                    Manufacturer = "Noctua",
+                    CoolingCapacityW = 250,
+                    NoiseLevelDb = 24,
+                    Type = CoolingType.Air,
+                    FanSizeMm = 140,
+                    Rpm = 1500,
+                    CompatibleSockets = new List<CoolerSocketCompatibility>
+                    {
+                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                    }
+                },
+                new AirCooler
+                {
+                    ModelName = "be quiet! Dark Rock Pro 4",
+                    Manufacturer = "be quiet!",
+                    CoolingCapacityW = 250,
+                    NoiseLevelDb = 24,
+                    Type = CoolingType.Air,
+                    FanSizeMm = 135,
+                    Rpm = 1500,
+                    CompatibleSockets = new List<CoolerSocketCompatibility>
+                    {
+                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                    }
+                },
+                new WaterCooler
+                {
+                    ModelName = "Corsair H150i Elite",
+                    Manufacturer = "Corsair",
+                    CoolingCapacityW = 300,
+                    NoiseLevelDb = 22,
+                    Type = CoolingType.Liquid,
+                    RadiatorSizeMm = 360,
+                    CompatibleSockets = new List<CoolerSocketCompatibility>
+                    {
+                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                    }
+                },
+                new WaterCooler
+                {
+                    ModelName = "NZXT Kraken Z73",
+                    Manufacturer = "NZXT",
+                    CoolingCapacityW = 280,
+                    NoiseLevelDb = 21,
+                    Type = CoolingType.Liquid,
+                    RadiatorSizeMm = 360,
+                    CompatibleSockets = new List<CoolerSocketCompatibility>
+                    {
+                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                    }
+                }
             );
         }
+ 
 
         // GPU
         if (!context.GPUs.Any())
@@ -150,10 +206,10 @@ public static class DbSeeder
         if (!context.Cases.Any())
         {
             context.Cases.AddRange(
-                new Chassi { Manufacturer = "NZXT", ModelName = "H710", ChassiMaterial = ChassiMaterial.Steel, MaxGpuLengthMm = 413 },
-                new Chassi { Manufacturer = "Fractal Design", ModelName = "Meshify C", ChassiMaterial = ChassiMaterial.Aluminum, MaxGpuLengthMm = 315 },
-                new Chassi { Manufacturer = "Corsair", ModelName = "4000D Airflow", ChassiMaterial = ChassiMaterial.Steel, MaxGpuLengthMm = 360 },
-                new Chassi { Manufacturer = "Cooler Master", ModelName = "MasterBox NR600", ChassiMaterial = ChassiMaterial.TemperedGlass, MaxGpuLengthMm = 410 }
+                new Chassi { Manufacturer = "NZXT", ModelName = "H710", ChassiMaterial = ChassiMaterial.Steel, MaxGpuLengthMm = 413, FormFactor = CaseFormFactor.ATX },
+                new Chassi { Manufacturer = "Fractal Design", ModelName = "Meshify C", ChassiMaterial = ChassiMaterial.Aluminum, MaxGpuLengthMm = 315, FormFactor = CaseFormFactor.ATX },
+                new Chassi { Manufacturer = "Corsair", ModelName = "4000D Airflow", ChassiMaterial = ChassiMaterial.Steel, MaxGpuLengthMm = 360, FormFactor = CaseFormFactor.ATX },
+                new Chassi { Manufacturer = "Cooler Master", ModelName = "MasterBox NR600", ChassiMaterial = ChassiMaterial.TemperedGlass, MaxGpuLengthMm = 410, FormFactor = CaseFormFactor.ATX }
             );
         }
 
