@@ -18,6 +18,8 @@
         public string? CaseName { get; set; }
 
         public int? CpuCoolerId { get; set; }
+        public string? CPUCoolerName { get; set; }
+
         public int? KeyboardId { get; set; }
         public string? KeyboardName { get; set; }
 
