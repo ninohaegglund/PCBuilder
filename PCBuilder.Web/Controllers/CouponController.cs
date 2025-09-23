@@ -25,8 +25,12 @@ public class CouponController : Controller
         {
             list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result));
         }
+        else
+        {
+            TempData["error"] = response?.DisplayMessage;
+        }
 
-        return View(list);
+            return View(list);
     }
 
     public async Task<IActionResult> CouponCreate()
@@ -43,7 +47,12 @@ public class CouponController : Controller
 
             if (response != null && response.IsSuccess)
             {
+                TempData["success"] = "Coupon created successfully";
                 return RedirectToAction(nameof(CouponIndex));
+            }
+            else
+            {
+                TempData["error"] = response?.DisplayMessage;
             }
         }
         return View(model);
@@ -55,8 +64,13 @@ public class CouponController : Controller
 
         if (response != null && response.IsSuccess)
         {
+           
             CouponDto? model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
             return View(model);
+        }
+        else
+        {
+            TempData["error"] = response?.DisplayMessage;
         }
         return NotFound();
     }
@@ -69,7 +83,12 @@ public class CouponController : Controller
 
         if (response != null && response.IsSuccess)
         {
+            TempData["success"] = "Coupon deleted successfully";
             return RedirectToAction(nameof(CouponIndex));
+        }
+        else
+        {
+            TempData["error"] = response?.DisplayMessage;
         }
         return View(couponDto);
     }
