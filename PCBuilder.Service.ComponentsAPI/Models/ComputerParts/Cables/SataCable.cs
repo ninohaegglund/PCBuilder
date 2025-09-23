@@ -5,8 +5,6 @@ public class SataCable
     public int Id { get; set; }
     public int? ComputerId { get; set; }
     public Computer? Computer { get; set; }
-
-
     public int LengthCm { get; set; }
     public bool IsRightAngled { get; set; }
 }
