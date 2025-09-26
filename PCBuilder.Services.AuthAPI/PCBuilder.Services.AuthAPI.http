@@ -1,0 +1,6 @@
+@PCBuilder.Services.AuthAPI_HostAddress = http://localhost:5063
+
+GET {{PCBuilder.Services.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
