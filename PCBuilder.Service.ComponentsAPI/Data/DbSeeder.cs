@@ -9,6 +9,7 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
@@ -267,6 +268,53 @@ public static class DbSeeder
                 new Speaker { Manufacturer = "Edifier", ModelName = "R1280DB", Watt = 42, IsWireless = true }
             );
         }
+
+        // Motherboards
+        if (!context.Motherboards.Any())
+        {
+            context.Motherboards.AddRange(
+                new AtxMotherboard
+                {
+                    ModelName = "MSI B550 Tomahawk",
+                    Manufacturer = "MSI",
+                    Socket = CPUSocket.AM4,
+                    Chipset = "B550",
+                    RamSlots = 4,
+                    SupportedRamType = RAMType.DDR4,
+                    MaxRamCapacityGb = 128,
+                    PcieSlots = 2,
+                    SupportsMultiGpu = true,
+                    MaxPcieLengthMm = 350
+                },
+                new MicroAtxMotherboard
+                {
+                    ModelName = "ASRock B460M Steel Legend",
+                    Manufacturer = "ASRock",
+                    Socket = CPUSocket.LGA1200,
+                    Chipset = "B460",
+                    RamSlots = 2,
+                    SupportedRamType = RAMType.DDR4,
+                    MaxRamCapacityGb = 64,
+                    PcieSlots = 1,
+                    SupportsMultiGpu = false,
+                    MaxPcieLengthMm = 300
+                },
+                new MiniItxMotherboard
+                {
+                    ModelName = "Gigabyte Z490I Aorus Ultra",
+                    Manufacturer = "Gigabyte",
+                    Socket = CPUSocket.LGA1200,
+                    Chipset = "Z490",
+                    RamSlots = 2,
+                    SupportedRamType = RAMType.DDR4,
+                    MaxRamCapacityGb = 64,
+                    PcieSlots = 1,
+                    SupportsMultiGpu = false,
+                    MaxPcieLengthMm = 270
+                }
+            );
+        }
+
 
         // PCIe Cables
         if (!context.PCIeCables.Any())

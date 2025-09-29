@@ -57,45 +57,54 @@ public class DataContext : DbContext
         }
 
 
+        // CPU
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Cpu)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CPUId);
+            .WithMany() // flera datorer kan ha samma CPU-modell
+            .HasForeignKey(c => c.CPUId);
 
+        // PSU
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.PSU)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.PSUId);
+            .WithMany()
+            .HasForeignKey(c => c.PSUId);
 
+        // Motherboard
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Motherboard)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.MotherboardId);
+            .WithMany()
+            .HasForeignKey(c => c.MotherboardId);
 
+        // Case
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Case)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CaseId);
+            .WithMany()
+            .HasForeignKey(c => c.CaseId);
 
+        // CPU Cooler
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.CPUCooler)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CpuCoolerId);
+            .WithMany()
+            .HasForeignKey(c => c.CpuCoolerId);
 
+        // Keyboard
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Keyboard)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.KeyboardId);
+            .WithMany()
+            .HasForeignKey(c => c.KeyboardId);
 
+        // Mouse
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Mouse)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.MouseId);
+            .WithMany()
+            .HasForeignKey(c => c.MouseId);
 
+        // Headset
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Headset)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.HeadsetId);
+            .WithMany()
+            .HasForeignKey(c => c.HeadsetId);
+
 
         // 1-many relationer
         modelBuilder.Entity<Computer>()
