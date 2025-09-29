@@ -3,6 +3,8 @@
     public class ComputerDTO
     {
         public int Id { get; set; }
+        public string Name { get; set; } = null!;
+
 
         // 1-1 relations
         public int? CPUId { get; set; }
