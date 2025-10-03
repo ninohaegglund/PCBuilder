@@ -3,24 +3,26 @@ using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
 using PCBuilder.Services.ComponentsAPI.DTOs;
 using PCBuilder.Services.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+
 
 namespace PCBuilder.Service.ComponentsAPI.Services;
 
 public class ComputerService
 {
     private readonly DataContext _context;
+    private readonly ComputerCreateDTO _computerCreateDTO;
     private readonly IMapper _mapper;
 
-    public ComputerService(DataContext context, IMapper mapper)
+    public ComputerService(DataContext context, IMapper mapper, ComputerCreateDTO computerCreateDTO)
     {
         _context = context;
         _mapper = mapper;
+        _computerCreateDTO = computerCreateDTO;
+    }
+
+    private async Task<List<T>> GetEntitiesByIdsAsync<T>(DbSet<T> dbSet, IEnumerable<int> ids) where T : class
+    {
+        return ids != null && ids.Any() ? await dbSet.Where(e => ids.Contains(EF.Property<int>(e, "Id"))).ToListAsync() : new List<T>();
     }
 
     public Computer BuildComputerFromDTO(ComputerDTO computerDTO)
@@ -279,42 +281,51 @@ public class ComputerService
         }
     }
 
-    public async Task<ResponseDTO> CreateComputerAsync(ComputerDTO computerDTO)
+    public async Task<ResponseDTO> CreateComputerAsync(ComputerCreateDTO computerDTO)
     {
         var response = new ResponseDTO();
         try
         {
-            var computer = new Computer
-            {
-                Name = computerDTO.Name,
-                CPUId = computerDTO.CPUId,
-                PSUId = computerDTO.PSUId,
-                MotherboardId = computerDTO.MotherboardId,
-                CaseId = computerDTO.CaseId,
-                CpuCoolerId = computerDTO.CpuCoolerId,
-                KeyboardId = computerDTO.KeyboardId,
-                MouseId = computerDTO.MouseId,
-                HeadsetId = computerDTO.HeadsetId
-            };
+            var computer = new Computer();
+            MapComputerDtoToEntity(computerDTO, computer);
 
-            if (computerDTO.GPUIds?.Any() == true)
-                computer.GPU = await _context.GPUs.Where(g => computerDTO.GPUIds.Contains(g.Id)).ToListAsync();
-            if (computerDTO.RAMIds?.Any() == true)
-                computer.RamModules = await _context.RAMModules.Where(r => computerDTO.RAMIds.Contains(r.Id)).ToListAsync();
-            if (computerDTO.StorageIds?.Any() == true)
-                computer.Storage = await _context.Storages.Where(s => computerDTO.StorageIds.Contains(s.Id)).ToListAsync();
-            if (computerDTO.CaseFanIds?.Any() == true)
-                computer.CaseFans = await _context.ChassiCooling.Where(f => computerDTO.CaseFanIds.Contains(f.Id)).ToListAsync();
-            if (computerDTO.PCIeCableIds?.Any() == true)
-                computer.PCIeCables = await _context.PCIeCables.Where(c => computerDTO.PCIeCableIds.Contains(c.Id)).ToListAsync();
-            if (computerDTO.PowerCableIds?.Any() == true)
-                computer.PowerCables = await _context.PowerCables.Where(c => computerDTO.PowerCableIds.Contains(c.Id)).ToListAsync();
-            if (computerDTO.SataCableIds?.Any() == true)
-                computer.SataCables = await _context.SataCables.Where(c => computerDTO.SataCableIds.Contains(c.Id)).ToListAsync();
-            if (computerDTO.MonitorIds?.Any() == true)
-                computer.Monitor = await _context.Monitors.Where(m => computerDTO.MonitorIds.Contains(m.Id)).ToListAsync();
-            if (computerDTO.SpeakerIds?.Any() == true)
-                computer.Speakers = await _context.Speakers.Where(s => computerDTO.SpeakerIds.Contains(s.Id)).ToListAsync();
+            if (string.IsNullOrWhiteSpace(computerDTO.Name))
+            {
+                int numberOfPc = await _context.Computers.CountAsync();
+                computer.Name = $"Customer Computer {numberOfPc + 1}";
+            }
+            else
+            {
+                computer.Name = computerDTO.Name;
+            }
+
+            computer.GPU = await GetEntitiesByIdsAsync(_context.GPUs, computerDTO.GPUIds);
+            foreach (var gpu in computer.GPU) { gpu.Computer = computer; }
+
+            computer.RamModules = await GetEntitiesByIdsAsync(_context.RAMModules, computerDTO.RAMIds);
+            foreach (var ram in computer.RamModules) { ram.Computer = computer; }
+
+            computer.Storage = await GetEntitiesByIdsAsync(_context.Storages, computerDTO.StorageIds);
+            foreach (var storage in computer.Storage) { storage.Computer = computer; }
+
+            computer.CaseFans = await GetEntitiesByIdsAsync(_context.ChassiCooling, computerDTO.CaseFanIds);
+            foreach (var fan in computer.CaseFans) { fan.Computer = computer; }
+
+            computer.PCIeCables = await GetEntitiesByIdsAsync(_context.PCIeCables, computerDTO.PCIeCableIds);
+            foreach (var pcie in computer.PCIeCables) { pcie.Computer = computer; }
+
+            computer.PowerCables = await GetEntitiesByIdsAsync(_context.PowerCables, computerDTO.PowerCableIds);
+            foreach (var power in computer.PowerCables) { power.Computer = computer; }
+
+            computer.SataCables = await GetEntitiesByIdsAsync(_context.SataCables, computerDTO.SataCableIds);
+            foreach (var sata in computer.SataCables) { sata.Computer = computer; }
+
+            computer.Monitor = await GetEntitiesByIdsAsync(_context.Monitors, computerDTO.MonitorIds);
+            foreach (var monitor in computer.Monitor) { monitor.Computer = computer; }
+
+            computer.Speakers = await GetEntitiesByIdsAsync(_context.Speakers, computerDTO.SpeakerIds);
+            foreach (var speaker in computer.Speakers) { speaker.Computer = computer; }
+
 
             _context.Computers.Add(computer);
             await _context.SaveChangesAsync();
@@ -330,7 +341,7 @@ public class ComputerService
         return response;
     }
 
-    public async Task<ResponseDTO> UpdateComputerAsync(int id, ComputerDTO computerDTO)
+    public async Task<ResponseDTO> UpdateComputerAsync(int id, ComputerCreateDTO computerDTO)
     {
         var response = new ResponseDTO();
         try
@@ -361,34 +372,34 @@ public class ComputerService
                 return response;
             }
 
-            computer.Name = computerDTO.Name;
-            computer.CPUId = computerDTO.CPUId;
-            computer.PSUId = computerDTO.PSUId;
-            computer.MotherboardId = computerDTO.MotherboardId;
-            computer.CaseId = computerDTO.CaseId;
-            computer.CpuCoolerId = computerDTO.CpuCoolerId;
-            computer.KeyboardId = computerDTO.KeyboardId;
-            computer.MouseId = computerDTO.MouseId;
-            computer.HeadsetId = computerDTO.HeadsetId;
+            MapComputerDtoToEntity(computerDTO, computer);
 
-            computer.GPU = computerDTO.GPUIds?.Any() == true ?
-                await _context.GPUs.Where(g => computerDTO.GPUIds.Contains(g.Id)).ToListAsync() : new List<GPU>();
-            computer.RamModules = computerDTO.RAMIds?.Any() == true ?
-                await _context.RAMModules.Where(r => computerDTO.RAMIds.Contains(r.Id)).ToListAsync() : new List<RAM>();
-            computer.Storage = computerDTO.StorageIds?.Any() == true ?
-                await _context.Storages.Where(s => computerDTO.StorageIds.Contains(s.Id)).ToListAsync() : new List<StorageDevice>();
-            computer.CaseFans = computerDTO.CaseFanIds?.Any() == true ?
-                await _context.ChassiCooling.Where(f => computerDTO.CaseFanIds.Contains(f.Id)).ToListAsync() : new List<ChassiCooling>();
-            computer.PCIeCables = computerDTO.PCIeCableIds?.Any() == true ?
-                await _context.PCIeCables.Where(c => computerDTO.PCIeCableIds.Contains(c.Id)).ToListAsync() : new List<PCIeCable>();
-            computer.PowerCables = computerDTO.PowerCableIds?.Any() == true ?
-                await _context.PowerCables.Where(c => computerDTO.PowerCableIds.Contains(c.Id)).ToListAsync() : new List<PowerCable>();
-            computer.SataCables = computerDTO.SataCableIds?.Any() == true ?
-                await _context.SataCables.Where(c => computerDTO.SataCableIds.Contains(c.Id)).ToListAsync() : new List<SataCable>();
-            computer.Monitor = computerDTO.MonitorIds?.Any() == true ?
-                await _context.Monitors.Where(m => computerDTO.MonitorIds.Contains(m.Id)).ToListAsync() : new List<DisplayMonitor>();
-            computer.Speakers = computerDTO.SpeakerIds?.Any() == true ?
-                await _context.Speakers.Where(s => computerDTO.SpeakerIds.Contains(s.Id)).ToListAsync() : new List<Speaker>();
+            computer.GPU = await GetEntitiesByIdsAsync(_context.GPUs, computerDTO.GPUIds);
+            foreach (var gpu in computer.GPU) { gpu.Computer = computer; }
+
+            computer.RamModules = await GetEntitiesByIdsAsync(_context.RAMModules, computerDTO.RAMIds);
+            foreach (var ram in computer.RamModules) { ram.Computer = computer; }
+
+            computer.Storage = await GetEntitiesByIdsAsync(_context.Storages, computerDTO.StorageIds);
+            foreach (var storage in computer.Storage) { storage.Computer = computer; }
+
+            computer.CaseFans = await GetEntitiesByIdsAsync(_context.ChassiCooling, computerDTO.CaseFanIds);
+            foreach (var fan in computer.CaseFans) { fan.Computer = computer; }
+
+            computer.PCIeCables = await GetEntitiesByIdsAsync(_context.PCIeCables, computerDTO.PCIeCableIds);
+            foreach (var pcie in computer.PCIeCables) { pcie.Computer = computer; }
+
+            computer.PowerCables = await GetEntitiesByIdsAsync(_context.PowerCables, computerDTO.PowerCableIds);
+            foreach (var power in computer.PowerCables) { power.Computer = computer; }
+
+            computer.SataCables = await GetEntitiesByIdsAsync(_context.SataCables, computerDTO.SataCableIds);
+            foreach (var sata in computer.SataCables) { sata.Computer = computer; }
+
+            computer.Monitor = await GetEntitiesByIdsAsync(_context.Monitors, computerDTO.MonitorIds);
+            foreach (var monitor in computer.Monitor) { monitor.Computer = computer; }
+
+            computer.Speakers = await GetEntitiesByIdsAsync(_context.Speakers, computerDTO.SpeakerIds);
+            foreach (var speaker in computer.Speakers) { speaker.Computer = computer; }
 
             _context.Computers.Update(computer);
             await _context.SaveChangesAsync();
@@ -402,6 +413,19 @@ public class ComputerService
             response.Result = ex.Message + (ex.InnerException != null ? " | Inner: " + ex.InnerException.Message : "");
         }
         return response;
+    }
+
+    private static void MapComputerDtoToEntity(ComputerCreateDTO computerDTO, Computer computer)
+    {
+        computer.Name = computerDTO.Name;
+        computer.CPUId = computerDTO.CPUId;
+        computer.PSUId = computerDTO.PSUId;
+        computer.MotherboardId = computerDTO.MotherboardId;
+        computer.CaseId = computerDTO.CaseId;
+        computer.CpuCoolerId = computerDTO.CpuCoolerId;
+        computer.KeyboardId = computerDTO.KeyboardId;
+        computer.MouseId = computerDTO.MouseId;
+        computer.HeadsetId = computerDTO.HeadsetId;
     }
 
     public async Task<ResponseDTO> DeleteComputerAsync(int id)

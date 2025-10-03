@@ -10,16 +10,10 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
     [ApiController]
     public class ComputerAPIController : ControllerBase
     {
-        private readonly DataContext _db;
-        private ResponseDTO _response;
-        private IMapper _mapper;
         private ComputerService _service;
 
         public ComputerAPIController(DataContext db, IMapper mapper, ComputerService service)
         {
-            _db = db;
-            _response = new ResponseDTO();
-            _mapper = mapper;
             _service = service;
         }
 
@@ -41,13 +35,13 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<ResponseDTO> CreateComputer([FromBody] ComputerDTO computerDTO)
+        public async Task<ResponseDTO> CreateComputer([FromBody] ComputerCreateDTO computerDTO)
         {
             return await _service.CreateComputerAsync(computerDTO);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<ResponseDTO> UpdateComputer(int id, [FromBody] ComputerDTO computerDTO)
+        public async Task<ResponseDTO> UpdateComputer(int id, [FromBody] ComputerCreateDTO computerDTO)
         {
             return await _service.UpdateComputerAsync(id, computerDTO);
         }
