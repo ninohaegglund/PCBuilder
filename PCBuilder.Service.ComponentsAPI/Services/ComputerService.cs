@@ -10,14 +10,12 @@ namespace PCBuilder.Service.ComponentsAPI.Services;
 public class ComputerService
 {
     private readonly DataContext _context;
-    private readonly ComputerCreateDTO _computerCreateDTO;
     private readonly IMapper _mapper;
 
-    public ComputerService(DataContext context, IMapper mapper, ComputerCreateDTO computerCreateDTO)
+    public ComputerService(DataContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _computerCreateDTO = computerCreateDTO;
     }
 
     private async Task<List<T>> GetEntitiesByIdsAsync<T>(DbSet<T> dbSet, IEnumerable<int> ids) where T : class

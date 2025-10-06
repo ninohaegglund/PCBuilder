@@ -19,12 +19,12 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
             _mapper = mapper;
         }
 
-        [HttpPut("{id:int}/add-gpu/{gpuId:int}")]
-        public ResponseDTO AddGPUToComputer(int id, int gpuId)
+        [HttpPut("{computerId:int}/add-gpu/{gpuId:int}")]
+        public ResponseDTO AddGPUToComputer(int computerId, int gpuId)
         {
             try
             {
-                var computer = _db.Computers.FirstOrDefault(c => c.Id == id);
+                var computer = _db.Computers.FirstOrDefault(c => c.Id == computerId);
                 if (computer == null)
                 {
                     _response.IsSuccess = false;
