@@ -30,7 +30,7 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
                     _response.IsSuccess = false;
                     _response.Result = "Computer not found.";
                 }
-                var gpu = _db.GPUs.FirstOrDefault(g => g.Id == gpuId);
+                var gpu = _db.GPUs.FirstOrDefault(g => g.Id == gpuId); 
                 if (gpu == null)
                 {
                     _response.IsSuccess = false;
