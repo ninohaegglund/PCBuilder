@@ -361,3 +361,7 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/PCBuilder.Services.AuthAPI/appsettings.json
+/PCBuilder.Services.AuthAPI/appsettings.Development.json
+/PCBuilder.Services.TestAPI/appsettings.json
+/PCBuilder.Services.TestAPI/appsettings.Development.json
