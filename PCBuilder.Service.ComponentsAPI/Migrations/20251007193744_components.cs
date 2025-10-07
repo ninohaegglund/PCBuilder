@@ -18,6 +18,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FormFactor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChassiMaterial = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MaxGpuLengthMm = table.Column<int>(type: "int", nullable: false)
                 },
@@ -36,8 +37,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CoolingCapacityW = table.Column<int>(type: "int", nullable: false),
                     NoiseLevelDb = table.Column<int>(type: "int", nullable: false),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompatibleSockets = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -156,11 +156,32 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "CoolerSocketCompatibility",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Socket = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CPUCoolingId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CoolerSocketCompatibility", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CoolerSocketCompatibility_CPUCoolers_CPUCoolingId",
+                        column: x => x.CPUCoolingId,
+                        principalTable: "CPUCoolers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Computers",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CPUId = table.Column<int>(type: "int", nullable: true),
                     PSUId = table.Column<int>(type: "int", nullable: true),
                     MotherboardId = table.Column<int>(type: "int", nullable: true),
@@ -425,58 +446,47 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_CaseId",
                 table: "Computers",
-                column: "CaseId",
-                unique: true,
-                filter: "[CaseId] IS NOT NULL");
+                column: "CaseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_CpuCoolerId",
                 table: "Computers",
-                column: "CpuCoolerId",
-                unique: true,
-                filter: "[CpuCoolerId] IS NOT NULL");
+                column: "CpuCoolerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_CPUId",
                 table: "Computers",
-                column: "CPUId",
-                unique: true,
-                filter: "[CPUId] IS NOT NULL");
+                column: "CPUId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_HeadsetId",
                 table: "Computers",
-                column: "HeadsetId",
-                unique: true,
-                filter: "[HeadsetId] IS NOT NULL");
+                column: "HeadsetId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_KeyboardId",
                 table: "Computers",
-                column: "KeyboardId",
-                unique: true,
-                filter: "[KeyboardId] IS NOT NULL");
+                column: "KeyboardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_MotherboardId",
                 table: "Computers",
-                column: "MotherboardId",
-                unique: true,
-                filter: "[MotherboardId] IS NOT NULL");
+                column: "MotherboardId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_MouseId",
                 table: "Computers",
-                column: "MouseId",
-                unique: true,
-                filter: "[MouseId] IS NOT NULL");
+                column: "MouseId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Computers_PSUId",
                 table: "Computers",
-                column: "PSUId",
-                unique: true,
-                filter: "[PSUId] IS NOT NULL");
+                column: "PSUId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CoolerSocketCompatibility_CPUCoolingId",
+                table: "CoolerSocketCompatibility",
+                column: "CPUCoolingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GPUs_ComputerId",
@@ -524,6 +534,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ChassiCooling");
+
+            migrationBuilder.DropTable(
+                name: "CoolerSocketCompatibility");
 
             migrationBuilder.DropTable(
                 name: "GPUs");

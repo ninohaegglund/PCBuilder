@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
 using PCBuilder.Service.ComponentsAPI.Services;
-using PCBuilder.Services.ComponentsAPI.DTOs;
-
 namespace PCBuilder.Service.ComponentsAPI.Controllers
 {
     [Route("api/[controller]")]

@@ -49,7 +49,7 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
             return _response;
         }
 
-        [HttpPut("{id:int}/remove-gpu/{gpuId:int}")]
+        [HttpPut("{computerId:int}/remove-gpu/{gpuId:int}")]
         public ResponseDTO RemoveGPUFromComputer(int id, int gpuId)
         {
             try
