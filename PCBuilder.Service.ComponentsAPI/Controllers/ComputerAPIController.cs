@@ -1,16 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
-using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Service.ComponentsAPI.Services.IService;
 namespace PCBuilder.Service.ComponentsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/component")]
     [ApiController]
     public class ComputerAPIController : ControllerBase
     {
-        private ComputerService _service;
-
-        public ComputerAPIController(DataContext db, IMapper mapper, ComputerService service)
+        private readonly IComputerService _service;
+        public ComputerAPIController(DataContext db, IMapper mapper, IComputerService service)
         {
             _service = service;
         }

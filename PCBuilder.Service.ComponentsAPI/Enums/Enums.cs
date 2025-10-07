@@ -1,6 +1,4 @@
 ﻿namespace PCBuilder.Services.ComponentsAPI.Models.Components;
-
-// CPU-sockets
 public enum CPUSocket
 {
     LGA1151,

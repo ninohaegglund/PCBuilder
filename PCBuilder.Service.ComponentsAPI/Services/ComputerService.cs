@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
+using PCBuilder.Service.ComponentsAPI.Services.IService;
 using PCBuilder.Services.ComponentsAPI.DTOs;
 using PCBuilder.Services.ComponentsAPI.Models;
 
 
 namespace PCBuilder.Service.ComponentsAPI.Services;
 
-public class ComputerService
+public class ComputerService : IComputerService
 {
     private readonly DataContext _context;
     private readonly IMapper _mapper;
@@ -35,7 +36,7 @@ public class ComputerService
             computer.RamModules = _context.RAMModules.Where(r => computerDTO.RAMIds.Contains(r.Id)).ToList();
         }
         if (computerDTO.StorageIds != null && computerDTO.StorageIds.Any())
-        {       
+        {
             computer.Storage = _context.Storages.Where(s => computerDTO.StorageIds.Contains(s.Id)).ToList();
         }
         if (computerDTO.CaseFanIds != null && computerDTO.CaseFanIds.Any())
@@ -455,7 +456,7 @@ public class ComputerService
                 Action<T> setComputerReference) where T : class
             {
                 if (newIds == null)
-                    return; 
+                    return;
 
                 currentList.Clear();
 
