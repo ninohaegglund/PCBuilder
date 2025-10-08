@@ -1,93 +1,95 @@
 ﻿@using PCBuilder.Services.ComponentsAPI.DTOs
 @model ComputerDTO
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="text-black">Components List</h1>
+<div class="container mt-4">
+    <div class="card shadow border-0">
+        <div class="card-header bg-light bg-gradient text-center py-3">
+            <h2 class="text-black">PC Components Overview</h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">PC Name:</div>
+                <div class="col-md-8">@Model.Name</div>
+            </div>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">CPU:</div>
+                <div class="col-md-8">@Model.CPUName (@(Model.CPUId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Motherboard:</div>
+                <div class="col-md-8">@Model.MotherboardName (@(Model.MotherboardId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">PSU:</div>
+                <div class="col-md-8">@Model.PSUName (@(Model.PSUId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Case:</div>
+                <div class="col-md-8">@Model.CaseName (@(Model.CaseId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">CPU Cooler:</div>
+                <div class="col-md-8">@Model.CPUCoolerName (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
+            </div>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Keyboard:</div>
+                <div class="col-md-8">@Model.KeyboardName (@(Model.KeyboardId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Mouse:</div>
+                <div class="col-md-8">@Model.MouseName (@(Model.MouseId?.ToString() ?? "-"))</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Headset:</div>
+                <div class="col-md-8">@Model.HeadsetName (@(Model.HeadsetId?.ToString() ?? "-"))</div>
+            </div>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">GPUs:</div>
+                <div class="col-md-8">@((Model.GPUNames != null && Model.GPUNames.Any()) ? string.Join(", ", Model.GPUNames) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">RAM:</div>
+                <div class="col-md-8">@((Model.RAMNames != null && Model.RAMNames.Any()) ? string.Join(", ", Model.RAMNames) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Storage:</div>
+                <div class="col-md-8">@((Model.StorageNames != null && Model.StorageNames.Any()) ? string.Join(", ", Model.StorageNames) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Case Fans:</div>
+                <div class="col-md-8">@((Model.CaseFanNames != null && Model.CaseFanNames.Any()) ? string.Join(", ", Model.CaseFanNames) : "-")</div>
+            </div>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Monitors:</div>
+                <div class="col-md-8">@((Model.MonitorNames != null && Model.MonitorNames.Any()) ? string.Join(", ", Model.MonitorNames) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Speakers:</div>
+                <div class="col-md-8">@((Model.SpeakerNames != null && Model.SpeakerNames.Any()) ? string.Join(", ", Model.SpeakerNames) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">PCIe Cables:</div>
+                <div class="col-md-8">@((Model.PCIeCableIds != null && Model.PCIeCableIds.Any()) ? string.Join(", ", Model.PCIeCableIds) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Power Cables:</div>
+                <div class="col-md-8">@((Model.PowerCableIds != null && Model.PowerCableIds.Any()) ? string.Join(", ", Model.PowerCableIds) : "-")</div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">SATA Cables:</div>
+                <div class="col-md-8">@((Model.SataCableIds != null && Model.SataCableIds.Any()) ? string.Join(", ", Model.SataCableIds) : "-")</div>
+            </div>
+            <hr />
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Actions:</div>
+                <div class="col-md-8">
+                    <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card-body p-4">
-        <table class="table table-borderless table-hover table-responsive">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                    <th>CPU Id</th>
-                    <th>CPU Name</th>
-                    <th>PSU Id</th>
-                    <th>PSU Name</th>
-                    <th>Motherboard Id</th>
-                    <th>Motherboard Name</th>
-                    <th>Case Id</th>
-                    <th>Case Name</th>
-                    <th>CPU Cooler Id</th>
-                    <th>CPU Cooler Name</th>
-                    <th>Keyboard Id</th>
-                    <th>Keyboard Name</th>
-                    <th>Mouse Id</th>
-                    <th>Mouse Name</th>
-                    <th>Headset Id</th>
-                    <th>Headset Name</th>
-                    <th>GPU Ids</th>
-                    <th>GPU Names</th>
-                    <th>RAM Ids</th>
-                    <th>RAM Names</th>
-                    <th>Storage Ids</th>
-                    <th>Storage Names</th>
-                    <th>Case Fan Ids</th>
-                    <th>Case Fan Names</th>
-                    <th>PCIe Cable Ids</th>
-                    <th>Power Cable Ids</th>
-                    <th>SATA Cable Ids</th>
-                    <th>Monitor Ids</th>
-                    <th>Monitor Names</th>
-                    <th>Speaker Ids</th>
-                    <th>Speaker Names</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>@Model.Id</td>
-                    <td>@Model.Name</td>
-                    <td>@(Model.CPUId?.ToString() ?? "-")</td>
-                    <td>@Model.CPUName</td>
-                    <td>@(Model.PSUId?.ToString() ?? "-")</td>
-                    <td>@Model.PSUName</td>
-                    <td>@(Model.MotherboardId?.ToString() ?? "-")</td>
-                    <td>@Model.MotherboardName</td>
-                    <td>@(Model.CaseId?.ToString() ?? "-")</td>
-                    <td>@Model.CaseName</td>
-                    <td>@(Model.CpuCoolerId?.ToString() ?? "-")</td>
-                    <td>@Model.CPUCoolerName</td>
-                    <td>@(Model.KeyboardId?.ToString() ?? "-")</td>
-                    <td>@Model.KeyboardName</td>
-                    <td>@(Model.MouseId?.ToString() ?? "-")</td>
-                    <td>@Model.MouseName</td>
-                    <td>@(Model.HeadsetId?.ToString() ?? "-")</td>
-                    <td>@Model.HeadsetName</td>
-                    <td>@(Model.GPUIds != null && Model.GPUIds.Any() ? string.Join(", ", Model.GPUIds) : "-")</td>
-                    <td>@(Model.GPUNames != null && Model.GPUNames.Any() ? string.Join(", ", Model.GPUNames) : "-")</td>
-                    <td>@(Model.RAMIds != null && Model.RAMIds.Any() ? string.Join(", ", Model.RAMIds) : "-")</td>
-                    <td>@(Model.RAMNames != null && Model.RAMNames.Any() ? string.Join(", ", Model.RAMNames) : "-")</td>
-                    <td>@(Model.StorageIds != null && Model.StorageIds.Any() ? string.Join(", ", Model.StorageIds) : "-")</td>
-                    <td>@(Model.StorageNames != null && Model.StorageNames.Any() ? string.Join(", ", Model.StorageNames) : "-")</td>
-                    <td>@(Model.CaseFanIds != null && Model.CaseFanIds.Any() ? string.Join(", ", Model.CaseFanIds) : "-")</td>
-                    <td>@(Model.CaseFanNames != null && Model.CaseFanNames.Any() ? string.Join(", ", Model.CaseFanNames) : "-")</td>
-                    <td>@(Model.PCIeCableIds != null && Model.PCIeCableIds.Any() ? string.Join(", ", Model.PCIeCableIds) : "-")</td>
-                    <td>@(Model.PowerCableIds != null && Model.PowerCableIds.Any() ? string.Join(", ", Model.PowerCableIds) : "-")</td>
-                    <td>@(Model.SataCableIds != null && Model.SataCableIds.Any() ? string.Join(", ", Model.SataCableIds) : "-")</td>
-                    <td>@(Model.MonitorIds != null && Model.MonitorIds.Any() ? string.Join(", ", Model.MonitorIds) : "-")</td>
-                    <td>@(Model.MonitorNames != null && Model.MonitorNames.Any() ? string.Join(", ", Model.MonitorNames) : "-")</td>
-                    <td>@(Model.SpeakerIds != null && Model.SpeakerIds.Any() ? string.Join(", ", Model.SpeakerIds) : "-")</td>
-                    <td>@(Model.SpeakerNames != null && Model.SpeakerNames.Any() ? string.Join(", ", Model.SpeakerNames) : "-")</td>
-                    <td>
-                        <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
     </div>
 </div>
