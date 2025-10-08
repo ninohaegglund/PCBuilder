@@ -367,3 +367,5 @@ FodyWeavers.xsd
 /PCBuilder.Services.TestAPI/appsettings.json
 /PCBuilder.Services.AuthAPI/appsettings.Development.json
 /PCBuilder.Services.AuthAPI/appsettings.json
+/PCBuilder.Web/appsettings.json
+/PCBuilder.Web/appsettings.Development.json
