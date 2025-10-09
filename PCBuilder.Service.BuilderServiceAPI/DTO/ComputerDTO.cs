@@ -40,9 +40,6 @@
         public List<string>? StorageNames { get; set; } 
         public List<int>? CaseFanIds { get; set; } 
         public List<string>? CaseFanNames { get; set; }
-        public List<int>? PCIeCableIds { get; set; } 
-        public List<int>? PowerCableIds { get; set; }
-        public List<int>? SataCableIds { get; set; }
         public List<int>? MonitorIds { get; set; }
         public List<string>? MonitorNames { get; set; }
         public List<int>? SpeakerIds { get; set; }

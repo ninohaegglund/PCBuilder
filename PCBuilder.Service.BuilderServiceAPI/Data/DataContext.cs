@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
@@ -15,28 +16,12 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 public class DataContext : DbContext
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
-    public DbSet<CPU> CPUs { get; set; } = null!;
-    public DbSet<CPUCooling> CPUCoolers { get; set; } = null!;
-    public DbSet<Motherboard> Motherboards { get; set; } = null!;
-    public DbSet<PSU> PSUs { get; set; } = null!;
-    public DbSet<Chassi> Cases { get; set; } = null!;
-    public DbSet<Keyboard> Keyboards { get; set; } = null!;
-    public DbSet<Mouse> Mice { get; set; } = null!;
-    public DbSet<Headset> Headsets { get; set; } = null!;
-    public DbSet<GPU> GPUs { get; set; } = null!;
-    public DbSet<RAM> RAMModules { get; set; } = null!;
-    public DbSet<StorageDevice> Storages { get; set; } = null!;
-    public DbSet<ChassiCooling> ChassiCooling { get; set; } = null!;
-    public DbSet<DisplayMonitor> Monitors { get; set; } = null!;
-    public DbSet<Speaker> Speakers { get; set; } = null!;
-
+    public DbSet<Computer> Computers { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Enums sparas som string
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entityType.GetProperties())
@@ -49,5 +34,6 @@ public class DataContext : DbContext
                 }
             }
         }
+
     }
 }
