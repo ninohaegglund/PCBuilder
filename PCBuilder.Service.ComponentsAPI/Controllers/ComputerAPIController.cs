@@ -1,159 +1,53 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
-using PCBuilder.Services.ComponentsAPI.DTOs;
-using PCBuilder.Services.ComponentsAPI.Models;
-
+using PCBuilder.Service.ComponentsAPI.Services.IService;
 namespace PCBuilder.Service.ComponentsAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/computer")]
     [ApiController]
     public class ComputerAPIController : ControllerBase
     {
-        private readonly DataContext _db;
-        private ResponseDTO _response;
-        private IMapper _mapper;
-        public ComputerAPIController(DataContext db, IMapper mapper)
+        private readonly IComputerService _service;
+        public ComputerAPIController(DataContext db, IMapper mapper, IComputerService service)
         {
-            _db = db;
-            _response = new ResponseDTO();
-            _mapper = mapper;
+            _service = service;
         }
 
         [HttpGet]
-        public ResponseDTO Get()
+        public async Task<ResponseDTO> Get()
         {
-            try
-            {
-                IEnumerable<Computer> Computers = _db.Computers.ToList();
-                _response.Result = _mapper.Map<IEnumerable<ComputerDTO>>(Computers);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
+            return await _service.GetAllComputersAsync();
+        }
+        [HttpGet("{id:int}")]
+        public async Task<ResponseDTO> Get(int id)
+        {
+            return await _service.GetComputerByIdAsync(id);
         }
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public ResponseDTO Get(int id)
+        [HttpGet("GetByName/{name}")]
+        public async Task<ResponseDTO> GetByName(string name)
         {
-            try
-            {
-                Computer Computers = _db.Computers.First(u => u.Id == id);
-                _response.Result = _mapper.Map<ComputerDTO>(Computers);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
-        }
-
-        [HttpGet]
-        [Route("GetByName/{name}")]
-        public ResponseDTO GetByName(string name)
-        {
-            try
-            {
-                Computer computer = _db.Computers.FirstOrDefault(u => u.Name.ToLower() == name.ToLower());
-                if (computer == null)
-                {
-                    _response.IsSuccess = false;
-                }
-                _response.Result = _mapper.Map<ComputerDTO>(computer);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
+            return await _service.GetComputerByNameAsync(name);
         }
 
         [HttpPost]
-        public ResponseDTO CreateComputer([FromBody] ComputerDTO computerDTO)
+        public async Task<ResponseDTO> CreateComputer([FromBody] ComputerCreateDTO computerDTO)
         {
-            try
-            {
-                Computer computer = _mapper.Map<Computer>(computerDTO);
-                _db.Computers.Add(computer);
-                _db.SaveChanges();
-
-                _response.Result = _mapper.Map<ComputerDTO>(computer);
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
+            return await _service.CreateComputerAsync(computerDTO);
         }
 
         [HttpPut("{id:int}")]
-        public ResponseDTO UpdateComputer(int id, [FromBody] ComputerDTO computerDTO)
+        public async Task<ResponseDTO> UpdateComputer(int id, [FromBody] ComputerCreateDTO computerDTO)
         {
-            try
-            {
-                if (id != computerDTO.Id)
-                {
-                    _response.IsSuccess = false;
-                    _response.Result = "Computer ID mismatch";
-                    return _response;
-                }
-
-                var computer = _db.Computers.FirstOrDefault(u => u.Id == id);
-                if (computer == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Result = "Computer not found";
-                    return _response;
-                }
-
-                _mapper.Map(computerDTO, computer);
-                _db.Computers.Update(computer);
-                _db.SaveChanges();
-
-                _response.Result = _mapper.Map<ComputerDTO>(computer);
-            }
-
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
+            return await _service.UpdateComputerAsync(id, computerDTO);
         }
 
-
-        [HttpDelete("{id:int}")]
-        public ResponseDTO DeleteComputer(int id)
+        [HttpDelete]
+        [Route("{id:int}")]
+        public async Task<ResponseDTO> DeleteComputer(int id)
         {
-            try
-            {
-                var computer = _db.Computers.FirstOrDefault(u => u.Id == id);
-                if (computer == null)
-                {
-                    _response.IsSuccess = false;
-                    _response.Result = "Computer not found";
-                    return _response;
-                }
-
-                _db.Computers.Remove(computer);
-                _db.SaveChanges();
-
-                _response.Result = "Computer deleted successfully";
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Result = ex.Message;
-            }
-            return _response;
+            return await _service.DeleteComputerAsync(id);
         }
     }
 }
-

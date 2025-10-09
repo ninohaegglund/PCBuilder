@@ -1,3 +1,8 @@
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using PCBuilder.Service.ComponentsAPI;
+using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Service.ComponentsAPI.Services.IService;
 using PCBuilder.Web.Service;
 using PCBuilder.Web.Service.IService;
 using PCBuilder.Web.Utility;
@@ -11,8 +16,17 @@ builder.Services.AddHttpClient();
 builder.Services.AddHttpClient<ICouponService,CouponService>();
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 
+
+builder.Services.AddDbContext<DataContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<IComputerService, ComputerService>();
+
 
 var app = builder.Build();
 

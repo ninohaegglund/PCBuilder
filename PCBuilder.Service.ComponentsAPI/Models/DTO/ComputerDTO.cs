@@ -3,7 +3,7 @@
     public class ComputerDTO
     {
         public int Id { get; set; }
-        public string Name { get; set; } = null!;
+        public string? Name { get; set; }
 
 
         // 1-1 relations
@@ -32,20 +32,20 @@
         public string? HeadsetName { get; set; }
 
         // 1-many relations
-        public List<int> GPUIds { get; set; } = new();
-        public List<string> GPUNames { get; set; } = new();
-        public List<int> RAMIds { get; set; } = new();
-        public List<string> RAMNames { get; set; } = new();
-        public List<int> StorageIds { get; set; } = new();
-        public List<string> StorageNames { get; set; } = new();
-        public List<int> CaseFanIds { get; set; } = new();
-        public List<string> CaseFanNames { get; set; } = new();
-        public List<int> PCIeCableIds { get; set; } = new();
-        public List<int> PowerCableIds { get; set; } = new();
-        public List<int> SataCableIds { get; set; } = new();
-        public List<int> MonitorIds { get; set; } = new();
-        public List<string> MonitorNames { get; set; } = new();
-        public List<int> SpeakerIds { get; set; } = new();
-        public List<string> SpeakerNames { get; set; } = new();
+        public List<int>? GPUIds { get; set; } 
+        public List<string>? GPUNames { get; set; } 
+        public List<int>? RAMIds { get; set; }
+        public List<string>? RAMNames { get; set; } 
+        public List<int>? StorageIds { get; set; }
+        public List<string>? StorageNames { get; set; } 
+        public List<int>? CaseFanIds { get; set; } 
+        public List<string>? CaseFanNames { get; set; }
+        public List<int>? PCIeCableIds { get; set; } 
+        public List<int>? PowerCableIds { get; set; }
+        public List<int>? SataCableIds { get; set; }
+        public List<int>? MonitorIds { get; set; }
+        public List<string>? MonitorNames { get; set; }
+        public List<int>? SpeakerIds { get; set; }
+        public List<string>? SpeakerNames { get; set; }
     }
 }

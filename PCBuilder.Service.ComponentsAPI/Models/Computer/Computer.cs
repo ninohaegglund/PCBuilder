@@ -16,7 +16,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models;
 public class Computer
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
+    public string? Name { get; set; }
 
 
     // 1-1 relationer

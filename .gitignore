@@ -363,8 +363,8 @@ MigrationBackup/
 FodyWeavers.xsd
 /PCBuilder.Service.ComponentsAPI/appsettings.json
 /PCBuilder.Service.ComponentsAPI/appsettings.Development.json
-/PCBuilder.Services.TestAPI/appsettings.Development.json
 /PCBuilder.Services.TestAPI/appsettings.json
+/PCBuilder.Services.TestAPI/appsettings.Development.json
 /PCBuilder.Services.AuthAPI/appsettings.Development.json
 /PCBuilder.Services.AuthAPI/appsettings.json
 /PCBuilder.Web/appsettings.json

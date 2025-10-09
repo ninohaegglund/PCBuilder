@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace PCBuilder.Service.ComponentsAPI.Migrations
+namespace PCBuilder.Services.TestAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class components2 : Migration
+    public partial class xdxd : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

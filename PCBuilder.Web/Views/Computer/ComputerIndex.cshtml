@@ -1,0 +1,35 @@
+﻿@using PCBuilder.Services.ComponentsAPI.DTOs
+@model List<PCBuilder.Services.ComponentsAPI.DTOs.ComputerDTO>
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-black">Computer List</h1>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <table class="table table-borderless table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.Name</td>
+                        <td>
+                            <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info">Details</a>
+                            <a asp-action="DeleteComputer" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

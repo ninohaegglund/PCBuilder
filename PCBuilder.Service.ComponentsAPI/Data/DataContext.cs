@@ -57,90 +57,108 @@ public class DataContext : DbContext
         }
 
 
+        // CPU
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Cpu)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CPUId);
+            .WithMany() // flera datorer kan ha samma CPU-modell
+            .HasForeignKey(c => c.CPUId);
 
+        // PSU
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.PSU)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.PSUId);
+            .WithMany()
+            .HasForeignKey(c => c.PSUId);
 
+        // Motherboard
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Motherboard)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.MotherboardId);
+            .WithMany()
+            .HasForeignKey(c => c.MotherboardId);
 
+        // Case
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Case)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CaseId);
+            .WithMany()
+            .HasForeignKey(c => c.CaseId);
 
+        // CPU Cooler
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.CPUCooler)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.CpuCoolerId);
+            .WithMany()
+            .HasForeignKey(c => c.CpuCoolerId);
 
+        // Keyboard
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Keyboard)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.KeyboardId);
+            .WithMany()
+            .HasForeignKey(c => c.KeyboardId);
 
+        // Mouse
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Mouse)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.MouseId);
+            .WithMany()
+            .HasForeignKey(c => c.MouseId);
 
+        // Headset
         modelBuilder.Entity<Computer>()
             .HasOne(c => c.Headset)
-            .WithOne()
-            .HasForeignKey<Computer>(c => c.HeadsetId);
+            .WithMany()
+            .HasForeignKey(c => c.HeadsetId);
+
 
         // 1-many relationer
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.GPU)
             .WithOne(g => g.Computer)
-            .HasForeignKey(g => g.ComputerId);
+            .HasForeignKey(g => g.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.RamModules)
             .WithOne(r => r.Computer)
-            .HasForeignKey(r => r.ComputerId);
+            .HasForeignKey(r => r.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.Storage)
             .WithOne(s => s.Computer)
-            .HasForeignKey(s => s.ComputerId);
+            .HasForeignKey(s => s.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.CaseFans)
             .WithOne(f => f.Computer)
-            .HasForeignKey(f => f.ComputerId);
+            .HasForeignKey(f => f.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.PCIeCables)
             .WithOne(pc => pc.Computer)
-            .HasForeignKey(pc => pc.ComputerId);
+            .HasForeignKey(pc => pc.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.PowerCables)
             .WithOne(pc => pc.Computer)
-            .HasForeignKey(pc => pc.ComputerId);
+            .HasForeignKey(pc => pc.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.SataCables)
             .WithOne(sc => sc.Computer)
-            .HasForeignKey(sc => sc.ComputerId);
+            .HasForeignKey(sc => sc.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.Monitor)
             .WithOne(m => m.Computer)
-            .HasForeignKey(m => m.ComputerId);
+            .HasForeignKey(m => m.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Computer>()
             .HasMany(c => c.Speakers)
             .WithOne(s => s.Computer)
-            .HasForeignKey(s => s.ComputerId);
+            .HasForeignKey(s => s.ComputerId)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

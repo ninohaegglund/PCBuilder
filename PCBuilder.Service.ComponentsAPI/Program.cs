@@ -1,7 +1,9 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI;
-using System;
+using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
+using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Service.ComponentsAPI.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,10 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
+
+builder.Services.AddScoped<IComputerService, ComputerService>();
+builder.Services.AddScoped<ComputerCreateDTO>();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
