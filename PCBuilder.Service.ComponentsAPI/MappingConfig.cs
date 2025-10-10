@@ -2,7 +2,18 @@
 using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Services.ComponentsAPI.DTOs;
 using PCBuilder.Services.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
 using System.Linq;
 
 namespace PCBuilder.Service.ComponentsAPI
@@ -44,8 +55,25 @@ namespace PCBuilder.Service.ComponentsAPI
                     .ForMember(dest => dest.SpeakerIds, opt => opt.MapFrom(src => src.Speakers.Select(s => s.Id)))
                     .ForMember(dest => dest.SpeakerNames, opt => opt.MapFrom(src => src.Speakers.Select(s => s.ModelName)));
 
+                // DTO to Model mappings
                 config.CreateMap<CPU, CPUDto>();
                 config.CreateMap<PSU, PSUDTO>();
+                config.CreateMap<Motherboard, MotherboardDTO>();
+                config.CreateMap<Chassi, ChassiDTO>();
+                config.CreateMap<CPUCooling, CPUCoolingDTO>();
+                config.CreateMap<Keyboard, KeyboardDTO>();
+                config.CreateMap<Mouse, MouseDTO>();
+                config.CreateMap<Headset, HeadsetDTO>();
+                config.CreateMap<GPU, GPUDto>();
+                config.CreateMap<RAM, RAMDTO>();
+                config.CreateMap<StorageDevice, StorageDTO>();
+                config.CreateMap<ChassiCooling, ChassiCoolingDTO>();
+                config.CreateMap<PCIeCable, PCIeCableDTO>();
+                config.CreateMap<PowerCable, PowerCableDTO>();
+                config.CreateMap<SataCable, SataCableDTO>();
+                config.CreateMap<DisplayMonitor, MonitorDTO>();
+                config.CreateMap<Speaker, SpeakerDTO>();
+                
             });
 
             return mappingConfig;
