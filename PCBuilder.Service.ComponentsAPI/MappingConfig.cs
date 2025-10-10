@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Services.ComponentsAPI.DTOs;
 using PCBuilder.Services.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using System.Linq;
 
 namespace PCBuilder.Service.ComponentsAPI
@@ -41,6 +43,9 @@ namespace PCBuilder.Service.ComponentsAPI
                     .ForMember(dest => dest.MonitorNames, opt => opt.MapFrom(src => src.Monitor.Select(m => m.ModelName)))
                     .ForMember(dest => dest.SpeakerIds, opt => opt.MapFrom(src => src.Speakers.Select(s => s.Id)))
                     .ForMember(dest => dest.SpeakerNames, opt => opt.MapFrom(src => src.Speakers.Select(s => s.ModelName)));
+
+                config.CreateMap<CPU, CPUDto>();
+                config.CreateMap<PSU, PSUDTO>();
             });
 
             return mappingConfig;

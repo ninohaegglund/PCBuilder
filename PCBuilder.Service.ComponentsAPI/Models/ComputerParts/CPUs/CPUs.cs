@@ -1,5 +1,4 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.Components;
+﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
 
 public class CPU
 {
