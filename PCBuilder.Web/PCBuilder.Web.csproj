@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PCBuilder.Service.BuilderServiceAPI\PCBuilder.Service.BuilderServiceAPI.csproj" />
     <ProjectReference Include="..\PCBuilder.Service.ComponentsAPI\PCBuilder.Service.ComponentsAPI.csproj" />
   </ItemGroup>
 

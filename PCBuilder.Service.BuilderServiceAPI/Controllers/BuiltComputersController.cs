@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
-using PCBuilder.Service.ComponentsAPI.Services.IService;
 namespace PCBuilder.Service.ComponentsAPI.Controllers
 {
     [Route("api/computer")]
     [ApiController]
-    public class ComputerAPIController : ControllerBase
+    public class BuiltComputersController : ControllerBase
     {
         private readonly IComputerService _service;
-        public ComputerAPIController(DataContext db, IMapper mapper, IComputerService service)
+        public BuiltComputersController(DataContext db, IMapper mapper, IComputerService service)
         {
             _service = service;
         }
@@ -23,12 +23,6 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
         public async Task<ResponseDTO> Get(int id)
         {
             return await _service.GetComputerByIdAsync(id);
-        }
-
-        [HttpGet("GetByName/{name}")]
-        public async Task<ResponseDTO> GetByName(string name)
-        {
-            return await _service.GetComputerByNameAsync(name);
         }
 
         [HttpPost]

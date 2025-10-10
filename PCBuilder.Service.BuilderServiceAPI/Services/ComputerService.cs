@@ -10,17 +10,19 @@ namespace PCBuilder.Service.ComponentsAPI.Services;
 
 public class ComputerService : IComputerService
 {
-    private readonly DataContext _context;
+    private readonly PcDataContext _context;
     private readonly IMapper _mapper;
     private readonly IGetComponentsService _componentsService;
-    private readonly ComputerRepository _computerRepository;
+    private readonly BuiltComputersRepository _computerRepository;
+    private readonly UnfinishedBuildsRepository _unfinishedBuildsRepository;
 
-    public ComputerService(DataContext context, IMapper mapper, IGetComponentsService getComponentsService, ComputerRepository computerRepository)
+    public ComputerService(PcDataContext context, IMapper mapper, IGetComponentsService getComponentsService, BuiltComputersRepository computerRepository, UnfinishedBuildsRepository unfinishedBuildsRepository)
     {
         _context = context;
         _mapper = mapper;
         _componentsService = getComponentsService;
         _computerRepository = computerRepository;
+        _unfinishedBuildsRepository = unfinishedBuildsRepository;
     }
 
     public async Task<ResponseDTO> GetAllComputersAsync()
@@ -54,37 +56,35 @@ public class ComputerService : IComputerService
                     SpeakerIds = computer.SpeakerIds
                 };
 
-                // Hämta namn från respektive ComponentsAPI
                 if (dto.GPUIds != null && dto.GPUIds.Any())
-                    dto.GPUNames = (await _componentsService.GetGpusAsync(dto.GPUIds)).Select(g => g.ModelName).ToList();
+                    dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
                 if (dto.RAMIds != null && dto.RAMIds.Any())
-                    dto.RAMNames = (await _componentsService.GetRamsAsync(dto.RAMIds)).Select(r => r.ModelName).ToList();
+                    dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
                 if (dto.StorageIds != null && dto.StorageIds.Any())
-                    dto.StorageNames = (await _componentsService.GetStoragesAsync(dto.StorageIds)).Select(s => s.ModelName).ToList();
+                    dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
                 if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
-                    dto.CaseFanNames = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).Select(f => f.ModelName).ToList();
+                    dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
                 if (dto.MonitorIds != null && dto.MonitorIds.Any())
-                    dto.MonitorNames = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).Select(m => m.ModelName).ToList();
+                    dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
                 if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
-                    dto.SpeakerNames = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).Select(s => s.ModelName).ToList();
+                    dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
 
-                // Hämta namn för 1-1-komponenter om du vill (frivilligt)
                 if (computer.CPUId.HasValue)
-                    dto.CPUName = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault()?.ModelName;
+                    dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
                 if (computer.PSUId.HasValue)
-                    dto.PSUName = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault()?.ModelName;
+                    dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
                 if (computer.MotherboardId.HasValue)
-                    dto.MotherboardName = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault()?.ModelName;
+                    dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
                 if (computer.CaseId.HasValue)
-                    dto.CaseName = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault()?.ModelName;
+                    dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
                 if (computer.CpuCoolerId.HasValue)
-                    dto.CPUCoolerName = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault()?.ModelName;
+                    dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
                 if (computer.KeyboardId.HasValue)
-                    dto.KeyboardName = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault()?.ModelName;
+                    dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
                 if (computer.MouseId.HasValue)
-                    dto.MouseName = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault()?.ModelName;
+                    dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
                 if (computer.HeadsetId.HasValue)
-                    dto.HeadsetName = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault()?.ModelName;
+                    dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
 
                 dtoList.Add(dto);
             }
@@ -127,37 +127,36 @@ public class ComputerService : IComputerService
                 SpeakerIds = computer.SpeakerIds
             };
 
-            // Hämta namn på samma sätt som i GetAllComputersAsync (kan extraheras till hjälpfunktion)
             if (dto.GPUIds != null && dto.GPUIds.Any())
-                dto.GPUNames = (await _componentsService.GetGpusAsync(dto.GPUIds)).Select(g => g.ModelName).ToList();
+                dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
             if (dto.RAMIds != null && dto.RAMIds.Any())
-                dto.RAMNames = (await _componentsService.GetRamsAsync(dto.RAMIds)).Select(r => r.ModelName).ToList();
+                dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
             if (dto.StorageIds != null && dto.StorageIds.Any())
-                dto.StorageNames = (await _componentsService.GetStoragesAsync(dto.StorageIds)).Select(s => s.ModelName).ToList();
+                dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
             if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
-                dto.CaseFanNames = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).Select(f => f.ModelName).ToList();
+                dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
             if (dto.MonitorIds != null && dto.MonitorIds.Any())
-                dto.MonitorNames = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).Select(m => m.ModelName).ToList();
+                dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
             if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
-                dto.SpeakerNames = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).Select(s => s.ModelName).ToList();
+                dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
 
             // 1-1-komponentnamn
             if (computer.CPUId.HasValue)
-                dto.CPUName = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault()?.ModelName;
+                dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
             if (computer.PSUId.HasValue)
-                dto.PSUName = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault()?.ModelName;
+                dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
             if (computer.MotherboardId.HasValue)
-                dto.MotherboardName = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault()?.ModelName;
+                dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
             if (computer.CaseId.HasValue)
-                dto.CaseName = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault()?.ModelName;
+                dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
             if (computer.CpuCoolerId.HasValue)
-                dto.CPUCoolerName = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault()?.ModelName;
+                dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
             if (computer.KeyboardId.HasValue)
-                dto.KeyboardName = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault()?.ModelName;
+                dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
             if (computer.MouseId.HasValue)
-                dto.MouseName = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault()?.ModelName;
+                dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
             if (computer.HeadsetId.HasValue)
-                dto.HeadsetName = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault()?.ModelName;
+                dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
 
             return new ResponseDTO { IsSuccess = true, Result = dto };
         }

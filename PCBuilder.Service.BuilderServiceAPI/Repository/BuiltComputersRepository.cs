@@ -1,12 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PCBuilder.Service.BuilderServiceAPI.Models;
+﻿using PCBuilder.Service.BuilderServiceAPI.Models;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Repository;
 
-public class ComputerRepository
+public class BuiltComputersRepository
 {
-    public readonly DataContext _context;
-    public ComputerRepository(DataContext context)
+    public readonly PcDataContext _context;
+    public BuiltComputersRepository(PcDataContext context)
     {
         _context = context;
     }

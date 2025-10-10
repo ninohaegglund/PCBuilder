@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
-using PCBuilder.Service.ComponentsAPI.Services.IService;
 using PCBuilder.Services.ComponentsAPI.DTOs;
 
 namespace PCBuilder.Web.Controllers;

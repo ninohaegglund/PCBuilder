@@ -4,6 +4,7 @@ public class Computer
 {
     public int Id { get; set; }
     public string? Name { get; set; }
+    public bool IsBuilt { get; set; }
 
     public int? CPUId { get; set; }
     public int? PSUId { get; set; }

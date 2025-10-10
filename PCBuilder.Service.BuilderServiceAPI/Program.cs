@@ -1,7 +1,7 @@
+using AutoMapper;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
 using PCBuilder.Service.ComponentsAPI.Services;
-using PCBuilder.Service.ComponentsAPI.Services.IService;
 
 var builder = WebApplication.CreateBuilder(args);
 
