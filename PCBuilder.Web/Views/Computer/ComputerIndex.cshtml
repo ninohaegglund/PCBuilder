@@ -1,35 +1,37 @@
 ﻿@using PCBuilder.Services.ComponentsAPI.DTOs
 @model List<PCBuilder.Services.ComponentsAPI.DTOs.ComputerDTO>
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="text-black">Computer List</h1>
+<div class="container mt-4">
+    <div class="row g-4">
+        <h1 class="text-center">Computers</h1>
+        @foreach (var item in Model)
+        {
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="card card-hover  border-light bg-light-subtle  h-100 shadow-sm" style="max-width: 20rem;">
+                    <div class="card-header fw-bold bg-dark-subtle ">
+                        @item.Name
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled mb-4">
+                            <li>
+                                <strong>CPU:</strong>
+                                @item.CPUName ?? "-"
+                            </li>
+                            <li>
+                                <strong>GPU:</strong>
+                                @(item.GPUNames != null && item.GPUNames.Any() ? string.Join(", ", item.GPUNames) : "-")
+                            </li>
+                            <li>
+                                <strong>RAM:</strong>
+                                @(item.RAMNames != null && item.RAMNames.Any() ? string.Join(", ", item.RAMNames) : "-")
+                            </li>
+                        </ul>
+                        <div class="text-end">
+                            <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info me-2">Details</a>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-    <div class="card-body p-4">
-        <table class="table table-borderless table-hover table-responsive">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Name</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.Name</td>
-                        <td>
-                            <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info">Details</a>
-                            <a asp-action="DeleteComputer" asp-route-id="@item.Id" class="btn btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+        }
     </div>
 </div>

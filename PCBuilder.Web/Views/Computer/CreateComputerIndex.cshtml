@@ -1,0 +1,139 @@
+﻿@model PCBuilder.Service.ComponentsAPI.Models.DTO.Response.ComputerCreateDTO
+
+
+<form asp-action="Create">
+    <div class="container mt-4">
+        <div class="card border-secondary bg-light-subtle shadow-sm">
+            <div class="card-header bg-dark text-white text-center">
+                <h2>Build Computer</h2>
+            </div>
+            <div class="card-body">
+
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CPUId" class="form-label fw-bold"></label>
+                    <select asp-for="CPUId" asp-items="ViewBag.CPUs" class="form-control"></select>
+                    <span asp-validation-for="CPUId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PSUId" class="form-label fw-bold"></label>
+                    <select asp-for="PSUId" asp-items="ViewBag.PSUs" class="form-control"></select>
+                    <span asp-validation-for="PSUId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MotherboardId" class="form-label fw-bold"></label>
+                    <input asp-for="MotherboardId" class="form-control" />
+                    <span asp-validation-for="MotherboardId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CaseId" class="form-label fw-bold"></label>
+                    <input asp-for="CaseId" class="form-control" />
+                    <span asp-validation-for="CaseId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CpuCoolerId" class="form-label fw-bold"></label>
+                    <input asp-for="CpuCoolerId" class="form-control" />
+                    <span asp-validation-for="CpuCoolerId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="KeyboardId" class="form-label fw-bold"></label>
+                    <input asp-for="KeyboardId" class="form-control" />
+                    <span asp-validation-for="KeyboardId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MouseId" class="form-label fw-bold"></label>
+                    <input asp-for="MouseId" class="form-control" />
+                    <span asp-validation-for="MouseId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="HeadsetId" class="form-label fw-bold"></label>
+                    <input asp-for="HeadsetId" class="form-control" />
+                    <span asp-validation-for="HeadsetId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GPUIds" class="form-label fw-bold"></label>
+                    <input asp-for="GPUIds" class="form-control" />
+                    <span asp-validation-for="GPUIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="RAMIds" class="form-label fw-bold"></label>
+                    <input asp-for="RAMIds" class="form-control" />
+                    <span asp-validation-for="RAMIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="StorageIds" class="form-label fw-bold"></label>
+                    <input asp-for="StorageIds" class="form-control" />
+                    <span asp-validation-for="StorageIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CaseFanIds" class="form-label fw-bold"></label>
+                    <input asp-for="CaseFanIds" class="form-control" />
+                    <span asp-validation-for="CaseFanIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PCIeCableIds" class="form-label fw-bold"></label>
+                    <input asp-for="PCIeCableIds" class="form-control" />
+                    <span asp-validation-for="PCIeCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PowerCableIds" class="form-label fw-bold"></label>
+                    <input asp-for="PowerCableIds" class="form-control" />
+                    <span asp-validation-for="PowerCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SataCableIds" class="form-label fw-bold"></label>
+                    <input asp-for="SataCableIds" class="form-control" />
+                    <span asp-validation-for="SataCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MonitorIds" class="form-label fw-bold"></label>
+                    <input asp-for="MonitorIds" class="form-control" />
+                    <span asp-validation-for="MonitorIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpeakerIds" class="form-label fw-bold"></label>
+                    <input asp-for="SpeakerIds" class="form-control" />
+                    <span asp-validation-for="SpeakerIds" class="text-danger"></span>
+                </div>
+
+
+
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="ComputerIndex" class="btn btn-outline-info">
+                    <i class="bi bi-arrow-left"></i> View Computers
+                </a>
+                <button asp-action="CreateComputerIndex" type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg"></i> Create
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
