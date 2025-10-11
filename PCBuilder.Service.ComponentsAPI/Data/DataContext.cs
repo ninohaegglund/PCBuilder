@@ -31,7 +31,6 @@ public class DataContext : DbContext
     public DbSet<DisplayMonitor> Monitors { get; set; } = null!;
     public DbSet<Speaker> Speakers { get; set; } = null!;
 
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

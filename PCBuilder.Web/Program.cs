@@ -1,10 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using PCBuilder.Service.ComponentsAPI.Services;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Web.Service;
 using PCBuilder.Web.Service.IService;
 using PCBuilder.Web.Utility;
+using PCBuilder.Service.BuilderServiceAPI.Data;
+using PCBuilder.Service.BuilderServiceAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

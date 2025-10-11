@@ -1,4 +1,6 @@
-﻿namespace PCBuilder.Service.BuilderServiceAPI.Repository;
+﻿using PCBuilder.Service.BuilderServiceAPI.Data;
+
+namespace PCBuilder.Service.BuilderServiceAPI.Repository;
 
 public class UnfinishedBuildsRepository
 {

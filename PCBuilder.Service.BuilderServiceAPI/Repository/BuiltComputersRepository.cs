@@ -1,4 +1,5 @@
-﻿using PCBuilder.Service.BuilderServiceAPI.Models;
+﻿using PCBuilder.Service.BuilderServiceAPI.Data;
+using PCBuilder.Service.BuilderServiceAPI.Models;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Repository;
 

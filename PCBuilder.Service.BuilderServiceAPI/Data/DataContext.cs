@@ -2,10 +2,13 @@
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 
+namespace PCBuilder.Service.BuilderServiceAPI.Data;
+
 public class PcDataContext : DbContext
 {
-    public PcDataContext(DbContextOptions<DataContext> options) : base(options) { }
+    public PcDataContext(DbContextOptions<PcDataContext> options) : base(options) { }
     public DbSet<Computer> Computers { get; set; } = null!;
+    public DbSet<Inventory> Inventories { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

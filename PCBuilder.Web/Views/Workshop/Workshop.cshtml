@@ -29,7 +29,7 @@
                         <td>@order.Id</td>
                         <td>@order.CustomerName</td>
                         <td>@order.ComputerName</td>
-                        <td>@order.Status</td>
+                        <td>@order.OrderStatus</td>
                         <td>
                             <a asp-action="StartBuild" asp-route-orderId="@order.Id" class="btn btn-success">Start Build</a>
                         </td>
@@ -97,9 +97,9 @@
             <thead>
                 <tr>
                     <th>Component Id</th>
-                    <th>Name</th>
+                    <th>Inventory Name</th>
                     <th>Type</th>
-                    <th>Stock</th>
+                    <th>Quantity</th>
                 </tr>
             </thead>
             <tbody>
@@ -107,9 +107,9 @@
                 {
                     <tr>
                         <td>@component.Id</td>
-                        <td>@component.Name</td>
-                        <td>@component.Type</td>
-                        <td>@component.Stock</td>
+                        <td>@component.InventoryName</td>
+                        <td>@component.ComponentId</td>
+                        <td>@component.Quantity</td>
                     </tr>
                 }
             </tbody>
