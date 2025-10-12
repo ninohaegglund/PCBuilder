@@ -1,10 +1,19 @@
-﻿namespace PCBuilder.Service.BuilderServiceAPI.Models;
+﻿using PCBuilder.Service.BuilderServiceAPI.Enums;
+
+namespace PCBuilder.Service.BuilderServiceAPI.Models;
 
 public class Computer
 {
     public int Id { get; set; }
-    public string? Name { get; set; }
+    public string? ComputerName { get; set; }
     public bool IsBuilt { get; set; }
+
+    public Customer Customer { get; set; }
+    public int CustomerId { get; set; }
+
+    public Status Status { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 
     public int? CPUId { get; set; }
     public int? PSUId { get; set; }

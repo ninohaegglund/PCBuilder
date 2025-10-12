@@ -1,6 +1,0 @@
-@PCBuilder.Services.CustomerAPI_HostAddress = http://localhost:5221
-
-GET {{PCBuilder.Services.CustomerAPI_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

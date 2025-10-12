@@ -1,5 +1,5 @@
 ﻿@using PCBuilder.Web.WorkshopViewModel
-@model WorkshopViewModel
+@model WorkshopViewModel    
 
 <div class="card shadow border-0 mt-4">
     <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
@@ -50,11 +50,12 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var build in Model.PendingBuilds)
+                @foreach (var build in Model.UnfinishedBuilds)
                 {
                     <tr>
                         <td>@build.Id</td>
                         <td>@build.CustomerName</td>
+                        <td>@build.Name</td>
                         <td>@build.CreatedAt.ToShortDateString()</td>
                         <td>@build.Status</td>
                         <td>
