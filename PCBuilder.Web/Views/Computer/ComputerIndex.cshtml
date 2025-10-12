@@ -19,11 +19,11 @@
                             </li>
                             <li>
                                 <strong>GPU:</strong>
-                                @(item.GPUNames != null && item.GPUNames.Any() ? string.Join(", ", item.GPUNames) : "-")
+                                @(item.GPUs != null && item.GPUs.Any() ? string.Join(", ", item.GPUs) : "-")
                             </li>
                             <li>
                                 <strong>RAM:</strong>
-                                @(item.RAMNames != null && item.RAMNames.Any() ? string.Join(", ", item.RAMNames) : "-")
+                                @(item.RAMs != null && item.RAMs.Any() ? string.Join(", ", item.RAMs) : "-")
                             </li>
                         </ul>
                         <div class="text-end">

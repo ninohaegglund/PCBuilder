@@ -23,6 +23,7 @@ builder.Services.AddDbContext<PcDataContext>(options =>
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddControllers();
+builder.Services.AddSingleton(mapper);
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 builder.Services.AddControllers();

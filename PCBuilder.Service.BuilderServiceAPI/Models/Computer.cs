@@ -8,7 +8,7 @@ public class Computer
     public string? ComputerName { get; set; }
     public bool IsBuilt { get; set; }
 
-    public Customer Customer { get; set; }
+    //public Customer Customer { get; set; }
     public int CustomerId { get; set; }
 
     public Status Status { get; set; }
