@@ -7,6 +7,7 @@ using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.Repository;
+using PCBuilder.Service.BuilderServiceAPI.Repository.IRepository;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 
@@ -15,10 +16,10 @@ public class ComputerService : IComputerService
     private readonly PcDataContext _context;
     private readonly IMapper _mapper;
     private readonly IGetComponentsService _componentsService;
-    private readonly BuiltComputersRepository _computerRepository;
+    private readonly IBuiltComputersRepository _computerRepository;
     private readonly UnfinishedBuildsRepository _unfinishedBuildsRepository;
 
-    public ComputerService(PcDataContext context, IMapper mapper, IGetComponentsService getComponentsService, BuiltComputersRepository computerRepository, UnfinishedBuildsRepository unfinishedBuildsRepository)
+    public ComputerService(PcDataContext context, IMapper mapper, IGetComponentsService getComponentsService, IBuiltComputersRepository computerRepository, UnfinishedBuildsRepository unfinishedBuildsRepository)
     {
         _context = context;
         _mapper = mapper;

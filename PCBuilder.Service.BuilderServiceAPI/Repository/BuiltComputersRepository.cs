@@ -1,9 +1,10 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.Models;
+using PCBuilder.Service.BuilderServiceAPI.Repository.IRepository;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Repository;
 
-public class BuiltComputersRepository
+public class BuiltComputersRepository : IBuiltComputersRepository
 {
     public readonly PcDataContext _context;
     public BuiltComputersRepository(PcDataContext context)
