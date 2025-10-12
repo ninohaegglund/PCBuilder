@@ -1,0 +1,139 @@
+﻿@model PCBuilder.Service.ComponentsAPI.Models.DTO.Response.ComputerCreateDTO
+
+
+<form asp-action="Create">
+    <div class="container mt-4">
+        <div class="card border-secondary bg-light-subtle shadow-sm">
+            <div class="card-header bg-dark text-white text-center">
+                <h2>Build Computer</h2>
+            </div>
+            <div class="card-body">
+
+
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label fw-bold">Name </label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CPUId" class="form-label fw-bold">CPU <i class="bi bi-cpu"></i> </label>
+                    <select asp-for="CPUId" asp-items="ViewBag.CPUs" class="form-control"></select>
+                    <span asp-validation-for="CPUId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PSUId" class="form-label fw-bold"> PSU <i class="bi bi-battery-charging"></i></label>
+                    <select asp-for="PSUId" asp-items="ViewBag.PSUs" class="form-control"></select>
+                    <span asp-validation-for="PSUId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MotherboardId" class="form-label fw-bold">Motherboard <i class="bi bi-motherboard"></i></label>
+                    <select asp-for="MotherboardId" asp-items="ViewBag.Motherboards" class="form-control"></select>
+                    <span asp-validation-for="MotherboardId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CaseId" class="form-label fw-bold"> Case <i class="bi bi-pc"></i></label>
+                    <select asp-for="CaseId" asp-items="ViewBag.Cases" class="form-control"></select>
+                    <span asp-validation-for="CaseId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CpuCoolerId" class="form-label fw-bold">Cooler <i class="bi bi-fan"></i></label>
+                    <select asp-for="CpuCoolerId" asp-items="ViewBag.CPUCoolers" class="form-control"></select>
+                    <span asp-validation-for="CpuCoolerId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="KeyboardId" class="form-label fw-bold">Keyboard <i class="bi bi-calculator"></i></label>
+                    <select asp-for="KeyboardId" asp-items="ViewBag.Keyboards" class="form-control"></select>
+                    <span asp-validation-for="KeyboardId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MouseId" class="form-label fw-bold">Mouse <i class="bi bi-mouse"></i></label>
+                    <select asp-for="MouseId" asp-items="ViewBag.Mice" class="form-control"></select>
+                    <span asp-validation-for="MouseId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="HeadsetId" class="form-label fw-bold">Headset <i class="bi bi-headset"></i></label>
+                    <select asp-for="HeadsetId" asp-items="ViewBag.Headsets" class="form-control"></select>
+                    <span asp-validation-for="HeadsetId" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="GPUIds" class="form-label fw-bold">GPU <i class="bi bi-nvidia"></i></label>
+                    <select asp-for="GPUIds" asp-items="ViewBag.GPUs" class="form-control"></select>
+                    <span asp-validation-for="GPUIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="RAMIds" class="form-label fw-bold">RAM <i class="bi bi-memory"></i></label>
+                    <select asp-for="RAMIds" asp-items="ViewBag.RAMs" class="form-control"></select>
+                    <span asp-validation-for="RAMIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="StorageIds" class="form-label fw-bold"> Storage <i class="bi bi-device-ssd"></i></label>
+                    <select asp-for="StorageIds" asp-items="ViewBag.Storages" class="form-control"></select>
+                    <span asp-validation-for="StorageIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="CaseFanIds" class="form-label fw-bold">Case Fans <i class="bi bi-fan"></i> </label>
+                    <select asp-for="CaseFanIds" asp-items="ViewBag.Mice" class="form-control"></select>
+                    <span asp-validation-for="CaseFanIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PCIeCableIds" class="form-label fw-bold"></label>
+                    <select asp-for="PCIeCableIds" asp-items="ViewBag.PCIeCables" class="form-control"></select>
+                    <span asp-validation-for="PCIeCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="PowerCableIds" class="form-label fw-bold"></label>
+                    <select asp-for="PowerCableIds" asp-items="ViewBag.PowerCables" class="form-control"></select>
+                    <span asp-validation-for="PowerCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SataCableIds" class="form-label fw-bold"></label>
+                    <select asp-for="SataCableIds" asp-items="ViewBag.SataCables" class="form-control"></select>
+                    <span asp-validation-for="SataCableIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="MonitorIds" class="form-label fw-bold">Monitor <i class="bi bi-display"></i></label>
+                    <select asp-for="MonitorIds" asp-items="ViewBag.Monitors" class="form-control"></select>
+                    <span asp-validation-for="MonitorIds" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="SpeakerIds" class="form-label fw-bold">Speakers <i class="bi bi-speaker"></i></label>
+                    <select asp-for="SpeakerIds" asp-items="ViewBag.Speakers" class="form-control"></select>
+                    <span asp-validation-for="SpeakerIds" class="text-danger"></span>
+                </div>
+
+
+
+            </div>
+            <div class="card-footer d-flex justify-content-between">
+                <a asp-action="ComputerIndex" class="btn btn-outline-info">
+                    <i class="bi bi-arrow-left"></i> View Computers
+                </a>
+                <button asp-action="CreateComputerIndex" type="submit" class="btn btn-success">
+                    <i class="bi bi-check-lg"></i> Create
+                </button>
+            </div>
+        </div>
+    </div>
+</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

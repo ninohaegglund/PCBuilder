@@ -35,3 +35,9 @@ body {
     transform: translateY(-4px);
     transition: all 0.2s;
 }
+
+.card-hover:hover {
+    box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+    transform: translateY(-3px) scale(1.02);
+    transition: all 0.18s;
+}

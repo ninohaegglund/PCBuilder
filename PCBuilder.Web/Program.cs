@@ -23,6 +23,8 @@ builder.Services.AddDbContext<PcDataContext>(options =>
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IComputerService, ComputerService>();
+builder.Services.AddScoped<IComponentService, ComponentService>();
+
 
 
 var app = builder.Build();
