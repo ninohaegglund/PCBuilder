@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
+using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.Repository;
-using PCBuilder.Service.BuilderServiceAPI.Repository.IRepository;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 

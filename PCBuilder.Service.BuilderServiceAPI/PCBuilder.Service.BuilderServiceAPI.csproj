@@ -25,4 +25,8 @@
     <ProjectReference Include="..\PCBuilder.Service.ComponentsAPI\PCBuilder.Service.ComponentsAPI.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Database\" />
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,6 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.Models;
 
-namespace PCBuilder.Service.BuilderServiceAPI.Repository.IRepository
+namespace PCBuilder.Service.BuilderServiceAPI.IRepository
 {
     public interface IBuiltComputersRepository
     {

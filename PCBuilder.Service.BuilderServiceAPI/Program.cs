@@ -4,9 +4,9 @@ using PCBuilder.Service.BuilderServiceAPI;
 using PCBuilder.Service.BuilderServiceAPI.Client;
 using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
+using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Repository;
-using PCBuilder.Service.BuilderServiceAPI.Repository.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.Services;
 using PCBuilder.Service.BuilderServiceAPI.Utility;
 

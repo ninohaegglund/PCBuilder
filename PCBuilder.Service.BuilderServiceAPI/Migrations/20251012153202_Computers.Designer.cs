@@ -12,8 +12,8 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
     [DbContext(typeof(PcDataContext))]
-    [Migration("20251012112931_inv")]
-    partial class inv
+    [Migration("20251012153202_Computers")]
+    partial class Computers
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

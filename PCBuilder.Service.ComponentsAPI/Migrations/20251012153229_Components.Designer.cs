@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251007193744_components")]
-    partial class components
+    [Migration("20251012153229_Components")]
+    partial class Components
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,8 +129,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
                     b.ToTable("Monitors");
                 });
 
@@ -175,8 +173,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
                     b.ToTable("GPUs");
                 });
 
@@ -200,136 +196,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.HasIndex("CPUCoolingId");
 
                     b.ToTable("CoolerSocketCompatibility");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.Computer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("CPUId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CaseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("CpuCoolerId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HeadsetId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("KeyboardId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MotherboardId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("MouseId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("PSUId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CPUId");
-
-                    b.HasIndex("CaseId");
-
-                    b.HasIndex("CpuCoolerId");
-
-                    b.HasIndex("HeadsetId");
-
-                    b.HasIndex("KeyboardId");
-
-                    b.HasIndex("MotherboardId");
-
-                    b.HasIndex("MouseId");
-
-                    b.HasIndex("PSUId");
-
-                    b.ToTable("Computers");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe.PCIeCable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConnectorType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LengthCm")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComputerId");
-
-                    b.ToTable("PCIeCables");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PowerCable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConnectorType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("LengthCm")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComputerId");
-
-                    b.ToTable("PowerCables");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.SataCable", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ComputerId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsRightAngled")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("LengthCm")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ComputerId");
-
-                    b.ToTable("SataCables");
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", b =>
@@ -393,8 +259,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ComputerId");
 
                     b.ToTable("ChassiCooling");
                 });
@@ -524,8 +388,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
                     b.ToTable("Speakers");
                 });
 
@@ -633,8 +495,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
                     b.ToTable("RAMModules");
                 });
 
@@ -675,27 +535,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ComputerId");
-
                     b.ToTable("Storages");
-                });
-
-            modelBuilder.Entity("DisplayMonitor", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("Monitor")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("GPU", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("GPU")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling.CoolerSocketCompatibility", b =>
@@ -709,144 +549,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Navigation("CPUCooling");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.Computer", b =>
-                {
-                    b.HasOne("CPU", "Cpu")
-                        .WithMany()
-                        .HasForeignKey("CPUId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", "Case")
-                        .WithMany()
-                        .HasForeignKey("CaseId");
-
-                    b.HasOne("CPUCooling", "CPUCooler")
-                        .WithMany()
-                        .HasForeignKey("CpuCoolerId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", "Headset")
-                        .WithMany()
-                        .HasForeignKey("HeadsetId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", "Keyboard")
-                        .WithMany()
-                        .HasForeignKey("KeyboardId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards.Motherboard", "Motherboard")
-                        .WithMany()
-                        .HasForeignKey("MotherboardId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", "Mouse")
-                        .WithMany()
-                        .HasForeignKey("MouseId");
-
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", "PSU")
-                        .WithMany()
-                        .HasForeignKey("PSUId");
-
-                    b.Navigation("CPUCooler");
-
-                    b.Navigation("Case");
-
-                    b.Navigation("Cpu");
-
-                    b.Navigation("Headset");
-
-                    b.Navigation("Keyboard");
-
-                    b.Navigation("Motherboard");
-
-                    b.Navigation("Mouse");
-
-                    b.Navigation("PSU");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe.PCIeCable", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("PCIeCables")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PowerCable", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("PowerCables")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.SataCable", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("SataCables")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.ChassiCooling", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("CaseFans")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers.Speaker", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("Speakers")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM.RAM", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("RamModules")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice.StorageDevice", b =>
-                {
-                    b.HasOne("PCBuilder.Services.ComponentsAPI.Models.Computer", "Computer")
-                        .WithMany("Storage")
-                        .HasForeignKey("ComputerId");
-
-                    b.Navigation("Computer");
-                });
-
             modelBuilder.Entity("CPUCooling", b =>
                 {
                     b.Navigation("CompatibleSockets");
-                });
-
-            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.Computer", b =>
-                {
-                    b.Navigation("CaseFans");
-
-                    b.Navigation("GPU");
-
-                    b.Navigation("Monitor");
-
-                    b.Navigation("PCIeCables");
-
-                    b.Navigation("PowerCables");
-
-                    b.Navigation("RamModules");
-
-                    b.Navigation("SataCables");
-
-                    b.Navigation("Speakers");
-
-                    b.Navigation("Storage");
                 });
 #pragma warning restore 612, 618
         }
