@@ -41,7 +41,7 @@ public class ComputerService : IComputerService
                 var dto = new ComputerDTO
                 {
                     Id = computer.Id,
-                    Name = computer.Name,
+                    Name = computer.ComputerName,
                     CPUId = computer.CPUId,
                     PSUId = computer.PSUId,
                     MotherboardId = computer.MotherboardId,
@@ -112,7 +112,7 @@ public class ComputerService : IComputerService
             var dto = new ComputerDTO
             {
                 Id = computer.Id,
-                Name = computer.Name,
+                Name = computer.ComputerName,
                 CPUId = computer.CPUId,
                 PSUId = computer.PSUId,
                 MotherboardId = computer.MotherboardId,
@@ -180,11 +180,11 @@ public class ComputerService : IComputerService
             if (string.IsNullOrWhiteSpace(computerDTO.Name))
             {
                 int numberOfPc = await _context.Computers.CountAsync();
-                computer.Name = $"Customer Computer {numberOfPc + 1}";
+                computer.ComputerName = $"Customer Computer {numberOfPc + 1}";
             }
             else
             {
-                computer.Name = computerDTO.Name;
+                computer.ComputerName = computerDTO.Name;
             }
 
             // 1-1 relationer
@@ -209,7 +209,7 @@ public class ComputerService : IComputerService
             await _context.SaveChangesAsync();
 
             response.IsSuccess = true;
-            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.Name };
+            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.ComputerName };
         }
         catch (Exception ex)
         {
@@ -241,7 +241,7 @@ public class ComputerService : IComputerService
             }
 
             if (!string.IsNullOrWhiteSpace(computerDTO.Name))
-                computer.Name = computerDTO.Name;
+                computer.ComputerName = computerDTO.Name;
 
             computer.CPUId = computerDTO.CPUId;
             computer.PSUId = computerDTO.PSUId;
@@ -262,7 +262,7 @@ public class ComputerService : IComputerService
             await _computerRepository.SaveUpdatesAsync(computer);
 
             response.IsSuccess = true;
-            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.Name };
+            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.ComputerName };
         }
         catch (Exception ex)
         {
