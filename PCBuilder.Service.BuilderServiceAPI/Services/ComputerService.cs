@@ -203,7 +203,7 @@ public class ComputerService : IComputerService
             computer.StorageIds = computerDTO.StorageIds?.ToList() ?? new();
             computer.CaseFanIds = computerDTO.CaseFanIds?.ToList() ?? new();
             computer.MonitorIds = computerDTO.MonitorIds?.ToList() ?? new();
-            computer.SpeakerIds = computerDTO.SpeakerIds?.ToList() ?? new();
+            computer.SpeakerIds = computerDTO.SpeakerIds?.ToList() ?? new();    
 
             _context.Computers.Add(computer);
             await _context.SaveChangesAsync();

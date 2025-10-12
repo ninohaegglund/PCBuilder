@@ -6,6 +6,8 @@ using PCBuilder.Web.Service.IService;
 using PCBuilder.Web.Utility;
 using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.Services;
+using PCBuilder.Service.ComponentsAPI.Interfaces;
+using PCBuilder.Service.ComponentsAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

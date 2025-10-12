@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
+using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using PCBuilder.Service.ComponentsAPI.Interfaces;
 
 namespace PCBuilder.Web.Controllers;
 
@@ -33,9 +36,6 @@ public class ComputerController : Controller
         var cpuCoolers = await _componentService.GetAllCPUCoolersAsync();
         var monitors = await _componentService.GetAllMonitorsAsync();
         var speakers = await _componentService.GetAllSpeakersAsync();
-        var sataCables = await _componentService.GetAllSataCablesAsync();
-        var pcieCables = await _componentService.GetAllPCIeCablesAsync();
-        var powerCables = await _componentService.GetAllPowerCablesAsync();
 
         ViewBag.CPUs = new SelectList(cpus, "Id", "ModelName");
         ViewBag.PSUs = new SelectList(psus, "Id", "ModelName");
@@ -51,9 +51,6 @@ public class ComputerController : Controller
         ViewBag.CPUCoolers = new SelectList(cpuCoolers, "Id", "ModelName");
         ViewBag.Monitors = new SelectList(monitors, "Id", "ModelName");
         ViewBag.Speakers = new SelectList(speakers, "Id", "ModelName");
-        ViewBag.SataCables = new SelectList(sataCables, "Id", "LengthCm");
-        ViewBag.PCIeCables = new SelectList(pcieCables, "Id", "LengthCm");
-        ViewBag.PowerCables = new SelectList(powerCables, "Id", "LengthCm");
 
         return View(new ComputerCreateDTO());
     }

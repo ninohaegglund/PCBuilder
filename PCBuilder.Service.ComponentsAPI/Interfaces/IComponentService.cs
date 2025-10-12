@@ -1,6 +1,6 @@
 ﻿using PCBuilder.Service.ComponentsAPI.Models.DTO;
 
-namespace PCBuilder.Service.ComponentsAPI.Services.IService
+namespace PCBuilder.Service.ComponentsAPI.Interfaces
 {
     public interface IComponentService
     {
@@ -14,11 +14,8 @@ namespace PCBuilder.Service.ComponentsAPI.Services.IService
         Task<IEnumerable<MouseDTO>> GetAllMiceAsync();
         Task<IEnumerable<MonitorDTO>> GetAllMonitorsAsync();
         Task<IEnumerable<MotherboardDTO>> GetAllMotherboardsAsync();
-        Task<IEnumerable<PCIeCableDTO>> GetAllPCIeCablesAsync();
-        Task<IEnumerable<PowerCableDTO>> GetAllPowerCablesAsync();
         Task<IEnumerable<PSUDTO>> GetAllPSUsAsync();
         Task<IEnumerable<RAMDTO>> GetAllRAMModulesAsync();
-        Task<IEnumerable<SataCableDTO>> GetAllSataCablesAsync();
         Task<IEnumerable<SpeakerDTO>> GetAllSpeakersAsync();
         Task<IEnumerable<StorageDTO>> GetAllStorageDevicesAsync();
     }

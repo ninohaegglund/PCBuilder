@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;
-using PCBuilder.Service.ComponentsAPI.Services.IService;
+using PCBuilder.Service.ComponentsAPI.Interfaces;
 
 namespace PCBuilder.Service.ComponentsAPI.Services;
 
@@ -87,25 +87,6 @@ public class ComponentService : IComponentService
         var chassiCoolers = await _context.ChassiCooling.ToListAsync();
         return _mapper.Map<IEnumerable<ChassiCoolingDTO>>(chassiCoolers);
     }
-
-    public async Task<IEnumerable<PCIeCableDTO>> GetAllPCIeCablesAsync()
-    {
-        var pcieCables = await _context.PCIeCables.ToListAsync();
-        return _mapper.Map<IEnumerable<PCIeCableDTO>>(pcieCables);
-    }
-
-    public async Task<IEnumerable<PowerCableDTO>> GetAllPowerCablesAsync()
-    {
-        var powerCables = await _context.PowerCables.ToListAsync();
-        return _mapper.Map<IEnumerable<PowerCableDTO>>(powerCables);
-    }
-
-    public async Task<IEnumerable<SataCableDTO>> GetAllSataCablesAsync()
-    {
-        var sataCables = await _context.SataCables.ToListAsync();
-        return _mapper.Map<IEnumerable<SataCableDTO>>(sataCables);
-    }
-
     public async Task<IEnumerable<MonitorDTO>> GetAllMonitorsAsync()
     {
         var monitors = await _context.Monitors.ToListAsync();
