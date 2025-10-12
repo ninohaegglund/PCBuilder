@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Service.ComponentsAPI.Models.DTO.Response;
+﻿namespace PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 
 public class ComputerCreateDTO
 {

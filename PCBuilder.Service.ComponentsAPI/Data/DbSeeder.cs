@@ -1,8 +1,5 @@
 ﻿using PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.Components;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cables.PCIe;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
@@ -314,38 +311,7 @@ public static class DbSeeder
                 }
             );
         }
-
-
-        // PCIe Cables
-        if (!context.PCIeCables.Any())
-        {
-            context.PCIeCables.AddRange(
-                new PCIeCable { ConnectorType = "6+2 pin", LengthCm = 50 },
-                new PCIeCable { ConnectorType = "8 pin", LengthCm = 60 },
-                new PCIeCable { ConnectorType = "6 pin", LengthCm = 45 }
-            );
-        }
-
-        // Power Cables
-        if (!context.PowerCables.Any())
-        {
-            context.PowerCables.AddRange(
-                new PowerCable { ConnectorType = "24 pin ATX", LengthCm = 50 },
-                new PowerCable { ConnectorType = "8 pin EPS", LengthCm = 60 },
-                new PowerCable { ConnectorType = "4+4 pin EPS", LengthCm = 55 }
-            );
-        }
-
-        // SATA Cables
-        if (!context.SataCables.Any())
-        {
-            context.SataCables.AddRange(
-                new SataCable { LengthCm = 50, IsRightAngled = false },
-                new SataCable { LengthCm = 30, IsRightAngled = true },
-                new SataCable { LengthCm = 40, IsRightAngled = false }
-            );
-        }
-
+        
         context.SaveChanges();
     }
 }

@@ -8,8 +8,6 @@ public class StorageDevice
     public string Manufacturer { get; set; } = null!;
 
     public int? ComputerId { get; set; }
-    public Computer? Computer { get; set; }
-
 
     public int CapacityGb { get; set; }
     public StorageInterface Interface { get; set; }

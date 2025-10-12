@@ -7,10 +7,7 @@ public  class GPUCooling
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
-
     public int ComputerId { get; set; }
-    public Computer Computer { get; set; } = null!;
-
     public CoolingType CoolerType { get; set; }
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }

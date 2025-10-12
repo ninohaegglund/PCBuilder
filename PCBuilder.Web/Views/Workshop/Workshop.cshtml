@@ -1,0 +1,119 @@
+﻿@using PCBuilder.Web.WorkshopViewModel
+@model WorkshopViewModel    
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-black">Workshop</h1>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-4">
+
+        <h3>Pending Orders</h3>
+        <table class="table table-borderless table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Order Id</th>
+                    <th>Customer Name</th>
+                    <th>Requested Computer</th>
+                    <th>Status</th>
+                    <th>Start Build</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.PendingOrders)
+                {
+                    <tr>
+                        <td>@order.Id</td>
+                        <td>@order.CustomerName</td>
+                        <td>@order.ComputerName</td>
+                        <td>@order.OrderStatus</td>
+                        <td>
+                            <a asp-action="StartBuild" asp-route-orderId="@order.Id" class="btn btn-success">Start Build</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3 class="mt-5">Pending Builds</h3>
+        <table class="table table-borderless table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Build Id</th>
+                    <th>Customer</th>
+                    <th>Started</th>
+                    <th>Status</th>
+                    <th>Continue</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var build in Model.UnfinishedBuilds)
+                {
+                    <tr>
+                        <td>@build.Id</td>
+                        <td>@build.CustomerName</td>
+                        <td>@build.Name</td>
+                        <td>@build.CreatedAt.ToShortDateString()</td>
+                        <td>@build.Status</td>
+                        <td>
+                            <a asp-action="ContinueBuild" asp-route-id="@build.Id" class="btn btn-primary">Continue</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3 class="mt-5">Built Computers</h3>
+        <table class="table table-borderless table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Computer Id</th>
+                    <th>Customer</th>
+                    <th>Completed</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var built in Model.BuiltComputers)
+                {
+                    <tr>
+                        <td>@built.Id</td>
+                        <td>@built.CustomerName</td>
+                        <td>@built.CreatedAt.ToShortDateString()</td>
+                        <td>@built.Status</td>
+                        <td>
+                            <a asp-action="EditBuiltComputer" asp-route-id="@built.Id" class="btn btn-warning">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h3 class="mt-5">Inventory</h3>
+        <table class="table table-borderless table-hover table-responsive">
+            <thead>
+                <tr>
+                    <th>Component Id</th>
+                    <th>Inventory Name</th>
+                    <th>Type</th>
+                    <th>Quantity</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var component in Model.Inventory)
+                {
+                    <tr>
+                        <td>@component.Id</td>
+                        <td>@component.InventoryName</td>
+                        <td>@component.ComponentId</td>
+                        <td>@component.Quantity</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

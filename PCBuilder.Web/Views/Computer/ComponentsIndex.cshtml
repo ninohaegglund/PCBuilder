@@ -1,5 +1,6 @@
-﻿@using PCBuilder.Services.ComponentsAPI.DTOs
+﻿@using PCBuilder.Service.BuilderServiceAPI.DTO
 @model ComputerDTO
+
 
 <div class="container mt-4">
     <div class="card shadow border-0">
@@ -14,74 +15,73 @@
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">CPU:</div>
-                <div class="col-md-8">@Model.CPUName (@(Model.CPUId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.CPU?.ModelName (@(Model.CPUId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Motherboard:</div>
-                <div class="col-md-8">@Model.MotherboardName (@(Model.MotherboardId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Motherboard?.ModelName (@(Model.MotherboardId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">PSU:</div>
-                <div class="col-md-8">@Model.PSUName (@(Model.PSUId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.PSU?.ModelName (@(Model.PSUId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Case:</div>
-                <div class="col-md-8">@Model.CaseName (@(Model.CaseId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Case?.ModelName (@(Model.CaseId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">CPU Cooler:</div>
-                <div class="col-md-8">@Model.CPUCoolerName (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.CPUCooler?.ModelName (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
             </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Keyboard:</div>
-                <div class="col-md-8">@Model.KeyboardName (@(Model.KeyboardId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Keyboard?.ModelName (@(Model.KeyboardId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Mouse:</div>
-                <div class="col-md-8">@Model.MouseName (@(Model.MouseId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Mouse?.ModelName (@(Model.MouseId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Headset:</div>
-                <div class="col-md-8">@Model.HeadsetName (@(Model.HeadsetId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Headset?.ModelName (@(Model.HeadsetId?.ToString() ?? "-"))</div>
             </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">GPUs:</div>
-                <div class="col-md-8">@((Model.GPUNames != null && Model.GPUNames.Any()) ? string.Join(", ", Model.GPUNames) : "-")</div>
+                <div class="col-md-8">
+                    @(Model.GPUs != null && Model.GPUs.Any() ? string.Join(", ", Model.GPUs.Select(g => g.ModelName)) : "-")
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">RAM:</div>
-                <div class="col-md-8">@((Model.RAMNames != null && Model.RAMNames.Any()) ? string.Join(", ", Model.RAMNames) : "-")</div>
+                <div class="col-md-8">
+                    @(Model.RAMs != null && Model.RAMs.Any() ? string.Join(", ", Model.RAMs.Select(r => r.ModelName)) : "-")
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Storage:</div>
-                <div class="col-md-8">@((Model.StorageNames != null && Model.StorageNames.Any()) ? string.Join(", ", Model.StorageNames) : "-")</div>
+                <div class="col-md-8">
+                    @(Model.Storages != null && Model.Storages.Any() ? string.Join(", ", Model.Storages.Select(s => s.ModelName)) : "-")
+                </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Case Fans:</div>
-                <div class="col-md-8">@((Model.CaseFanNames != null && Model.CaseFanNames.Any()) ? string.Join(", ", Model.CaseFanNames) : "-")</div>
+                <div class="col-md-8">
+                    @((Model.CaseFans != null && Model.CaseFans.Any()) ? string.Join(", ", Model.CaseFans.Select(s => s.ModelName)) : "-")    
+                </div>
             </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Monitors:</div>
-                <div class="col-md-8">@((Model.MonitorNames != null && Model.MonitorNames.Any()) ? string.Join(", ", Model.MonitorNames) : "-")</div>
-            </div>
+                <div class="col-md-8">
+                    @((Model.Monitors != null && Model.Monitors.Any()) ? string.Join(", ", Model.Monitors.Select(s => s.ModelName)) : "-")
+                </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Speakers:</div>
-                <div class="col-md-8">@((Model.SpeakerNames != null && Model.SpeakerNames.Any()) ? string.Join(", ", Model.SpeakerNames) : "-")</div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 fw-bold">PCIe Cables:</div>
-                <div class="col-md-8">@((Model.PCIeCableIds != null && Model.PCIeCableIds.Any()) ? string.Join(", ", Model.PCIeCableIds) : "-")</div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 fw-bold">Power Cables:</div>
-                <div class="col-md-8">@((Model.PowerCableIds != null && Model.PowerCableIds.Any()) ? string.Join(", ", Model.PowerCableIds) : "-")</div>
-            </div>
-            <div class="row mb-3">
-                <div class="col-md-4 fw-bold">SATA Cables:</div>
-                <div class="col-md-8">@((Model.SataCableIds != null && Model.SataCableIds.Any()) ? string.Join(", ", Model.SataCableIds) : "-")</div>
+                <div class="col-md-8">
+                    @((Model.Speakers != null && Model.Speakers.Any()) ? string.Join(", ", Model.Speakers.Select(s => s.ModelName)) : "-")
+                </div>
             </div>
             <hr />
             <div class="row mb-3">
