@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Service.BuilderSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.CustomerAPI", "PCBuilder.Services.CustomerAPI\PCBuilder.Services.CustomerAPI.csproj", "{656B48BA-6950-4072-B094-0D084F584531}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.OrderAPI", "PCBuilder.Services.OrderAPI\PCBuilder.Services.OrderAPI.csproj", "{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{656B48BA-6950-4072-B094-0D084F584531}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{656B48BA-6950-4072-B094-0D084F584531}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{656B48BA-6950-4072-B094-0D084F584531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{4CF8640F-8561-CD36-F880-813BBE576F86} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 		{4A2E22AF-980C-4148-A427-28F293359316} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 		{656B48BA-6950-4072-B094-0D084F584531} = {49B97C85-B683-4FB5-880C-65FF5158791D}
+		{DC1CBB5E-921E-40C6-8BF8-1B4DD1E4B053} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4686CC4A-22DE-4353-BD20-9D7730ED8B2E}
