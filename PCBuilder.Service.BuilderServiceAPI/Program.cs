@@ -6,6 +6,7 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
+using PCBuilder.Service.BuilderServiceAPI.Mapping;
 using PCBuilder.Service.BuilderServiceAPI.Repository;
 using PCBuilder.Service.BuilderServiceAPI.Services;
 using PCBuilder.Service.BuilderServiceAPI.Utility;
@@ -33,8 +34,8 @@ builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
-builder.Services.AddScoped<IBuiltComputersRepository, BuiltComputersRepository>();
-builder.Services.AddScoped<UnfinishedBuildsRepository>();
+builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
 
 var app = builder.Build();
 
@@ -49,7 +50,7 @@ app.UseAuthorization();
 app.MapControllers();
 app.Run();
 
-void ApplyMigrations()
+/*void ApplyMigrations()
 {
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PcDataContext>();
@@ -57,4 +58,4 @@ void ApplyMigrations()
     {
         dbContext.Database.Migrate();
     }
-}
+}*/

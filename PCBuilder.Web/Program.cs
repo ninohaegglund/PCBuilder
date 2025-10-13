@@ -40,7 +40,7 @@ builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
-builder.Services.AddScoped<IBuiltComputersRepository, BuiltComputersRepository>();
+builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
 builder.Services.AddScoped<UnfinishedBuildsRepository>();
 
 
