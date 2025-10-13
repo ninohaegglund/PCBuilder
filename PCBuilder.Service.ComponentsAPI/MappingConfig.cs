@@ -11,7 +11,6 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
-using System.Linq;
 
 namespace PCBuilder.Service.ComponentsAPI
 {
@@ -21,20 +20,20 @@ namespace PCBuilder.Service.ComponentsAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CPU, CPUDto>();
-                config.CreateMap<PSU, PSUDTO>();
-                config.CreateMap<Motherboard, MotherboardDTO>();
-                config.CreateMap<Chassi, ChassiDTO>();
-                config.CreateMap<CPUCooling, CPUCoolingDTO>();
-                config.CreateMap<Keyboard, KeyboardDTO>();
-                config.CreateMap<Mouse, MouseDTO>();
-                config.CreateMap<Headset, HeadsetDTO>();
-                config.CreateMap<GPU, GPUDto>();
-                config.CreateMap<RAM, RAMDTO>();
-                config.CreateMap<StorageDevice, StorageDTO>();
-                config.CreateMap<ChassiCooling, ChassiCoolingDTO>();
-                config.CreateMap<DisplayMonitor, MonitorDTO>();
-                config.CreateMap<Speaker, SpeakerDTO>();
+                config.CreateMap<CPU, CPUDto>().ReverseMap();
+                config.CreateMap<PSU, PSUDTO>().ReverseMap();
+                config.CreateMap<Motherboard, MotherboardDTO>().ReverseMap();
+                config.CreateMap<Chassi, ChassiDTO>().ReverseMap();
+                config.CreateMap<CPUCooling, CPUCoolingDTO>().ReverseMap();
+                config.CreateMap<Keyboard, KeyboardDTO>().ReverseMap();
+                config.CreateMap<Mouse, MouseDTO>().ReverseMap();
+                config.CreateMap<Headset, HeadsetDTO>().ReverseMap();
+                config.CreateMap<GPU, GPUDto>().ReverseMap();
+                config.CreateMap<RAM, RAMDTO>().ReverseMap();
+                config.CreateMap<StorageDevice, StorageDTO>().ReverseMap();
+                config.CreateMap<ChassiCooling, ChassiCoolingDTO>().ReverseMap();
+                config.CreateMap<DisplayMonitor, MonitorDTO>().ReverseMap();
+                config.CreateMap<Speaker, SpeakerDTO>().ReverseMap();
                 
             });
 
