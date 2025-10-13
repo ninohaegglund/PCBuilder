@@ -35,7 +35,7 @@ builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
 builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
-builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddAutoMapper(typeof(MappingProfile)); 
 
 var app = builder.Build();
 
@@ -48,9 +48,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+ApplyMigrations();
 app.Run();
 
-/*void ApplyMigrations()
+void ApplyMigrations()
 {
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<PcDataContext>();
@@ -58,4 +59,4 @@ app.Run();
     {
         dbContext.Database.Migrate();
     }
-}*/
+}
