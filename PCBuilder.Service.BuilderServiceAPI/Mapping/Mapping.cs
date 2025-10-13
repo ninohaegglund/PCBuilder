@@ -8,6 +8,6 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Computer, ComputerDTO>()
-            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ComputerName));
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ComputerName)).ReverseMap();
     }
 }
