@@ -30,4 +30,6 @@ public class Computer
     public List<int> CaseFanIds { get; set; } = new();
     public List<int> MonitorIds { get; set; } = new();
     public List<int> SpeakerIds { get; set; } = new();
+
+    public ComputerSpecs Specs { get; set; } = new();
 }
