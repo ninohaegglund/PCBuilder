@@ -1,63 +1,39 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
-using PCBuilder.Service.BuilderServiceAPI.Repository;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 
 public class ComputerService : IComputerService
 {
-    private readonly PcDataContext _context;
     private readonly IMapper _mapper;
     private readonly IGetComponentsService _componentsService;
     private readonly IBuiltComputersRepository _computerRepository;
-    private readonly UnfinishedBuildsRepository _unfinishedBuildsRepository;
 
-    public ComputerService(PcDataContext context, IMapper mapper, IGetComponentsService getComponentsService, IBuiltComputersRepository computerRepository, UnfinishedBuildsRepository unfinishedBuildsRepository)
+    public ComputerService(
+        IMapper mapper,
+        IGetComponentsService getComponentsService,
+        IBuiltComputersRepository computerRepository)
     {
-        _context = context;
         _mapper = mapper;
         _componentsService = getComponentsService;
         _computerRepository = computerRepository;
-        _unfinishedBuildsRepository = unfinishedBuildsRepository;
     }
 
     public async Task<ResponseDTO> GetAllComputersAsync()
     {
         try
         {
-            var computers = await _context.Computers.ToListAsync();
-
+            var computers = await _computerRepository.GetAllAsync();
             var dtoList = new List<ComputerDTO>();
 
             foreach (var computer in computers)
             {
-                var dto = new ComputerDTO
-                {
-                    Id = computer.Id,
-                    Name = computer.ComputerName,
-                    CPUId = computer.CPUId,
-                    PSUId = computer.PSUId,
-                    MotherboardId = computer.MotherboardId,
-                    CaseId = computer.CaseId,
-                    CpuCoolerId = computer.CpuCoolerId,
-                    KeyboardId = computer.KeyboardId,
-                    MouseId = computer.MouseId,
-                    HeadsetId = computer.HeadsetId,
-
-                    GPUIds = computer.GPUIds,
-                    RAMIds = computer.RAMIds,
-                    StorageIds = computer.StorageIds,
-                    CaseFanIds = computer.CaseFanIds,
-                    MonitorIds = computer.MonitorIds,
-                    SpeakerIds = computer.SpeakerIds
-                };
+                var dto = _mapper.Map<ComputerDTO>(computer);
 
                 if (dto.GPUIds != null && dto.GPUIds.Any())
                     dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
@@ -104,31 +80,12 @@ public class ComputerService : IComputerService
     {
         try
         {
-            var computer = await _context.Computers.FindAsync(id);
+            var computer = await _computerRepository.GetByIdAsync(id);
 
             if (computer == null)
                 return new ResponseDTO { IsSuccess = false, Result = "Computer not found" };
 
-            var dto = new ComputerDTO
-            {
-                Id = computer.Id,
-                Name = computer.ComputerName,
-                CPUId = computer.CPUId,
-                PSUId = computer.PSUId,
-                MotherboardId = computer.MotherboardId,
-                CaseId = computer.CaseId,
-                CpuCoolerId = computer.CpuCoolerId,
-                KeyboardId = computer.KeyboardId,
-                MouseId = computer.MouseId,
-                HeadsetId = computer.HeadsetId,
-
-                GPUIds = computer.GPUIds,
-                RAMIds = computer.RAMIds,
-                StorageIds = computer.StorageIds,
-                CaseFanIds = computer.CaseFanIds,
-                MonitorIds = computer.MonitorIds,
-                SpeakerIds = computer.SpeakerIds
-            };
+            var dto = _mapper.Map<ComputerDTO>(computer);
 
             if (dto.GPUIds != null && dto.GPUIds.Any())
                 dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
@@ -143,7 +100,6 @@ public class ComputerService : IComputerService
             if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
                 dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
 
-            // 1-1-komponentnamn
             if (computer.CPUId.HasValue)
                 dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
             if (computer.PSUId.HasValue)
@@ -174,12 +130,11 @@ public class ComputerService : IComputerService
         var response = new ResponseDTO();
         try
         {
-            var computer = new Computer();
+            var computer = _mapper.Map<Computer>(computerDTO);
 
-            // Namn-hantering
             if (string.IsNullOrWhiteSpace(computerDTO.Name))
             {
-                int numberOfPc = await _context.Computers.CountAsync();
+                int numberOfPc = await _computerRepository.CountAsync();
                 computer.ComputerName = $"Customer Computer {numberOfPc + 1}";
             }
             else
@@ -187,29 +142,10 @@ public class ComputerService : IComputerService
                 computer.ComputerName = computerDTO.Name;
             }
 
-            // 1-1 relationer
-            computer.CPUId = computerDTO.CPUId;
-            computer.PSUId = computerDTO.PSUId;
-            computer.MotherboardId = computerDTO.MotherboardId;
-            computer.CaseId = computerDTO.CaseId;
-            computer.CpuCoolerId = computerDTO.CpuCoolerId;
-            computer.KeyboardId = computerDTO.KeyboardId;
-            computer.MouseId = computerDTO.MouseId;
-            computer.HeadsetId = computerDTO.HeadsetId;
-
-            // List-relationer: Spara bara ID-listor!
-            computer.GPUIds = computerDTO.GPUIds?.ToList() ?? new();
-            computer.RAMIds = computerDTO.RAMIds?.ToList() ?? new();
-            computer.StorageIds = computerDTO.StorageIds?.ToList() ?? new();
-            computer.CaseFanIds = computerDTO.CaseFanIds?.ToList() ?? new();
-            computer.MonitorIds = computerDTO.MonitorIds?.ToList() ?? new();
-            computer.SpeakerIds = computerDTO.SpeakerIds?.ToList() ?? new();    
-
-            _context.Computers.Add(computer);
-            await _context.SaveChangesAsync();
+            await _computerRepository.AddAsync(computer);
 
             response.IsSuccess = true;
-            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.ComputerName };
+            response.Result = _mapper.Map<ComputerDTO>(computer);
         }
         catch (Exception ex)
         {
@@ -231,7 +167,7 @@ public class ComputerService : IComputerService
                 return response;
             }
 
-            var computer = await _context.Computers.FindAsync(id);
+            var computer = await _computerRepository.GetByIdAsync(id);
 
             if (computer == null)
             {
@@ -240,29 +176,15 @@ public class ComputerService : IComputerService
                 return response;
             }
 
+            _mapper.Map(computerDTO, computer);
+
             if (!string.IsNullOrWhiteSpace(computerDTO.Name))
                 computer.ComputerName = computerDTO.Name;
 
-            computer.CPUId = computerDTO.CPUId;
-            computer.PSUId = computerDTO.PSUId;
-            computer.MotherboardId = computerDTO.MotherboardId;
-            computer.CaseId = computerDTO.CaseId;
-            computer.CpuCoolerId = computerDTO.CpuCoolerId;
-            computer.KeyboardId = computerDTO.KeyboardId;
-            computer.MouseId = computerDTO.MouseId;
-            computer.HeadsetId = computerDTO.HeadsetId;
-
-            computer.GPUIds = computerDTO.GPUIds?.ToList() ?? new();
-            computer.RAMIds = computerDTO.RAMIds?.ToList() ?? new();
-            computer.StorageIds = computerDTO.StorageIds?.ToList() ?? new();
-            computer.CaseFanIds = computerDTO.CaseFanIds?.ToList() ?? new();
-            computer.MonitorIds = computerDTO.MonitorIds?.ToList() ?? new();
-            computer.SpeakerIds = computerDTO.SpeakerIds?.ToList() ?? new();
-
-            await _computerRepository.SaveUpdatesAsync(computer);
+            await _computerRepository.UpdateAsync(computer);
 
             response.IsSuccess = true;
-            response.Result = new ComputerDTO { Id = computer.Id, Name = computer.ComputerName };
+            response.Result = _mapper.Map<ComputerDTO>(computer);
         }
         catch (Exception ex)
         {
@@ -277,7 +199,7 @@ public class ComputerService : IComputerService
         var response = new ResponseDTO();
         try
         {
-            var computer = await _context.Computers.FindAsync(id);
+            var computer = await _computerRepository.GetByIdAsync(id);
             if (computer == null)
             {
                 response.IsSuccess = false;
@@ -285,8 +207,7 @@ public class ComputerService : IComputerService
                 return response;
             }
 
-            _context.Computers.Remove(computer);
-            await _context.SaveChangesAsync();
+            await _computerRepository.DeleteAsync(computer);
 
             response.IsSuccess = true;
             response.Result = "Computer deleted successfully";

@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Service.BuilderServiceAPI.Utility;
+﻿    namespace PCBuilder.Service.BuilderServiceAPI.Utility;
 
 public class SD
 {
