@@ -34,7 +34,9 @@ namespace PCBuilder.Service.ComponentsAPI
                 config.CreateMap<ChassiCooling, ChassiCoolingDTO>().ReverseMap();
                 config.CreateMap<DisplayMonitor, MonitorDTO>().ReverseMap();
                 config.CreateMap<Speaker, SpeakerDTO>().ReverseMap();
-                
+                config.AddMaps(typeof(MappingConfig).Assembly);
+
+
             });
 
             return mappingConfig;
