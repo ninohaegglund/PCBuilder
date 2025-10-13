@@ -33,7 +33,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
@@ -53,7 +53,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
@@ -71,7 +71,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
@@ -92,7 +92,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
@@ -113,7 +113,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
@@ -133,7 +133,7 @@ public class ProductAPIController : Controller
         catch (Exception ex)
         {
             _response.IsSuccess = false;
-            _response.DisplayMessage = ex.Message;
+            _response.Message = ex.Message;
 
         }
         return _response;
