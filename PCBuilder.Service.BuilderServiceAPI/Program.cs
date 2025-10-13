@@ -48,15 +48,5 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
-ApplyMigrations();
-app.Run();
 
-void ApplyMigrations()
-{
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<PcDataContext>();
-    if (dbContext.Database.GetPendingMigrations().Count() > 0)
-    {
-        dbContext.Database.Migrate();
-    }
-}
+app.Run();

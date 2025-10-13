@@ -13,5 +13,7 @@ public class MappingProfile : Profile
 
         CreateMap<Computer, ComputerCreateDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.ComputerName)).ReverseMap();
+
     }
+    
 }

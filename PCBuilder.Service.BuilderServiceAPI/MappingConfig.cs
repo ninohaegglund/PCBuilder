@@ -13,6 +13,8 @@ public class MappingConfig
         {
             config.CreateMap<InventoryDTO, Inventory>();
             config.CreateMap<Inventory, InventoryDTO>();
+            config.AddMaps(typeof(MappingConfig).Assembly);
+
         });
 
         return mappingConfig;

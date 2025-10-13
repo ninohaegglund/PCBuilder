@@ -16,9 +16,9 @@ public class ComputerCreateDTO
     public List<int>? RAMIds { get; set; }
     public List<int>? StorageIds { get; set; }
     public List<int>? CaseFanIds { get; set; }
-    public List<int>? PCIeCableIds { get; set; }
-    public List<int>? PowerCableIds { get; set; }
-    public List<int>? SataCableIds { get; set; }
     public List<int>? MonitorIds { get; set; }
     public List<int>? SpeakerIds { get; set; }
+
+    public int CustomerId { get; set; }
+
 }

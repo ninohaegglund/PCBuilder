@@ -16,6 +16,8 @@ public class ComputerDTO
     public int Id { get; set; }
     public string? Name { get; set; }
 
+    public int CustomerId { get; set; }
+
     // 1-1 relations
     public int? CPUId { get; set; }
     public CPU? CPU { get; set; }
