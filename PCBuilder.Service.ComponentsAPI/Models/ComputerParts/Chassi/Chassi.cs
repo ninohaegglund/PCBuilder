@@ -7,6 +7,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
         public int Id { get; set; }
         public string Manufacturer { get; set; } = null!;
         public string ModelName { get; set; } = null!;
+        public decimal Price { get; set; }
 
         public CaseFormFactor FormFactor { get; set; }
         public ChassiMaterial ChassiMaterial { get; set; }

@@ -7,6 +7,7 @@ public class PSU
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public decimal Price { get; set; }
 
     public int Wattage { get; set; }         
     public EfficiencyRating EfficiencyRating { get; set; }

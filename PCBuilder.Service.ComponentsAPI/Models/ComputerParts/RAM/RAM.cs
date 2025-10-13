@@ -7,6 +7,8 @@ public class RAM
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public decimal Price { get; set; }
+
     public int? ComputerId { get; set; }
     public int CapacityGb { get; set; }
     public int SpeedMHz { get; set; }

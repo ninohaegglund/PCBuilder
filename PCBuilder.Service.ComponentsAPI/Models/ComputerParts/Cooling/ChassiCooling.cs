@@ -5,6 +5,8 @@ public class ChassiCooling
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public decimal Price { get; set; }
+
     public int? ComputerId { get; set; }
     public int FanSizeMm { get; set; }  
     public int Rpm { get; set; }         

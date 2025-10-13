@@ -7,6 +7,7 @@ namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards
         public int Id { get; set; }
         public string ModelName { get; set; } = null!;
         public string Manufacturer { get; set; } = null!;
+        public decimal Price { get; set; }
 
         public bool IsMechanical { get; set; }
         public SwitchType SwitchType { get; set; }

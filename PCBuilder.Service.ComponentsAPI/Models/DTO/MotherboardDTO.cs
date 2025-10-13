@@ -7,6 +7,7 @@ namespace PCBuilder.Service.ComponentsAPI.Models.DTO
         public int Id { get; set; }
         public string ModelName { get; set; } = null!;
         public string Manufacturer { get; set; } = null!;
+        public decimal Price { get; set; }
         public CPUSocket Socket { get; set; }
         public string Chipset { get; set; } = null!;
         public int RamSlots { get; set; }

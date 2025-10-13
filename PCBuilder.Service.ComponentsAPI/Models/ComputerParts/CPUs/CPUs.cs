@@ -5,6 +5,8 @@ public class CPU
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public decimal Price { get; set; }
+    public int PerformanceScore { get; set; }
 
     public int Cores { get; set; }
     public int Threads { get; set; }

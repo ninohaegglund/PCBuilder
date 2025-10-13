@@ -6,6 +6,8 @@ public class DisplayMonitor
     public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public decimal Price { get; set; }
+
     public int? ComputerId { get; set; }
     public double SizeInches { get; set; }
     public RefreshRate Hz { get; set; }
