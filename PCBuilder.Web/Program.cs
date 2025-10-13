@@ -41,7 +41,6 @@ builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
 builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
-builder.Services.AddScoped<UnfinishedBuildsRepository>();
 
 
 
