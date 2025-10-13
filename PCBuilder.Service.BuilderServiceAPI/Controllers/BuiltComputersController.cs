@@ -12,7 +12,7 @@ namespace PCBuilder.Service.BuilderServiceAPI.Controllers;
 public class BuiltComputersController : ControllerBase
 {
     private readonly IComputerService _service;
-    public BuiltComputersController(DataContext db, IMapper mapper, IComputerService service)
+    public BuiltComputersController(IComputerService service)
     {
         _service = service;
     }
