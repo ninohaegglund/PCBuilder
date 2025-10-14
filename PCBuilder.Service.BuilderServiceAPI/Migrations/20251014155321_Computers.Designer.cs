@@ -12,7 +12,7 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
     [DbContext(typeof(PcDataContext))]
-    [Migration("20251012153202_Computers")]
+    [Migration("20251014155321_Computers")]
     partial class Computers
     {
         /// <inheritdoc />
