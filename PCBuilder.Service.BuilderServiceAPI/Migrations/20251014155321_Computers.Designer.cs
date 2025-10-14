@@ -11,7 +11,7 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
-    [DbContext(typeof(PcDataContext))]
+    [DbContext(typeof(BuildDataContext))]
     [Migration("20251014155321_Computers")]
     partial class Computers
     {

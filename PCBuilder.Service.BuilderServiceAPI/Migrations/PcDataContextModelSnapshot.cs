@@ -10,7 +10,7 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
-    [DbContext(typeof(PcDataContext))]
+    [DbContext(typeof(BuildDataContext))]
     partial class PcDataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

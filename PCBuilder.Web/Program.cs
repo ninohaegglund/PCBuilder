@@ -28,7 +28,7 @@ builder.Services.AddHttpClient<ComponentsAPIClient>();
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 
 
-builder.Services.AddDbContext<PcDataContext>(options =>
+builder.Services.AddDbContext<BuildDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddDbContext<DataContext>(options =>
@@ -40,11 +40,11 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IComputerService, ComputerService>();
 builder.Services.AddScoped<IComponentService, ComponentService>();
 builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IInventoryItemService, InventoryItemService>();
 builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
-builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 

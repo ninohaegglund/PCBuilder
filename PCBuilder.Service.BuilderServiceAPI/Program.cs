@@ -15,27 +15,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<IInventoryService, InventoryService>();
 builder.Services.AddHttpClient<ComponentsAPIClient>();
 SD.InventoryAPIBase = builder.Configuration["ServiceUrls:InventoryAPI"]!;
 
-builder.Services.AddDbContext<PcDataContext>(options =>
+builder.Services.AddDbContext<BuildDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddControllers();
-builder.Services.AddSingleton(mapper);
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
-builder.Services.AddControllers();
+
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 builder.Services.AddScoped<IComputerService, ComputerService>();
 builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
-builder.Services.AddScoped<ComputerCreateDTO>();
-builder.Services.AddScoped<IBuiltComputersRepository, ComputersRepository>();
-builder.Services.AddAutoMapper(typeof(MappingProfile)); 
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 var app = builder.Build();
 

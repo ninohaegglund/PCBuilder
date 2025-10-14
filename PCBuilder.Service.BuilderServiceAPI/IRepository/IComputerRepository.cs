@@ -2,13 +2,14 @@
 
 namespace PCBuilder.Service.BuilderServiceAPI.IRepository
 {
-    public interface IBuiltComputersRepository
+    public interface IRepository<T> where T : class
     {
-        Task<List<Computer>> GetAllAsync();
-        Task<Computer?> GetByIdAsync(int id);
-        Task AddAsync(Computer computer);
-        Task UpdateAsync(Computer computer);
-        Task DeleteAsync(Computer computer);
+        Task<List<T>> GetAllAsync();
+        Task<T?> GetByIdAsync(int id);
+        Task AddAsync(T entity);
+        Task UpdateAsync(T entity);
+        Task DeleteAsync(T entity);
         Task<int> CountAsync();
     }
 }
+    
