@@ -3,7 +3,6 @@
 namespace PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
 
 
-// / Many-to-many relationship entity between CPUCooling and CPUSocket
 public class CoolerSocketCompatibility
 {
     public int Id { get; set; }         

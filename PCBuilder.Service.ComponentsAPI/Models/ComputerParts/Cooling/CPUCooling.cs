@@ -7,6 +7,7 @@ public class CPUCooling
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
 
+    public decimal Price { get; set; }
 
     public int CoolingCapacityW { get; set; }
     public int NoiseLevelDb { get; set; }
