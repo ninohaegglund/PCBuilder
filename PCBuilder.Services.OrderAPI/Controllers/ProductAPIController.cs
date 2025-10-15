@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Services.OrderAPI.Data;
+using PCBuilder.Services.OrderAPI.IRepository;
 using PCBuilder.Services.OrderAPI.Models;
 using PCBuilder.Services.OrderAPI.Models.Dto;
 
@@ -11,130 +12,74 @@ namespace PCBuilder.Services.OrderAPI.Controllers;
 [ApiController]
 public class ProductAPIController : Controller
 {
-    private readonly OrderDbContext _db;
-    private ResponseDto _response;
-    private IMapper _mapper;
+    private readonly IProductService _productService;
+    private readonly ResponseDto _response = new();
 
-    public ProductAPIController(OrderDbContext db, IMapper mapper)
+    public ProductAPIController(IProductService productService)
     {
-        _db = db;
-        _mapper = mapper;
-        _response = new ResponseDto();
+        _productService = productService;
     }
 
     [HttpGet]
-    public ResponseDto GetAll()
+    public async Task<ResponseDto> GetAll()
     {
         try
         {
-            IEnumerable<Product> objList = _db.Products.ToList();
-            _response.Result = _mapper.Map<IEnumerable<ProductDto>>(objList);
+            _response.Result = await _productService.GetAllProductAsync();
         }
         catch (Exception ex)
         {
             _response.IsSuccess = false;
             _response.Message = ex.Message;
-
         }
         return _response;
     }
 
 
-    [HttpGet]
-    [Route("{id:int}")]
-    public ResponseDto Get(int id)
+    [HttpGet("{id:int}")]
+    public async Task<ResponseDto> Get(int id)
     {
         try
         {
-            Product obj = _db.Products.First(u => u.Id == id);
-            _response.Result = _mapper.Map<ProductDto>(obj);
-
+            _response.Result = await _productService.GetProductByIdAsync(id);
         }
         catch (Exception ex)
         {
             _response.IsSuccess = false;
             _response.Message = ex.Message;
-
         }
         return _response;
     }
-    [HttpGet]
-    [Route("GetByName/{name}")]
-    public ResponseDto GetByName(string name)
-    {
-        try
-        {
-            Product obj = _db.Products.First(u => u.Name.ToLower() == name.ToLower());
-            _response.Result = _mapper.Map<ProductDto>(obj);
 
-        }
-        catch (Exception ex)
-        {
-            _response.IsSuccess = false;
-            _response.Message = ex.Message;
-
-        }
-        return _response;
-    }
 
     [HttpPost]
-    public ResponseDto Post([FromBody] ProductDto productDto)
+    public async Task<ResponseDto> Post([FromBody] ProductDto productDto)
     {
         try
         {
-            Product obj = _mapper.Map<Product>(productDto);
-            _db.Products.Add(obj);
-            _db.SaveChanges();
-
-            _response.Result = _mapper.Map<ProductDto>(obj);
-
+            _response.Result = await _productService.CreateProductAsync(productDto);
         }
         catch (Exception ex)
         {
             _response.IsSuccess = false;
             _response.Message = ex.Message;
-
         }
         return _response;
     }
 
-    [HttpPut]
-    public ResponseDto Put([FromBody] ProductDto productDto)
-    {
-        try
-        {
-            Product obj = _mapper.Map<Product>(productDto);
-            _db.Products.Update(obj);
-            _db.SaveChanges();
-
-            _response.Result = _mapper.Map<ProductDto>(obj);
-
-        }
-        catch (Exception ex)
-        {
-            _response.IsSuccess = false;
-            _response.Message = ex.Message;
-
-        }
-        return _response;
-    }
 
     [HttpDelete]
     [Route("{id:int}")]
-    public ResponseDto Delete(int id)
+    public async Task<ResponseDto> Delete(int id)
     {
         try
         {
-            Product obj = _db.Products.First(u => u.Id == id);
-            _db.Products.Remove(obj);
-            _db.SaveChanges();
-
+            _response.Result = await _productService.DeleteProductAsync(id);
         }
         catch (Exception ex)
         {
             _response.IsSuccess = false;
             _response.Message = ex.Message;
-
         }
         return _response;
     }

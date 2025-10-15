@@ -7,7 +7,7 @@ using System.Diagnostics;
 
 namespace PCBuilder.Services.OrderAPI.Services;
 
-public class ProductService
+public class ProductService : IProductService
 {
     private readonly IProductRepository _productRepository;
     private readonly IMapper _mapper;
@@ -24,7 +24,7 @@ public class ProductService
         {
             ArgumentNullException.ThrowIfNull(dto);
 
-            var entity = _mapper.Map<Product>(dto); 
+            var entity = _mapper.Map<Product>(dto);
             entity = await _productRepository.AddAsync(entity);
             if (entity == null)
                 return null;
@@ -54,7 +54,7 @@ public class ProductService
         }
     }
 
-    public async Task<ProductDto> GetProductById(int id)
+    public async Task<ProductDto> GetProductByIdAsync(int id)
     {
         try
         {
