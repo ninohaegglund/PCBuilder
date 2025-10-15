@@ -4,9 +4,9 @@ using PCBuilder.Service.BuilderServiceAPI.Models;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Data;
 
-public class PcDataContext : DbContext
+public class BuildDataContext : DbContext
 {
-    public PcDataContext(DbContextOptions<PcDataContext> options) : base(options) { }
+    public BuildDataContext(DbContextOptions<BuildDataContext> options) : base(options) { }
     public DbSet<Computer> Computers { get; set; } = null!;
     public DbSet<Inventory> Inventories { get; set; } = null!;
 

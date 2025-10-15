@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251012153229_Components")]
+    [Migration("20251014155251_Components")]
     partial class Components
     {
         /// <inheritdoc />

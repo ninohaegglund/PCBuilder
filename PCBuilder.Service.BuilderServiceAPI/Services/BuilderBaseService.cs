@@ -24,7 +24,6 @@ public class BuilderBaseService : IBuilderBaseService
             HttpClient client = _httpClientFactory.CreateClient("PCBuilderAPI");
             HttpRequestMessage message = new();
             message.Headers.Add("Accept", "application/json");
-            //token
 
             message.RequestUri = new Uri(requestDto.Url!);
             if (requestDto.Data != null)

@@ -12,12 +12,12 @@ public class ComputerService : IComputerService
 {
     private readonly IMapper _mapper;
     private readonly IGetComponentsService _componentsService;
-    private readonly IBuiltComputersRepository _computerRepository;
+    private readonly IRepository<Computer> _computerRepository;
 
     public ComputerService(
         IMapper mapper,
         IGetComponentsService getComponentsService,
-        IBuiltComputersRepository computerRepository)
+        IRepository<Computer> computerRepository)
     {
         _mapper = mapper;
         _componentsService = getComponentsService;
