@@ -318,20 +318,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("Chassi_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("Chassi_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Chassi_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Chassi_Price");
-                        });
+                    b.HasKey("Id");
 
                     b.HasDiscriminator().HasValue("Chassi");
                 });
@@ -416,20 +403,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("Headset_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("Headset_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Headset_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Headset_Price");
-                        });
+                    b.HasKey("Id");
 
                     b.HasDiscriminator().HasValue("Headset");
                 });
@@ -519,16 +493,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("NumberOfButtons")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("Mouse_Description");
-
-                            t.Property("IsWireless")
-                                .HasColumnName("Mouse_IsWireless");
+                    b.HasKey("Id");
 
                             t.Property("Manufacturer")
                                 .HasColumnName("Mouse_Manufacturer");
