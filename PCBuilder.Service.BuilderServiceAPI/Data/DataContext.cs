@@ -8,7 +8,7 @@ public class BuildDataContext : DbContext
 {
     public BuildDataContext(DbContextOptions<BuildDataContext> options) : base(options) { }
     public DbSet<Computer> Computers { get; set; } = null!;
-    public DbSet<Inventory> Inventories { get; set; } = null!;
+    public DbSet<InventoryItem> Inventories { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -11,8 +11,8 @@ public class MappingConfig
         var mappingConfig = new MapperConfiguration( config =>
         
         {
-            config.CreateMap<InventoryItemDTO, Inventory>();
-            config.CreateMap<Inventory, InventoryItemDTO>();
+            config.CreateMap<InventoryItemDTO, InventoryItem>();
+            config.CreateMap<InventoryItem, InventoryItemDTO>();
             config.AddMaps(typeof(MappingConfig).Assembly);
 
         });

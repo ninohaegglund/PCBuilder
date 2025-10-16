@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PCBuilder.Services.ComponentsAPI.Models;
+using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
@@ -16,6 +16,7 @@ public class DataContext : DbContext
 {
     public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
+    public DbSet<Components> Components { get; set; } = null!;
     public DbSet<CPU> CPUs { get; set; } = null!;
     public DbSet<CPUCooling> CPUCoolers { get; set; } = null!;
     public DbSet<Motherboard> Motherboards { get; set; } = null!;

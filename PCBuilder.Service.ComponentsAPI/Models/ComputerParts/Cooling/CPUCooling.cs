@@ -1,11 +1,12 @@
-﻿using PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
+﻿using PCBuilder.Service.ComponentsAPI.Models;
+using PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.Components;
 
-public class CPUCooling
+public class CPUCooling : Components
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
 
     public decimal Price { get; set; }
 

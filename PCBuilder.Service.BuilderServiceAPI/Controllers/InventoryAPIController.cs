@@ -5,7 +5,6 @@ using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
-using PCBuilder.Service.BuilderServiceAPI.Services;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Controllers;
 
@@ -34,13 +33,13 @@ public class InventoryItemAPIController : Controller
         return await _service.GetInventoryItemByIdAsync(id);
     }
 
-    [HttpGet]
+    /*[HttpGet]
     [Route("GetByName/{name}")]
     public async Task<ResponseDTO> GetByName(string name)
     {
         return await _service.GetInventoryByNameAsync(name);
     }
-
+    */
     [HttpPost]
     public async Task<ResponseDTO> CreateInventoryItem([FromBody] InventoryItemDTO inventoryItem)
     {

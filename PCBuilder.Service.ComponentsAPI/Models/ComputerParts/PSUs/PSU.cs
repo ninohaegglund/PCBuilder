@@ -1,12 +1,14 @@
 ﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+using ComponentParent = PCBuilder.Service.ComponentsAPI.Models.Components;
 
 namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 
-public class PSU
+public class PSU : ComponentParent
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
+
     public decimal Price { get; set; }
 
     public int Wattage { get; set; }         

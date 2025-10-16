@@ -1,10 +1,11 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
-
-public class CPU
+﻿using PCBuilder.Service.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.Components;
+public class CPU : Components
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
+
     public decimal Price { get; set; }
     public int PerformanceScore { get; set; }
 

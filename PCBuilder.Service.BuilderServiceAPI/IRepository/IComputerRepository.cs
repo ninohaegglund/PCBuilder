@@ -1,6 +1,4 @@
-﻿using PCBuilder.Service.BuilderServiceAPI.Models;
-
-namespace PCBuilder.Service.BuilderServiceAPI.IRepository
+﻿namespace PCBuilder.Service.BuilderServiceAPI.IRepository
 {
     public interface IRepository<T> where T : class
     {

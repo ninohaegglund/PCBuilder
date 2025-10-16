@@ -1,4 +1,5 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
+using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 
 namespace PCBuilder.Service.BuilderServiceAPI.IService
@@ -8,7 +9,7 @@ namespace PCBuilder.Service.BuilderServiceAPI.IService
         Task<ResponseDTO?> CreateInventoryItemAsync(InventoryItemDTO inventoryItemDTO);
         Task<ResponseDTO?> DeleteInventoryItemAsync(int id);
         Task<ResponseDTO?> GetAllInventoryItemsAsync();
+        Task<ResponseDTO?> GetAllItemsAsync();
         Task<ResponseDTO?> GetInventoryItemByIdAsync(int id);
-        Task<ResponseDTO?> GetInventoryByNameAsync(string name);
     }
 }
