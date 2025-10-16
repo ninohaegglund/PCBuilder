@@ -108,8 +108,8 @@ public static class DbSeeder
                     Rpm = 1500,
                     CompatibleSockets = new List<CoolerSocketCompatibility>
                     {
-                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
-                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                        new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                        new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
                     }
                 },
                 new AirCooler
@@ -123,8 +123,8 @@ public static class DbSeeder
                     Rpm = 1500,
                     CompatibleSockets = new List<CoolerSocketCompatibility>
                     {
-                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
-                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                        new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                        new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
                     }
                 },
                 new WaterCooler
@@ -137,8 +137,8 @@ public static class DbSeeder
                     RadiatorSizeMm = 360,
                     CompatibleSockets = new List<CoolerSocketCompatibility>
                     {
-                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
-                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                        new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                        new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
                     }
                 },
                 new WaterCooler
@@ -151,13 +151,12 @@ public static class DbSeeder
                     RadiatorSizeMm = 360,
                     CompatibleSockets = new List<CoolerSocketCompatibility>
                     {
-                new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
-                new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
+                        new CoolerSocketCompatibility { Socket = CPUSocket.LGA1700 },
+                        new CoolerSocketCompatibility { Socket = CPUSocket.AM5 }
                     }
                 }
             );
         }
- 
 
         // GPU
         if (!context.GPUs.Any())
@@ -311,7 +310,7 @@ public static class DbSeeder
                 }
             );
         }
-        
+
         context.SaveChanges();
     }
 }
