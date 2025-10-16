@@ -4,6 +4,7 @@ namespace PCBuilder.Service.ComponentsAPI.Interfaces
 {
     public interface IComponentService
     {
+        Task<IEnumerable<ComponentDTO>> GetComponentAsync(int id);
         Task<IEnumerable<ChassiDTO>> GetAllCasesAsync();
         Task<IEnumerable<ChassiCoolingDTO>> GetAllChassiCoolersAsync();
         Task<IEnumerable<CPUCoolingDTO>> GetAllCPUCoolersAsync();

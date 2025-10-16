@@ -1,10 +1,12 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
+﻿using ComponentParent = PCBuilder.Service.ComponentsAPI.Models.Components;
 
-public class Speaker
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
+
+public class Speaker : ComponentParent
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public decimal Price { get; set; }
 
     public int? ComputerId { get; set; }

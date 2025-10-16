@@ -10,6 +10,7 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using System.ComponentModel;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 
@@ -22,6 +23,8 @@ public class GetComponentsService : IGetComponentsService
         _componentsClient = componentsClient;
     }
 
+    public async Task<List<Component>> GetComponentsAsync<T>(IEnumerable<int> ids) where T : Component =>
+        await _componentsClient.GetByIdsAsync<Component>("api/components", ids);
     public async Task<List<GPU>> GetGpusAsync(IEnumerable<int> ids) =>
     await _componentsClient.GetByIdsAsync<GPU>("api/gpus", ids);
 

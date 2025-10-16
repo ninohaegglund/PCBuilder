@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client.Extensions.Msal;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
+using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
@@ -11,6 +11,7 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using System.ComponentModel;
 
 namespace PCBuilder.Service.ComponentsAPI.Repositories;
 
@@ -22,7 +23,6 @@ public class ComponentRepository : IComponentRepository
     {
         _context = context;
     }
-
     public async Task<List<CPU>> GetAllCPUsAsync() => await _context.CPUs.ToListAsync();
     public async Task<List<PSU>> GetAllPSUsAsync() => await _context.PSUs.ToListAsync();
     public async Task<List<Motherboard>> GetAllMotherboardsAsync() => await _context.Motherboards.ToListAsync();
@@ -37,6 +37,5 @@ public class ComponentRepository : IComponentRepository
     public async Task<List<ChassiCooling>> GetAllChassiCoolersAsync() => await _context.ChassiCooling.ToListAsync();
     public async Task<List<DisplayMonitor>> GetAllMonitorsAsync() => await _context.Monitors.ToListAsync();
     public async Task<List<Speaker>> GetAllSpeakersAsync() => await _context.Speakers.ToListAsync();
-    public async Task<List<ChassiCooling>> GetAllCaseFansAsync() => await _context.ChassiCooling.ToListAsync();
-
+    public async Task<List<Components>> GetComponentsAsync(int id) => await _context.Components.ToListAsync();
 }

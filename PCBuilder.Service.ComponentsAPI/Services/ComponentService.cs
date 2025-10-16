@@ -3,6 +3,7 @@ using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Service.ComponentsAPI.Repositories;
+using System.ComponentModel;
 
 namespace PCBuilder.Service.ComponentsAPI.Services;
 
@@ -17,6 +18,11 @@ public class ComponentService : IComponentService
         _mapper = mapper;
     }
 
+    public async Task<IEnumerable<ComponentDTO>> GetComponentAsync(int id)
+    {
+        var component = await _repository.GetComponentsAsync(id);
+        return _mapper.Map<IEnumerable<ComponentDTO>>(component);
+    }
     public async Task<IEnumerable<CPUDto>> GetAllCPUsAsync()
     {
         var cpus = await _repository.GetAllCPUsAsync();

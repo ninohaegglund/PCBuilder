@@ -1,4 +1,5 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
+﻿using PCBuilder.Service.ComponentsAPI.Models;
+using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
@@ -27,5 +28,5 @@ public interface IComponentRepository
     Task<List<ChassiCooling>> GetAllChassiCoolersAsync();
     Task<List<DisplayMonitor>> GetAllMonitorsAsync();
     Task<List<Speaker>> GetAllSpeakersAsync();
-    Task<List<ChassiCooling>> GetAllCaseFansAsync();
+    Task<List<Components>> GetComponentsAsync(int id);
 }

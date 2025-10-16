@@ -1,10 +1,13 @@
-﻿namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
+﻿using ComponentParent = PCBuilder.Service.ComponentsAPI.Models.Components;
 
-public class ChassiCooling
+namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
+
+public class ChassiCooling : ComponentParent
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
+
     public decimal Price { get; set; }
 
     public int? ComputerId { get; set; }

@@ -1,12 +1,13 @@
 ﻿using PCBuilder.Services.ComponentsAPI.Models.Components;
+using ComponentParent = PCBuilder.Service.ComponentsAPI.Models.Components;
 
 namespace PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 
-public class Motherboard
+public class Motherboard : ComponentParent
 {
-    public int Id { get; set; }
     public string ModelName { get; set; } = null!;
     public string Manufacturer { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public decimal Price { get; set; }
 
     public CPUSocket Socket { get; set; }
