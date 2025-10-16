@@ -36,7 +36,22 @@ public class DataContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        // Enums sparas som string
+        modelBuilder.Entity<CPU>().ToTable("CPUs");
+        modelBuilder.Entity<CPUCooling>().ToTable("CPUCoolers");
+        modelBuilder.Entity<Motherboard>().ToTable("Motherboards");
+        modelBuilder.Entity<PSU>().ToTable("PSUs");
+        modelBuilder.Entity<Chassi>().ToTable("Cases");
+        modelBuilder.Entity<Keyboard>().ToTable("Keyboards");
+        modelBuilder.Entity<Mouse>().ToTable("Mice");
+        modelBuilder.Entity<Headset>().ToTable("Headsets");
+        modelBuilder.Entity<GPU>().ToTable("GPUs");  
+        modelBuilder.Entity<RAM>().ToTable("RAMModules");
+        modelBuilder.Entity<StorageDevice>().ToTable("Storages");
+        modelBuilder.Entity<ChassiCooling>().ToTable("ChassiCooling");
+        modelBuilder.Entity<DisplayMonitor>().ToTable("Monitors");
+        modelBuilder.Entity<Speaker>().ToTable("Speakers");
+
+        // Automatically apply enum to string conversion for all enum properties
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             foreach (var property in entityType.GetProperties())
