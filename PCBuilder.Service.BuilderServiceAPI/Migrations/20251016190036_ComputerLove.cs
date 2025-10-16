@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Computers : Migration
+    public partial class ComputerLove : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -48,8 +48,6 @@ namespace PCBuilder.Service.BuilderServiceAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    InventoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ComponentId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

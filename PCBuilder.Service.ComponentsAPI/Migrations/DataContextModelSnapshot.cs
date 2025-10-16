@@ -32,18 +32,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(21)
-                        .HasColumnType("nvarchar(21)");
-
                     b.HasKey("Id");
 
-                    b.ToTable("Components");
+                    b.ToTable("Components", (string)null);
 
-                    b.HasDiscriminator().HasValue("Components");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling.CoolerSocketCompatibility", b =>
@@ -112,31 +105,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("Threads")
                         .HasColumnType("int");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("CPU_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("CPU_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("CPU_ModelName");
-
-                            t.Property("PerformanceScore")
-                                .HasColumnName("CPU_PerformanceScore");
-
-                            t.Property("PowerConsumptionW")
-                                .HasColumnName("CPU_PowerConsumptionW");
-
-                            t.Property("Price")
-                                .HasColumnName("CPU_Price");
-
-                            t.Property("TDP")
-                                .HasColumnName("CPU_TDP");
-                        });
-
-                    b.HasDiscriminator().HasValue("CPU");
+                    b.ToTable("CPUs", (string)null);
                 });
 
             modelBuilder.Entity("CPUCooling", b =>
@@ -168,22 +137,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("CPUCooling_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("CPUCooling_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("CPUCooling_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("CPUCooling_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("CPUCooling");
+                    b.ToTable("CPUCoolers", (string)null);
                 });
 
             modelBuilder.Entity("DisplayMonitor", b =>
@@ -219,25 +173,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<double>("SizeInches")
                         .HasColumnType("float");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("ComputerId")
-                                .HasColumnName("DisplayMonitor_ComputerId");
-
-                            t.Property("Description")
-                                .HasColumnName("DisplayMonitor_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("DisplayMonitor_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("DisplayMonitor_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("DisplayMonitor_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("DisplayMonitor");
+                    b.ToTable("Monitors", (string)null);
                 });
 
             modelBuilder.Entity("GPU", b =>
@@ -285,7 +221,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("GPU");
+                    b.ToTable("GPUs", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", b =>
@@ -318,9 +254,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
-
-                    b.HasDiscriminator().HasValue("Chassi");
+                    b.ToTable("Cases", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.ChassiCooling", b =>
@@ -354,28 +288,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("Rpm")
                         .HasColumnType("int");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("ComputerId")
-                                .HasColumnName("ChassiCooling_ComputerId");
-
-                            t.Property("CoolingCapacityW")
-                                .HasColumnName("ChassiCooling_CoolingCapacityW");
-
-                            t.Property("Description")
-                                .HasColumnName("ChassiCooling_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("ChassiCooling_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("ChassiCooling_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("ChassiCooling_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("ChassiCooling");
+                    b.ToTable("ChassiCooling", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", b =>
@@ -403,9 +316,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.HasKey("Id");
-
-                    b.HasDiscriminator().HasValue("Headset");
+                    b.ToTable("Headsets", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", b =>
@@ -447,25 +358,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("Keyboard_Description");
-
-                            t.Property("IsWireless")
-                                .HasColumnName("Keyboard_IsWireless");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("Keyboard_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Keyboard_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Keyboard_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("Keyboard");
+                    b.ToTable("Keyboards", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", b =>
@@ -493,19 +386,10 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("NumberOfButtons")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
-                            t.Property("Manufacturer")
-                                .HasColumnName("Mouse_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Mouse_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Mouse_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("Mouse");
+                    b.ToTable("Mice", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers.Speaker", b =>
@@ -536,28 +420,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("Watt")
                         .HasColumnType("int");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("ComputerId")
-                                .HasColumnName("Speaker_ComputerId");
-
-                            t.Property("Description")
-                                .HasColumnName("Speaker_Description");
-
-                            t.Property("IsWireless")
-                                .HasColumnName("Speaker_IsWireless");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("Speaker_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Speaker_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Speaker_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("Speaker");
+                    b.ToTable("Speakers", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards.Motherboard", b =>
@@ -600,25 +463,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("Motherboard_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("Motherboard_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("Motherboard_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("Motherboard_Price");
-
-                            t.Property("Socket")
-                                .HasColumnName("Motherboard_Socket");
-                        });
-
-                    b.HasDiscriminator().HasValue("Motherboard");
+                    b.ToTable("Motherboards", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", b =>
@@ -650,25 +495,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("Wattage")
                         .HasColumnType("int");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("Description")
-                                .HasColumnName("PSU_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("PSU_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("PSU_ModelName");
-
-                            t.Property("PowerConsumptionW")
-                                .HasColumnName("PSU_PowerConsumptionW");
-
-                            t.Property("Price")
-                                .HasColumnName("PSU_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("PSU");
+                    b.ToTable("PSUs", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM.RAM", b =>
@@ -703,28 +530,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("ComputerId")
-                                .HasColumnName("RAM_ComputerId");
-
-                            t.Property("Description")
-                                .HasColumnName("RAM_Description");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("RAM_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("RAM_ModelName");
-
-                            t.Property("Price")
-                                .HasColumnName("RAM_Price");
-
-                            t.Property("Type")
-                                .HasColumnName("RAM_Type");
-                        });
-
-                    b.HasDiscriminator().HasValue("RAM");
+                    b.ToTable("RAMModules", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice.StorageDevice", b =>
@@ -765,34 +571,7 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int>("WriteSpeedMb")
                         .HasColumnType("int");
 
-                    b.ToTable("Components", t =>
-                        {
-                            t.Property("CapacityGb")
-                                .HasColumnName("StorageDevice_CapacityGb");
-
-                            t.Property("ComputerId")
-                                .HasColumnName("StorageDevice_ComputerId");
-
-                            t.Property("Description")
-                                .HasColumnName("StorageDevice_Description");
-
-                            t.Property("Interface")
-                                .HasColumnName("StorageDevice_Interface");
-
-                            t.Property("Manufacturer")
-                                .HasColumnName("StorageDevice_Manufacturer");
-
-                            t.Property("ModelName")
-                                .HasColumnName("StorageDevice_ModelName");
-
-                            t.Property("PowerConsumptionW")
-                                .HasColumnName("StorageDevice_PowerConsumptionW");
-
-                            t.Property("Price")
-                                .HasColumnName("StorageDevice_Price");
-                        });
-
-                    b.HasDiscriminator().HasValue("StorageDevice");
+                    b.ToTable("Storages", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.ComputerParts.Cooling.CoolerSocketCompatibility", b =>
@@ -804,6 +583,132 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("CPUCooling");
+                });
+
+            modelBuilder.Entity("CPU", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("CPU", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CPUCooling", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("CPUCooling", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DisplayMonitor", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("DisplayMonitor", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("GPU", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("GPU", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi.Chassi", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.ChassiCooling", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling.ChassiCooling", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets.Headset", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards.Keyboard", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice.Mouse", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers.Speaker", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers.Speaker", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards.Motherboard", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards.Motherboard", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs.PSU", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM.RAM", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM.RAM", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice.StorageDevice", b =>
+                {
+                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Components", null)
+                        .WithOne()
+                        .HasForeignKey("PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice.StorageDevice", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CPUCooling", b =>

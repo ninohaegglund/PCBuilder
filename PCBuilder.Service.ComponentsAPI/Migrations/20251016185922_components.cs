@@ -11,13 +11,26 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Cases",
+                name: "Components",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    ComponentType = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Components", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Cases",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FormFactor = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ChassiMaterial = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -26,16 +39,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cases", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cases_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ChassiCooling",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     FanSizeMm = table.Column<int>(type: "int", nullable: false),
@@ -45,16 +64,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChassiCooling", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ChassiCooling_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CPUCoolers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     CoolingCapacityW = table.Column<int>(type: "int", nullable: false),
                     NoiseLevelDb = table.Column<int>(type: "int", nullable: false),
@@ -63,16 +88,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CPUCoolers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CPUCoolers_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "CPUs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PerformanceScore = table.Column<int>(type: "int", nullable: false),
                     Cores = table.Column<int>(type: "int", nullable: false),
@@ -86,16 +117,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CPUs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CPUs_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "GPUs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PerformanceScore = table.Column<int>(type: "int", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
@@ -109,16 +146,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GPUs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_GPUs_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Headsets",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsWireless = table.Column<bool>(type: "bit", nullable: false),
                     HasMicrophone = table.Column<bool>(type: "bit", nullable: false)
@@ -126,16 +169,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Headsets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Headsets_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Keyboards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     IsMechanical = table.Column<bool>(type: "bit", nullable: false),
                     SwitchType = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -147,16 +196,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keyboards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Keyboards_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Mice",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Dpi = table.Column<int>(type: "int", nullable: false),
                     IsWireless = table.Column<bool>(type: "bit", nullable: false),
@@ -165,16 +220,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mice", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Mice_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Monitors",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     SizeInches = table.Column<double>(type: "float", nullable: false),
@@ -184,16 +245,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Monitors", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Monitors_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Motherboards",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Socket = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Chipset = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -205,16 +272,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Motherboards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Motherboards_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "PSUs",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Wattage = table.Column<int>(type: "int", nullable: false),
                     EfficiencyRating = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -223,16 +296,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PSUs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PSUs_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "RAMModules",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     CapacityGb = table.Column<int>(type: "int", nullable: false),
@@ -242,16 +321,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RAMModules", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RAMModules_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Speakers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     Watt = table.Column<int>(type: "int", nullable: false),
@@ -260,16 +345,22 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Speakers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Speakers_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Storages",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     ModelName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Manufacturer = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     CapacityGb = table.Column<int>(type: "int", nullable: false),
@@ -281,6 +372,12 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Storages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Storages_Components_Id",
+                        column: x => x.Id,
+                        principalTable: "Components",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,6 +453,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "CPUCoolers");
+
+            migrationBuilder.DropTable(
+                name: "Components");
         }
     }
 }

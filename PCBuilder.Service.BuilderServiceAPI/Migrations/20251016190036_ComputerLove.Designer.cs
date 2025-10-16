@@ -12,8 +12,8 @@ using PCBuilder.Service.BuilderServiceAPI.Data;
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
     [DbContext(typeof(BuildDataContext))]
-    [Migration("20251014155321_Computers")]
-    partial class Computers
+    [Migration("20251016190036_ComputerLove")]
+    partial class ComputerLove
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -102,20 +102,13 @@ namespace PCBuilder.Service.BuilderServiceAPI.Migrations
                     b.ToTable("Computers");
                 });
 
-            modelBuilder.Entity("PCBuilder.Service.BuilderServiceAPI.Models.Inventory", b =>
+            modelBuilder.Entity("PCBuilder.Service.BuilderServiceAPI.Models.InventoryItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ComponentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InventoryName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");

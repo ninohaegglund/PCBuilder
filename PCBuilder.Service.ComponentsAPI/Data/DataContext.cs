@@ -50,6 +50,7 @@ public class DataContext : DbContext
         modelBuilder.Entity<ChassiCooling>().ToTable("ChassiCooling");
         modelBuilder.Entity<DisplayMonitor>().ToTable("Monitors");
         modelBuilder.Entity<Speaker>().ToTable("Speakers");
+        modelBuilder.Entity<Components>().ToTable("Components");
 
         // Automatically apply enum to string conversion for all enum properties
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
