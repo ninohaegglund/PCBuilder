@@ -1,5 +1,3 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Components;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.BuilderServiceAPI.Client;
 using PCBuilder.Service.BuilderServiceAPI.Data;
@@ -12,6 +10,7 @@ using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Services.CustomerAPI.Data;
 using PCBuilder.Web.Service;
 using PCBuilder.Web.Service.IService;
 using PCBuilder.Web.Utility;
@@ -29,10 +28,13 @@ SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 
 
 builder.Services.AddDbContext<BuildDataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ComputerDb")));
 
 builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ComponentDb")));
+
+builder.Services.AddDbContext<CustomerDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryDb")));
 
 
 builder.Services.AddScoped<IBaseService, BaseService>();

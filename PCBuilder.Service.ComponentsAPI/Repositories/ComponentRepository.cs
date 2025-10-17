@@ -11,7 +11,6 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
-using System.ComponentModel;
 
 namespace PCBuilder.Service.ComponentsAPI.Repositories;
 
