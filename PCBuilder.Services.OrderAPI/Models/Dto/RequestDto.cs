@@ -1,4 +1,6 @@
-﻿namespace PCBuilder.Services.OrderAPI.Models.Dto;
+﻿using static PCBuilder.Service.OrderAPI.Utility.SD;
+
+namespace PCBuilder.Services.OrderAPI.Models.Dto;
 
 public class RequestDto
 {

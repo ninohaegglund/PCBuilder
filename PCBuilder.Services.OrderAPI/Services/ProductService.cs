@@ -1,6 +1,7 @@
 ﻿
 using AutoMapper;
 using PCBuilder.Services.OrderAPI.IRepository;
+using PCBuilder.Services.OrderAPI.IService;
 using PCBuilder.Services.OrderAPI.Models;
 using PCBuilder.Services.OrderAPI.Models.Dto;
 using System.Diagnostics;
@@ -18,8 +19,9 @@ public class ProductService : IProductService
         _mapper = mapper;
     }
 
-    public async Task<ProductDto?> CreateProductAsync(ProductDto dto)
+    public async Task<ResponseDto?> CreateProductAsync(ProductDto dto)
     {
+        var response = new ResponseDto();
         try
         {
             ArgumentNullException.ThrowIfNull(dto);
@@ -27,62 +29,86 @@ public class ProductService : IProductService
             var entity = _mapper.Map<Product>(dto);
             entity = await _productRepository.AddAsync(entity);
             if (entity == null)
-                return null;
-
-            return _mapper.Map<ProductDto>(entity);
+            {
+                response.IsSuccess = false;
+                response.Message = "Failed to create product.";
+                return response;
+            }
+            response.Result = _mapper.Map<ProductDto>(entity);
         }
+
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
-            return null;
+            response.IsSuccess = false;
+            response.Message = ex.Message;
         }
+        return response;
     }
 
-    public async Task<IEnumerable<ProductDto>> GetAllProductAsync()
+    public async Task<ResponseDto> GetAllProductAsync()
     {
+        var response = new ResponseDto();
         try
         {
 
             var entities = await _productRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<ProductDto>>(entities);
+            response.Result = _mapper.Map<IEnumerable<ProductDto>>(entities);
 
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
-            return Enumerable.Empty<ProductDto>();
+            response.IsSuccess = false;
+            response.Message = ex.Message;
         }
+        return response;
     }
 
-    public async Task<ProductDto> GetProductByIdAsync(int id)
+    public async Task<ResponseDto> GetProductByIdAsync(int id)
     {
+        var response = new ResponseDto();
         try
         {
             var entity = await _productRepository.GetAsync((x => x.Id == id));
-            return _mapper.Map<ProductDto>(entity);
+            if (entity == null)
+            {
+                response.IsSuccess = false;
+                response.Message = "Product not found.";
+                return response;
+            }
+            else
+            {
+                response.Result = _mapper.Map<ProductDto>(entity);
+            }
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
-            return null!;
+            response.IsSuccess = false;
+            response.Message = ex.Message;
         }
+        return response;
     }
 
 
-    public async Task<bool> DeleteProductAsync(int id)
+    public async Task<ResponseDto> DeleteProductAsync(int id)
     {
+        var response = new ResponseDto();
         try
         {
             var entity = await _productRepository.GetAsync(x => x.Id == id);
             if (entity == null)
-                return false;
-            return await _productRepository.DeleteAsync(entity);
+            {
+                response.IsSuccess = false;
+                response.Message = "Product not found.";
+                return response;
+            }
+            response.Result = await _productRepository.DeleteAsync(entity);
         }
         catch (Exception ex)
         {
-            Debug.WriteLine(ex.Message);
-            return false;
+            response.IsSuccess = false;
+            response.Message = ex.Message;
         }
+        return response;
     }
 
 

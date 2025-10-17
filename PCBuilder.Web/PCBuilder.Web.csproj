@@ -17,6 +17,7 @@
   <ItemGroup>
     <ProjectReference Include="..\PCBuilder.Service.BuilderServiceAPI\PCBuilder.Service.BuilderServiceAPI.csproj" />
     <ProjectReference Include="..\PCBuilder.Service.ComponentsAPI\PCBuilder.Service.ComponentsAPI.csproj" />
+    <ProjectReference Include="..\PCBuilder.Services.OrderAPI\PCBuilder.Services.OrderAPI.csproj" />
   </ItemGroup>
 
 </Project>

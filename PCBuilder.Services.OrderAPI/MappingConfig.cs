@@ -11,8 +11,8 @@ public class MappingConfig
         var mappingConfig = new MapperConfiguration( config =>
         
         {
-            config.CreateMap<ProductDto, Product>();
-            config.CreateMap<Product, ProductDto>();
+            config.AddMaps(typeof(MappingConfig).Assembly);
+
         });
 
         return mappingConfig;

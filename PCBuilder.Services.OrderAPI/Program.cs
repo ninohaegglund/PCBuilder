@@ -2,6 +2,11 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Services.OrderAPI;
 using PCBuilder.Services.OrderAPI.Data;
+using PCBuilder.Services.OrderAPI.IRepository;
+using PCBuilder.Services.OrderAPI.IService;
+using PCBuilder.Services.OrderAPI.Models;
+using PCBuilder.Services.OrderAPI.Repositories;
+using PCBuilder.Services.OrderAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +21,11 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
+
 
 
 var app = builder.Build();
