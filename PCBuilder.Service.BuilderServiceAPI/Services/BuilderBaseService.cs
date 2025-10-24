@@ -29,7 +29,6 @@ public class BuilderBaseService : IBuilderBaseService
             if (requestDto.Data != null)
             {
                 message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
-
             }
 
             HttpResponseMessage? apiResponse = null;

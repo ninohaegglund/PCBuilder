@@ -1,4 +1,3 @@
-using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.BuilderServiceAPI.Client;
 using PCBuilder.Service.BuilderServiceAPI.Data;
@@ -6,14 +5,14 @@ using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Repository;
 using PCBuilder.Service.BuilderServiceAPI.Services;
-using PCBuilder.Service.BuilderServiceAPI.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<ComponentsAPIClient>();
-SD.InventoryAPIBase = builder.Configuration["ServiceUrls:InventoryAPI"]!;
+builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7255/");
+});
 
 builder.Services.AddDbContext<BuildDataContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
