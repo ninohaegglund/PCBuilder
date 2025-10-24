@@ -21,9 +21,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddHttpClient();
-builder.Services.AddHttpClient<ICouponService,CouponService>();
-builder.Services.AddHttpClient<ComponentsAPIClient>();
+builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:7255/");
+}); 
+
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 
 
