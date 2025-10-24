@@ -24,6 +24,39 @@ public class ComputerService : IComputerService
         _computerRepository = computerRepository;
     }
 
+    private async Task PopulateComponentsAsync(ComputerDTO dto, Computer computer)
+    {
+        if (dto.GPUIds != null && dto.GPUIds.Any())
+            dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
+        if (dto.RAMIds != null && dto.RAMIds.Any())
+            dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
+        if (dto.StorageIds != null && dto.StorageIds.Any())
+            dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
+        if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
+            dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
+        if (dto.MonitorIds != null && dto.MonitorIds.Any())
+            dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
+        if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
+            dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
+
+        if (computer.CPUId.HasValue)
+            dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
+        if (computer.PSUId.HasValue)
+            dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
+        if (computer.MotherboardId.HasValue)
+            dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
+        if (computer.CaseId.HasValue)
+            dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
+        if (computer.CpuCoolerId.HasValue)
+            dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
+        if (computer.KeyboardId.HasValue)
+            dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
+        if (computer.MouseId.HasValue)
+            dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
+        if (computer.HeadsetId.HasValue)
+            dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
+    }
+
     public async Task<ResponseDTO> GetAllComputersAsync()
     {
         try
@@ -34,37 +67,7 @@ public class ComputerService : IComputerService
             foreach (var computer in computers)
             {
                 var dto = _mapper.Map<ComputerDTO>(computer);
-
-                if (dto.GPUIds != null && dto.GPUIds.Any())
-                    dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
-                if (dto.RAMIds != null && dto.RAMIds.Any())
-                    dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
-                if (dto.StorageIds != null && dto.StorageIds.Any())
-                    dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
-                if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
-                    dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
-                if (dto.MonitorIds != null && dto.MonitorIds.Any())
-                    dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
-                if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
-                    dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
-
-                if (computer.CPUId.HasValue)
-                    dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
-                if (computer.PSUId.HasValue)
-                    dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
-                if (computer.MotherboardId.HasValue)
-                    dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
-                if (computer.CaseId.HasValue)
-                    dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
-                if (computer.CpuCoolerId.HasValue)
-                    dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
-                if (computer.KeyboardId.HasValue)
-                    dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
-                if (computer.MouseId.HasValue)
-                    dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
-                if (computer.HeadsetId.HasValue)
-                    dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
-
+                await PopulateComponentsAsync(dto, computer);
                 dtoList.Add(dto);
             }
 
@@ -86,36 +89,7 @@ public class ComputerService : IComputerService
                 return new ResponseDTO { IsSuccess = false, Result = "Computer not found" };
 
             var dto = _mapper.Map<ComputerDTO>(computer);
-
-            if (dto.GPUIds != null && dto.GPUIds.Any())
-                dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
-            if (dto.RAMIds != null && dto.RAMIds.Any())
-                dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
-            if (dto.StorageIds != null && dto.StorageIds.Any())
-                dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
-            if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
-                dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
-            if (dto.MonitorIds != null && dto.MonitorIds.Any())
-                dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
-            if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
-                dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
-
-            if (computer.CPUId.HasValue)
-                dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
-            if (computer.PSUId.HasValue)
-                dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
-            if (computer.MotherboardId.HasValue)
-                dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
-            if (computer.CaseId.HasValue)
-                dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
-            if (computer.CpuCoolerId.HasValue)
-                dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
-            if (computer.KeyboardId.HasValue)
-                dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
-            if (computer.MouseId.HasValue)
-                dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
-            if (computer.HeadsetId.HasValue)
-                dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
+            await PopulateComponentsAsync(dto, computer);
 
             return new ResponseDTO { IsSuccess = true, Result = dto };
         }
@@ -144,8 +118,11 @@ public class ComputerService : IComputerService
 
             await _computerRepository.AddAsync(computer);
 
+            var dto = _mapper.Map<ComputerDTO>(computer);
+            await PopulateComponentsAsync(dto, computer);
+
             response.IsSuccess = true;
-            response.Result = _mapper.Map<ComputerDTO>(computer);
+            response.Result = dto;
         }
         catch (Exception ex)
         {
@@ -183,8 +160,11 @@ public class ComputerService : IComputerService
 
             await _computerRepository.UpdateAsync(computer);
 
+            var dto = _mapper.Map<ComputerDTO>(computer);
+            await PopulateComponentsAsync(dto, computer);
+
             response.IsSuccess = true;
-            response.Result = _mapper.Map<ComputerDTO>(computer);
+            response.Result = dto;
         }
         catch (Exception ex)
         {
