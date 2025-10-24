@@ -10,6 +10,7 @@ using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using System.ComponentModel;
 
 namespace PCBuilder.Service.ComponentsAPI
 {
@@ -33,7 +34,24 @@ namespace PCBuilder.Service.ComponentsAPI
                 config.CreateMap<ChassiCooling, ChassiCoolingDTO>().ReverseMap();
                 config.CreateMap<DisplayMonitor, MonitorDTO>().ReverseMap();
                 config.CreateMap<Speaker, SpeakerDTO>().ReverseMap();
-                    
+                config.CreateMap<Component, ComponentDTO>().ReverseMap();
+
+                config.CreateMap<Chassi, ComponentDTO>().ReverseMap();
+                config.CreateMap<GPU, ComponentDTO>().ReverseMap();
+                config.CreateMap<RAM, ComponentDTO>().ReverseMap();
+                config.CreateMap<CPU, ComponentDTO>().ReverseMap();
+                config.CreateMap<PSU, ComponentDTO>().ReverseMap();
+                config.CreateMap<Motherboard, ComponentDTO>().ReverseMap();
+                config.CreateMap<CPUCooling, ComponentDTO>().ReverseMap();
+                config.CreateMap<Keyboard, ComponentDTO>().ReverseMap();
+                config.CreateMap<Mouse, ComponentDTO>().ReverseMap();
+                config.CreateMap<Headset, ComponentDTO>().ReverseMap();
+                config.CreateMap<StorageDevice, ComponentDTO>().ReverseMap();
+                config.CreateMap<ChassiCooling, ComponentDTO>().ReverseMap();
+                config.CreateMap<DisplayMonitor, ComponentDTO>().ReverseMap();
+                config.CreateMap<Speaker, ComponentDTO>().ReverseMap();
+
+
                 config.AddMaps(typeof(MappingConfig).Assembly);
             });
 

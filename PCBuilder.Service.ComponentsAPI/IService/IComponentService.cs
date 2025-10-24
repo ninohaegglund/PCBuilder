@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Service.ComponentsAPI.Models.DTO;
+﻿using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
@@ -33,6 +30,6 @@ namespace PCBuilder.Service.ComponentsAPI.Interfaces
         Task<List<Speaker>> GetAllSpeakersAsync();
 
 
-        Task<List<ComponentDTO>> GetComponentsAsync(IEnumerable<int> ids);
+        Task<List<Components>> GetComponentsAsync(IEnumerable<int> ids);
     }
 }

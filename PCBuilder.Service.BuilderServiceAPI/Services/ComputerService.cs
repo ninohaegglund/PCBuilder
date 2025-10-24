@@ -26,18 +26,18 @@ public class ComputerService : IComputerService
 
     private async Task PopulateComponentsAsync(ComputerDTO dto, Computer computer)
     {
-        if (dto.GPUIds != null && dto.GPUIds.Any())
-            dto.GPUs = (await _componentsService.GetGpusAsync(dto.GPUIds)).ToList();
-        if (dto.RAMIds != null && dto.RAMIds.Any())
-            dto.RAMs = (await _componentsService.GetRamsAsync(dto.RAMIds)).ToList();
-        if (dto.StorageIds != null && dto.StorageIds.Any())
-            dto.Storages = (await _componentsService.GetStoragesAsync(dto.StorageIds)).ToList();
-        if (dto.CaseFanIds != null && dto.CaseFanIds.Any())
-            dto.CaseFans = (await _componentsService.GetCaseFansAsync(dto.CaseFanIds)).ToList();
-        if (dto.MonitorIds != null && dto.MonitorIds.Any())
-            dto.Monitors = (await _componentsService.GetMonitorsAsync(dto.MonitorIds)).ToList();
-        if (dto.SpeakerIds != null && dto.SpeakerIds.Any())
-            dto.Speakers = (await _componentsService.GetSpeakersAsync(dto.SpeakerIds)).ToList();
+        if (computer.GPUIds != null && computer.GPUIds.Any())
+            dto.GPUs = (await _componentsService.GetGpusAsync(computer.GPUIds)).ToList();
+        if (computer.RAMIds != null && computer.RAMIds.Any())
+            dto.RAMs = (await _componentsService.GetRamsAsync(computer.RAMIds)).ToList();
+        if (computer.StorageIds != null && computer.StorageIds.Any())
+            dto.Storages = (await _componentsService.GetStoragesAsync(computer.StorageIds)).ToList();
+        if (computer.CaseFanIds != null && computer.CaseFanIds.Any())
+            dto.CaseFans = (await _componentsService.GetCaseFansAsync(computer.CaseFanIds)).ToList();
+        if (computer.MonitorIds != null && computer.MonitorIds.Any())
+            dto.Monitors = (await _componentsService.GetMonitorsAsync(computer.MonitorIds)).ToList();
+        if (computer.SpeakerIds != null && computer.SpeakerIds.Any())
+            dto.Speakers = (await _componentsService.GetSpeakersAsync(computer.SpeakerIds)).ToList();
 
         if (computer.CPUId.HasValue)
             dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();

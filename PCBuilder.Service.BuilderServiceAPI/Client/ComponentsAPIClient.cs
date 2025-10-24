@@ -19,6 +19,8 @@ public class ComponentsAPIClient
 
         var idString = string.Join(",", ids);
         var response = await _http.GetAsync($"{endpoint}?ids={idString}");
+        var json = await response.Content.ReadAsStringAsync();
+        Console.WriteLine(json);
         response.EnsureSuccessStatusCode();
 
         var stream = await response.Content.ReadAsStreamAsync();

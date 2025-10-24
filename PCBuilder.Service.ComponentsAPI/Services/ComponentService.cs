@@ -1,11 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Service.ComponentsAPI.Models.DTO;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
 using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
@@ -45,16 +41,14 @@ namespace PCBuilder.Service.ComponentsAPI.Services
         public async Task<List<DisplayMonitor>> GetAllMonitorsAsync() => await _repository.GetAllMonitorsAsync();
         public async Task<List<Speaker>> GetAllSpeakersAsync() => await _repository.GetAllSpeakersAsync();
 
-        public async Task<List<ComponentDTO>> GetComponentsAsync(IEnumerable<int> ids)
+        public async Task<List<Components>> GetComponentsAsync(IEnumerable<int> ids)
         {
             if (ids == null || !ids.Any())
-                return new List<ComponentDTO>();
-
+                return new List<Components>();
             var components = await _repository.GetComponentsAsync(ids);
             if (components == null || !components.Any())
-                return new List<ComponentDTO>();
-
-            return _mapper.Map<List<ComponentDTO>>(components);
+                return new List<Components>();
+            return components.ToList();
         }
     }
 }
