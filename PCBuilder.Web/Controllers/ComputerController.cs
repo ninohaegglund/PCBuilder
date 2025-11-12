@@ -88,7 +88,7 @@ public class ComputerController : Controller
         {
             list = response.Result as List<ComputerDTO>;
         }
-        return View(list);
+        return View(list);          
     }
 
     public async Task<IActionResult> ComponentsIndex(int id)

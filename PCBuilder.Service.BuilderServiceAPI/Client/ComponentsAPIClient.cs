@@ -1,5 +1,7 @@
 ﻿namespace PCBuilder.Service.BuilderServiceAPI.Client;
 
+using System;
+using System.Net.Http;
 using System.Text.Json;
 
 public class ComponentsAPIClient
@@ -9,22 +11,39 @@ public class ComponentsAPIClient
 
     public ComponentsAPIClient(HttpClient http)
     {
-        _http = http;
+        _http = http;   
     }
 
     public async Task<List<T>> GetByIdsAsync<T>(string endpoint, IEnumerable<int> ids)
     {
-        if (ids == null || !ids.Any())
-            return new List<T>();
+        var results = new List<T>();
+        if (ids == null || !ids.Any()) return results;
 
-        var idString = string.Join(",", ids);
-        var response = await _http.GetAsync($"{endpoint}?ids={idString}");
-        var json = await response.Content.ReadAsStringAsync();
-        Console.WriteLine(json);
-        response.EnsureSuccessStatusCode();
+        foreach (var id in ids)
+        {
+            var response = await _http.GetAsync($"{endpoint}/{id}");
+            response.EnsureSuccessStatusCode();
 
-        var stream = await response.Content.ReadAsStreamAsync();
-        var result = await JsonSerializer.DeserializeAsync<List<T>>(stream, _jsonOptions);
-        return result ?? new List<T>();
+            var json = await response.Content.ReadAsStringAsync();
+            if (string.IsNullOrWhiteSpace(json))
+                continue;
+
+            var trimmed = json.TrimStart();
+
+            if (trimmed.StartsWith("["))
+            {
+                var list = JsonSerializer.Deserialize<List<T>>(json, _jsonOptions);
+                if (list != null)
+                    results.AddRange(list);
+            }
+            else
+            {
+                var item = JsonSerializer.Deserialize<T>(json, _jsonOptions);
+                if (item != null)
+                    results.Add(item);
+            }
+        }
+
+        return results;
     }
 }

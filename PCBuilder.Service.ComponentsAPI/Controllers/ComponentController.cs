@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
-using PCBuilder.Service.ComponentsAPI.Models.DTO;
 
 namespace PCBuilder.Service.ComponentsAPI.Controllers
 {
@@ -17,13 +13,10 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
             _componentService = componentService;
         }
 
-        [HttpGet("GetComponents")]
-        public async Task<IActionResult> GetComponents([FromQuery] IEnumerable<int> ids)
+        [HttpGet("GetComponents/{id}")]
+        public async Task<IActionResult> GetComponents(int id)
         {
-            if (ids == null || !ids.Any())
-                return BadRequest("No ids provided.");
-
-            var components = await _componentService.GetComponentsAsync(ids);
+            var components = await _componentService.GetComponentsAsync(new[] { id });
             if (components == null || !components.Any())
                 return NotFound();
 

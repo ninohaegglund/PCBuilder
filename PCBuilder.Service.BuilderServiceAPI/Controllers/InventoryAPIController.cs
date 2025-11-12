@@ -33,13 +33,6 @@ public class InventoryItemAPIController : Controller
         return await _service.GetInventoryItemByIdAsync(id);
     }
 
-    /*[HttpGet]
-    [Route("GetByName/{name}")]
-    public async Task<ResponseDTO> GetByName(string name)
-    {
-        return await _service.GetInventoryByNameAsync(name);
-    }
-    */
     [HttpPost]
     public async Task<ResponseDTO> CreateInventoryItem([FromBody] InventoryItemDTO inventoryItem)
     {

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Service.BuilderServiceAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class ComputerLove : Migration
+    public partial class computers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
