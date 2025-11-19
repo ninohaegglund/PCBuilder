@@ -16,8 +16,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public ICollection<CpuCooler> CpuCoolers { get; set; } = new List<CpuCooler>();
         public ICollection<CaseFan> CaseFans { get; set; } = new List<CaseFan>();
         public ICollection<FanController> FanControllers { get; set; } = new List<FanController>();
-        public ICollection<WirelessNetworkCard> WirelessNetworkCards { get; set; } = new List<WirelessNetworkCard>();
-        public ICollection<WiredNetworkCard> WiredNetworkCards { get; set; } = new List<WiredNetworkCard>();
         public ICollection<Monitor> Monitors { get; set; } = new List<Monitor>();
         public ICollection<Mouse> Mice { get; set; } = new List<Mouse>();
         public ICollection<Keyboard> Keyboards { get; set; } = new List<Keyboard>();
@@ -38,8 +36,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public ICollection<CpuCooler> CpuCoolers { get; set; } = new List<CpuCooler>();
         public ICollection<CaseFan> CaseFans { get; set; } = new List<CaseFan>();
         public ICollection<FanController> FanControllers { get; set; } = new List<FanController>();
-        public ICollection<WirelessNetworkCard> WirelessNetworkCards { get; set; } = new List<WirelessNetworkCard>();
-        public ICollection<WiredNetworkCard> WiredNetworkCards { get; set; } = new List<WiredNetworkCard>();
         public ICollection<ExternalHardDrive> ExternalHardDrives { get; set; } = new List<ExternalHardDrive>();
         public ICollection<Headphones> Headphones { get; set; } = new List<Headphones>();
         public ICollection<Speakers> Speakers { get; set; } = new List<Speakers>();
@@ -236,13 +232,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string? Interface { get; set; }      
     }
 
-    public class ThermalPaste
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal? Price { get; set; }
-        public decimal? AmountGrams { get; set; }
-    }
 
     public class Speakers
     {
@@ -267,40 +256,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string? FocusType { get; set; }          
         public string? SupportedOs { get; set; }          
         public int? FovDegrees { get; set; }
-    }
-
-    public class OpticalDrive
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal? Price { get; set; }
-        public int? BdReadSpeed { get; set; }
-        public int? DvdReadSpeed { get; set; }
-        public int? CdReadSpeed { get; set; }
-        public string? BdWrite { get; set; }          
-        public string? DvdWrite { get; set; }
-        public string? CdWrite { get; set; }
-    }
-
-    public class WirelessNetworkCard
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal? Price { get; set; }
-        public string? Protocol { get; set; }           
-        public string? Interface { get; set; }           
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
-    }
-
-    public class WiredNetworkCard
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public decimal? Price { get; set; }
-        public string? Interface { get; set; }       
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class ExternalHardDrive
@@ -374,7 +329,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public decimal? Price { get; set; }
         public string? Style { get; set; }              
         public string? Switches { get; set; }
-        public string? Backlit { get; set; }          
+        public string? Backlit { get; set; }  
+        
         public bool Tenkeyless { get; set; }
         public string? Connection { get; set; }
         public int? ColorId { get; set; }

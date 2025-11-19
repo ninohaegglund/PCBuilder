@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Data\Database\" />
+    <Folder Include="Mapping\" />
   </ItemGroup>
 
 </Project>

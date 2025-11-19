@@ -1,62 +1,77 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.Client;
-using PCBuilder.Service.BuilderServiceAPI.IService;
-using PCPartsDatabase.Models;
-using System.ComponentModel;
+using PCBuilder.Service.ComponentsAPI.Models;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 
 public class GetComponentsService : IGetComponentsService
 {
-    public readonly ComponentsAPIClient _componentsClient;
+    private readonly ComponentsAPIClient _componentsClient;
 
     public GetComponentsService(ComponentsAPIClient componentsClient)
     {
         _componentsClient = componentsClient;
     }
 
-    public async Task<List<Component>> GetComponentsAsync<T>(IEnumerable<int> ids) where T : Component =>
-        await _componentsClient.GetByIdsAsync<Component>("api/Component/GetComponents", ids);
+    public async Task<List<Cpu>> GetCpusAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Cpu>("api/Component/GetComponents", ids);
 
-    public async Task<List<VideoCard>> GetGpusAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<VideoCard>("api/Component/GetComponents", ids);
+    public async Task<List<VideoCard>> GetGpusAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<VideoCard>("api/Component/GetComponents", ids);
 
-    public async Task<List<Ram>> GetRamsAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<RAM>("api/Component/GetComponents", ids);
+    public async Task<List<MemoryKit>> GetRamsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<MemoryKit>("api/Component/GetComponents", ids);
 
-    public async Task<List<StorageDevice>> GetStoragesAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<StorageDevice>("api/Component/GetComponents", ids);
+    public async Task<List<Motherboard>> GetMotherboardsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Motherboard>("api/Component/GetComponents", ids);
 
-    public async Task<List<ChassiCooling>> GetCaseFansAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<ChassiCooling>("api/Component/GetComponents", ids);
+    public async Task<List<Case>> GetCasesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Case>("api/Component/GetComponents", ids);
 
-    public async Task<List<DisplayMonitor>> GetMonitorsAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<DisplayMonitor>("api/Component/GetComponents", ids);
+    public async Task<List<PowerSupply>> GetPowerSuppliesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<PowerSupply>("api/Component/GetComponents", ids);
 
-    public async Task<List<Speaker>> GetSpeakersAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Speaker>("api/Component/GetComponents", ids);
+    public async Task<List<CpuCooler>> GetCpuCoolersAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<CpuCooler>("api/Component/GetComponents", ids);
 
+    public async Task<List<CaseFan>> GetCaseFansAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<CaseFan>("api/Component/GetComponents", ids);
 
-    public async Task<List<CPU>> GetCpusAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<CPU>("api/Component/GetComponents", ids);
+    public async Task<List<InternalHardDrive>> GetInternalStoragesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<InternalHardDrive>("api/Component/GetComponents", ids);
 
-    public async Task<List<PSU>> GetPsusAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<PSU>("api/Component/GetComponents", ids);
+    public async Task<List<ExternalHardDrive>> GetExternalStoragesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<ExternalHardDrive>("api/Component/GetComponents", ids);
 
-    public async Task<List<Motherboard>> GetMotherboardsAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Motherboard>("api/Component/GetComponents", ids);
+    public async Task<List<ComponentsAPI.Models.Monitor>> GetMonitorsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<ComponentsAPI.Models.Monitor>("api/Component/GetComponents", ids);
 
-    public async Task<List<Chassi>> GetCasesAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Chassi>("api/Component/GetComponents", ids);
+    public async Task<List<Keyboard>> GetKeyboardsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Keyboard>("api/Component/GetComponents", ids);
 
-    public async Task<List<CPUCooling>> GetCpuCoolersAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<CPUCooling>("api/Component/GetComponents", ids);
+    public async Task<List<Mouse>> GetMiceAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Mouse>("api/Component/GetComponents", ids);
 
-    public async Task<List<Keyboard>> GetKeyboardsAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Keyboard>("api/Component/GetComponents", ids);
+    public async Task<List<Headphones>> GetHeadphonesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Headphones>("api/Component/GetComponents", ids);
 
-    public async Task<List<Mouse>> GetMiceAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Mouse>("api/Component/GetComponents", ids);
+    public async Task<List<Speakers>> GetSpeakersAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Speakers>("api/Component/GetComponents", ids);
 
-    public async Task<List<Headset>> GetHeadsetsAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<Headset>("api/Component/GetComponents", ids);
+    public async Task<List<Webcam>> GetWebcamsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Webcam>("api/Component/GetComponents", ids);
+
+    public async Task<List<FanController>> GetFanControllersAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<FanController>("api/Component/GetComponents", ids);
+
+    public async Task<List<SoundCard>> GetSoundCardsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<SoundCard>("api/Component/GetComponents", ids);
+
+    public async Task<List<Ups>> GetUpsSystemsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<Ups>("api/Component/GetComponents", ids);
+
+    public async Task<List<ComponentsAPI.Models.OperatingSystem>> GetOperatingSystemsAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<ComponentsAPI.Models.OperatingSystem>("api/Component/GetComponents", ids);
+
+    public async Task<List<CaseAccessory>> GetCaseAccessoriesAsync(IEnumerable<int> ids)
+        => await _componentsClient.GetByIdsAsync<CaseAccessory>("api/Component/GetComponents", ids);
 }

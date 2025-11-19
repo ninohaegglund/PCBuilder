@@ -1,9 +1,8 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI;
-using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
-using PCBuilder.Service.ComponentsAPI.Mapping;
+using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
 using PCBuilder.Services.ComponentsAPI.Data;

@@ -29,12 +29,8 @@ namespace PCBuilder.Services.ComponentsAPI.Data
         public DbSet<Speakers> Speakers { get; set; } = null!;
         public DbSet<Webcam> Webcams { get; set; } = null!;
         public DbSet<FanController> FanControllers { get; set; } = null!;
-        public DbSet<WirelessNetworkCard> WirelessNetworkCards { get; set; } = null!;
-        public DbSet<WiredNetworkCard> WiredNetworkCards { get; set; } = null!;
         public DbSet<SoundCard> SoundCards { get; set; } = null!;
-        public DbSet<ThermalPaste> ThermalPastes { get; set; } = null!;
         public DbSet<Ups> UpsSystems { get; set; } = null!;
-        public DbSet<OpticalDrive> OpticalDrives { get; set; } = null!;
         public DbSet<OperatingSystem> OperatingSystems { get; set; } = null!;
         public DbSet<CaseAccessory> CaseAccessories { get; set; } = null!;
 
@@ -66,12 +62,8 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<Speakers>().ToTable("Speakers");
             modelBuilder.Entity<Webcam>().ToTable("Webcams");
             modelBuilder.Entity<FanController>().ToTable("FanControllers");
-            modelBuilder.Entity<WirelessNetworkCard>().ToTable("WirelessNetworkCards");
-            modelBuilder.Entity<WiredNetworkCard>().ToTable("WiredNetworkCards");
             modelBuilder.Entity<SoundCard>().ToTable("SoundCards");
-            modelBuilder.Entity<ThermalPaste>().ToTable("ThermalPastes");
             modelBuilder.Entity<Ups>().ToTable("UPS");
-            modelBuilder.Entity<OpticalDrive>().ToTable("OpticalDrives");
             modelBuilder.Entity<OperatingSystem>().ToTable("OperatingSystems");
             modelBuilder.Entity<CaseAccessory>().ToTable("CaseAccessories");
 

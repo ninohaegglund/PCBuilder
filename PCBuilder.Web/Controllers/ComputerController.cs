@@ -18,39 +18,26 @@ public class ComputerController : Controller
         _componentService = componentService;
     }
 
-
     [HttpGet]
-    public async Task <IActionResult> CreateComputerIndex()
+    public async Task<IActionResult> CreateComputerIndex()
     {
-        var cpus = await _componentService.GetAllCPUsAsync();
-        var psus = await _componentService.GetAllPSUsAsync();
-        var motherboards = await _componentService.GetAllMotherboardsAsync();
-        var cases = await _componentService.GetAllCasesAsync();
-        var keyboards = await _componentService.GetAllKeyboardsAsync();
-        var mice = await _componentService.GetAllMiceAsync();
-        var headsets = await _componentService.GetAllHeadsetsAsync();
-        var gpus = await _componentService.GetAllGPUsAsync();
-        var rams = await _componentService.GetAllRAMModulesAsync();
-        var storages = await _componentService.GetAllStorageDevicesAsync();
-        var caseCoolers = await _componentService.GetAllChassiCoolersAsync();
-        var cpuCoolers = await _componentService.GetAllCPUCoolersAsync();
-        var monitors = await _componentService.GetAllMonitorsAsync();
-        var speakers = await _componentService.GetAllSpeakersAsync();
+        var allComponents = await _componentService.GetAllComponentsAsync();
 
-        ViewBag.CPUs = new SelectList(cpus, "Id", "ModelName");
-        ViewBag.PSUs = new SelectList(psus, "Id", "ModelName");
-        ViewBag.Motherboards = new SelectList(motherboards, "Id", "ModelName");
-        ViewBag.Cases = new SelectList(cases, "Id", "ModelName");
-        ViewBag.Keyboards = new SelectList(keyboards, "Id", "ModelName");
-        ViewBag.Mice = new SelectList(mice, "Id", "ModelName");
-        ViewBag.Headsets = new SelectList(headsets, "Id", "ModelName");
-        ViewBag.GPUs = new SelectList(gpus, "Id", "ModelName");
-        ViewBag.RAMs = new SelectList(rams, "Id", "ModelName");
-        ViewBag.Storages = new SelectList(storages, "Id", "ModelName");
-        ViewBag.CaseCoolers = new SelectList(caseCoolers, "Id", "ModelName");
-        ViewBag.CPUCoolers = new SelectList(cpuCoolers, "Id", "ModelName");
-        ViewBag.Monitors = new SelectList(monitors, "Id", "ModelName");
-        ViewBag.Speakers = new SelectList(speakers, "Id", "ModelName");
+        ViewBag.CPUs = new SelectList(allComponents.Cpus, "Id", "Name");
+        ViewBag.GPUs = new SelectList(allComponents.Gpus, "Id", "Name");
+        ViewBag.RAMs = new SelectList(allComponents.Rams, "Id", "Name");
+        ViewBag.Motherboards = new SelectList(allComponents.Motherboards, "Id", "Name");
+        ViewBag.Cases = new SelectList(allComponents.Cases, "Id", "Name");
+        ViewBag.PSUs = new SelectList(allComponents.Psus, "Id", "Name");
+        ViewBag.CPUCoolers = new SelectList(allComponents.CpuCoolers, "Id", "Name");
+        ViewBag.CaseFans = new SelectList(allComponents.CaseFans, "Id", "Name");
+        ViewBag.InternalStorages = new SelectList(allComponents.InternalStorages, "Id", "Name");
+        ViewBag.ExternalStorages = new SelectList(allComponents.ExternalStorages, "Id", "Name");
+        ViewBag.Monitors = new SelectList(allComponents.Monitors, "Id", "Name");
+        ViewBag.Keyboards = new SelectList(allComponents.Keyboards, "Id", "Name");
+        ViewBag.Mice = new SelectList(allComponents.Mice, "Id", "Name");
+        ViewBag.Headphones = new SelectList(allComponents.Headphones, "Id", "Name");
+        ViewBag.Speakers = new SelectList(allComponents.Speakers, "Id", "Name");
 
         return View(new ComputerCreateDTO());
     }

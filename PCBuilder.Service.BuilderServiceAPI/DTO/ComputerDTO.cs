@@ -1,63 +1,68 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
+﻿using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 
-namespace PCBuilder.Service.BuilderServiceAPI.DTO;
-
-public class ComputerDTO
+namespace PCBuilder.Service.BuilderServiceAPI.DTO
 {
-    public int Id { get; set; }
-    public string? Name { get; set; }
+    public class ComputerDTO
+    {
+        public int Id { get; set; }
+        public string? Name { get; set; }
+        public int CustomerId { get; set; }
 
-    public int CustomerId { get; set; }
+        // ─────────────── 1:1 RELATIONER ───────────────
+        public int? CpuId { get; set; }
+        public CPUDto? Cpu { get; set; }
 
-    // 1-1 relations
-    public int? CPUId { get; set; }
-    public CPU? CPU { get; set; }
+        public int? GpuId { get; set; }           
+        public GPUDto? Gpu { get; set; }
 
-    public int? PSUId { get; set; }
-    public PSU? PSU { get; set; }
+        public int? MotherboardId { get; set; }
+        public MotherboardDto? Motherboard { get; set; }
 
-    public int? MotherboardId { get; set; }
-    public Motherboard? Motherboard { get; set; }
+        public int? CaseId { get; set; }
+        public CaseDto? Case { get; set; }
 
-    public int? CaseId { get; set; }
-    public Chassi? Case { get; set; }
+        public int? PowerSupplyId { get; set; }
+        public PSUDto? PowerSupply { get; set; }
 
-    public int? CpuCoolerId { get; set; }
-    public CPUCooling? CPUCooler { get; set; }
+        public int? CpuCoolerId { get; set; }
+        public CPUCoolerDto? CpuCooler { get; set; }
 
-    public int? KeyboardId { get; set; }
-    public Keyboard? Keyboard { get; set; }
+        public int? KeyboardId { get; set; }
+        public KeyboardDto? Keyboard { get; set; }
 
-    public int? MouseId { get; set; }
-    public Mouse? Mouse { get; set; }
+        public int? MouseId { get; set; }
+        public MouseDto? Mouse { get; set; }
 
-    public int? HeadsetId { get; set; }
-    public Headset? Headset { get; set; }
+        public int? HeadphonesId { get; set; }
+        public HeadphonesDto? Headphones { get; set; }
 
-    public List<int>? GPUIds { get; set; }
-    public List<GPU>? GPUs { get; set; }
+        public List<int>? GpuIds { get; set; } = new();
+        public List<GPUDto>? Gpus { get; set; } = new();
 
-    public List<int>? RAMIds { get; set; }
-    public List<RAM>? RAMs { get; set; }
+        public List<int>? RamIds { get; set; } = new();
+        public List<RAMDto>? Rams { get; set; } = new();
 
-    public List<int>? StorageIds { get; set; }
-    public List<StorageDevice>? Storages { get; set; }
+        public List<int>? InternalStorageIds { get; set; } = new();
+        public List<InternalStorageDto>? InternalStorages { get; set; } = new();
 
-    public List<int>? CaseFanIds { get; set; }
-    public List<ChassiCooling>? CaseFans { get; set; }
+        public List<int>? ExternalStorageIds { get; set; } = new();
+        public List<ExternalStorageDto>? ExternalStorages { get; set; } = new();
 
-    public List<int>? MonitorIds { get; set; }
-    public List<DisplayMonitor>? Monitors { get; set; }
+        public List<int>? CaseFanIds { get; set; } = new();
+        public List<CaseFanDto>? CaseFans { get; set; } = new();
 
-    public List<int>? SpeakerIds { get; set; }
-    public List<Speaker>? Speakers { get; set; }
+        public List<int>? MonitorIds { get; set; } = new();
+        public List<MonitorDto>? Monitors { get; set; } = new();
+
+        public List<int>? SpeakerIds { get; set; } = new();
+        public List<SpeakersDto>? Speakers { get; set; } = new();
+
+        public int? OperatingSystemId { get; set; }
+        public OperatingSystemDto? OperatingSystem { get; set; }
+
+        public decimal TotalPrice { get; set; }
+        public int TotalWattage { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime? CompletedAt { get; set; }
+    }
 }

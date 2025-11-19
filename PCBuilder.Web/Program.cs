@@ -10,6 +10,7 @@ using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Services.ComponentsAPI.Data;
 using PCBuilder.Services.CustomerAPI.Data;
 using PCBuilder.Web.Service;
 using PCBuilder.Web.Service.IService;
