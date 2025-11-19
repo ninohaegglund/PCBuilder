@@ -2,7 +2,7 @@
 {
     public class Headphones
     {
-        public string name { get; set; }
+        public string name { get; set; } = null!;
         public decimal price { get; set; }
         public string type { get; set; } 
         public int[] frequency_response { get; set; }
