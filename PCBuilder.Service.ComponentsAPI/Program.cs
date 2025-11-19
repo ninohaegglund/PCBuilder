@@ -6,6 +6,7 @@ using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Mapping;
 using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
+using PCBuilder.Services.ComponentsAPI.Data;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,7 +40,6 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-    DbSeeder.Seed(db);
     db.SaveChanges();
 }
 

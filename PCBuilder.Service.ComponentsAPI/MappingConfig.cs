@@ -1,15 +1,7 @@
 ﻿using AutoMapper;
+using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Service.ComponentsAPI.Models.DTO;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+
 using System.ComponentModel;
 
 namespace PCBuilder.Service.ComponentsAPI
@@ -20,7 +12,7 @@ namespace PCBuilder.Service.ComponentsAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CPU, CPUDto>().ReverseMap();
+                config.CreateMap<Cpu, CPUDto>().ReverseMap();
                 config.CreateMap<PSU, PSUDTO>().ReverseMap();
                 config.CreateMap<Motherboard, MotherboardDTO>().ReverseMap();
                 config.CreateMap<Chassi, ChassiDTO>().ReverseMap();
