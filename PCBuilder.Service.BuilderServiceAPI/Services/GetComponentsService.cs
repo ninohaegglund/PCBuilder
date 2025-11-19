@@ -1,15 +1,6 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.Client;
 using PCBuilder.Service.BuilderServiceAPI.IService;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using PCPartsDatabase.Models;
 using System.ComponentModel;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
@@ -26,10 +17,10 @@ public class GetComponentsService : IGetComponentsService
     public async Task<List<Component>> GetComponentsAsync<T>(IEnumerable<int> ids) where T : Component =>
         await _componentsClient.GetByIdsAsync<Component>("api/Component/GetComponents", ids);
 
-    public async Task<List<GPU>> GetGpusAsync(IEnumerable<int> ids) =>
-        await _componentsClient.GetByIdsAsync<GPU>("api/Component/GetComponents", ids);
+    public async Task<List<VideoCard>> GetGpusAsync(IEnumerable<int> ids) =>
+        await _componentsClient.GetByIdsAsync<VideoCard>("api/Component/GetComponents", ids);
 
-    public async Task<List<RAM>> GetRamsAsync(IEnumerable<int> ids) =>
+    public async Task<List<Ram>> GetRamsAsync(IEnumerable<int> ids) =>
         await _componentsClient.GetByIdsAsync<RAM>("api/Component/GetComponents", ids);
 
     public async Task<List<StorageDevice>> GetStoragesAsync(IEnumerable<int> ids) =>
