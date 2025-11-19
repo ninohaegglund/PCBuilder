@@ -1,7 +1,6 @@
-﻿using PCBuilder.Service.ComponentsAPI.Models;
+﻿
 
-
-namespace PCPartsDatabase.Models
+namespace PCBuilder.Service.ComponentsAPI.Models
 {
     public class Manufacturer
     {

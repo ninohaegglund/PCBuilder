@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PCPartsDatabase.Models;
+using PCBuilder.Service.ComponentsAPI.Models;
+using Monitor = PCBuilder.Service.ComponentsAPI.Models.Monitor;
+using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
 namespace PCBuilder.Services.ComponentsAPI.Data
 {
@@ -20,7 +22,7 @@ namespace PCBuilder.Services.ComponentsAPI.Data
         public DbSet<CaseFan> CaseFans { get; set; } = null!;
         public DbSet<InternalHardDrive> InternalHardDrives { get; set; } = null!;
         public DbSet<ExternalHardDrive> ExternalHardDrives { get; set; } = null!;
-        public DbSet<PCPartsDatabase.Models.Monitor> Monitors { get; set; } = null!;
+        public DbSet<Monitor> Monitors { get; set; } = null!;
         public DbSet<Mouse> Mice { get; set; } = null!;
         public DbSet<Keyboard> Keyboards { get; set; } = null!;
         public DbSet<Headphones> Headphones { get; set; } = null!;
@@ -33,7 +35,7 @@ namespace PCBuilder.Services.ComponentsAPI.Data
         public DbSet<ThermalPaste> ThermalPastes { get; set; } = null!;
         public DbSet<Ups> UpsSystems { get; set; } = null!;
         public DbSet<OpticalDrive> OpticalDrives { get; set; } = null!;
-        public DbSet<PCPartsDatabase.Models.OperatingSystem> OperatingSystems { get; set; } = null!;
+        public DbSet<OperatingSystem> OperatingSystems { get; set; } = null!;
         public DbSet<CaseAccessory> CaseAccessories { get; set; } = null!;
 
         // Lookup tables
@@ -57,7 +59,7 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<CaseFan>().ToTable("ChassiCooling");
             modelBuilder.Entity<InternalHardDrive>().ToTable("Storages");
             modelBuilder.Entity<ExternalHardDrive>().ToTable("ExternalStorages");
-            modelBuilder.Entity<PCPartsDatabase.Models.Monitor>().ToTable("Monitors");
+            modelBuilder.Entity<Monitor>().ToTable("Monitors");
             modelBuilder.Entity<Mouse>().ToTable("Mice");
             modelBuilder.Entity<Keyboard>().ToTable("Keyboards");
             modelBuilder.Entity<Headphones>().ToTable("Headsets");
@@ -70,7 +72,7 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<ThermalPaste>().ToTable("ThermalPastes");
             modelBuilder.Entity<Ups>().ToTable("UPS");
             modelBuilder.Entity<OpticalDrive>().ToTable("OpticalDrives");
-            modelBuilder.Entity<PCPartsDatabase.Models.OperatingSystem>().ToTable("OperatingSystems");
+            modelBuilder.Entity<OperatingSystem>().ToTable("OperatingSystems");
             modelBuilder.Entity<CaseAccessory>().ToTable("CaseAccessories");
 
             modelBuilder.Entity<Manufacturer>().ToTable("Manufacturers");

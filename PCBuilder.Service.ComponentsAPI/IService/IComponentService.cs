@@ -1,35 +1,47 @@
 ﻿using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using Monitor = PCBuilder.Service.ComponentsAPI.Models.Monitor;
+using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
 namespace PCBuilder.Service.ComponentsAPI.Interfaces
 {
     public interface IComponentService
     {
-        Task<List<CPU>> GetAllCPUsAsync();
-        Task<List<PSU>> GetAllPSUsAsync();
+        // Lookups
+        Task<List<Manufacturer>> GetAllManufacturersAsync();
+        Task<List<Color>> GetAllColorsAsync();
+        Task<List<FormFactor>> GetAllFormFactorsAsync();
+
+        // Core components
+        Task<List<Cpu>> GetAllCPUsAsync();
+        Task<List<VideoCard>> GetAllGPUsAsync();
+        Task<List<MemoryKit>> GetAllRAMModulesAsync();
         Task<List<Motherboard>> GetAllMotherboardsAsync();
-        Task<List<Chassi>> GetAllCasesAsync();
-        Task<List<Keyboard>> GetAllKeyboardsAsync();
+        Task<List<Case>> GetAllCasesAsync();
+        Task<List<PowerSupply>> GetAllPSUsAsync();
+        Task<List<CpuCooler>> GetAllCPUCoolersAsync();
+        Task<List<CaseFan>> GetAllChassiCoolersAsync();
+
+        // Storage
+        Task<List<InternalHardDrive>> GetAllInternalStorageDevicesAsync();
+        Task<List<ExternalHardDrive>> GetAllExternalStorageDevicesAsync();
+
+        // Peripherals
+        Task<List<Monitor>> GetAllMonitorsAsync();
         Task<List<Mouse>> GetAllMiceAsync();
-        Task<List<Headset>> GetAllHeadsetsAsync();
-        Task<List<GPU>> GetAllGPUsAsync();
-        Task<List<RAM>> GetAllRAMModulesAsync();
-        Task<List<StorageDevice>> GetAllStorageDevicesAsync();
-        Task<List<CPUCooling>> GetAllCPUCoolersAsync();
-        Task<List<ChassiCooling>> GetAllChassiCoolersAsync();
-        Task<List<DisplayMonitor>> GetAllMonitorsAsync();
-        Task<List<Speaker>> GetAllSpeakersAsync();
+        Task<List<Keyboard>> GetAllKeyboardsAsync();
+        Task<List<Headphones>> GetAllHeadsetsAsync();
+        Task<List<Speakers>> GetAllSpeakersAsync();
+        Task<List<Webcam>> GetAllWebcamsAsync();
 
-
-        Task<List<Components>> GetComponentsAsync(IEnumerable<int> ids);
+        // Other components
+        Task<List<FanController>> GetAllFanControllersAsync();
+        Task<List<WirelessNetworkCard>> GetAllWirelessNetworkCardsAsync();
+        Task<List<WiredNetworkCard>> GetAllWiredNetworkCardsAsync();
+        Task<List<SoundCard>> GetAllSoundCardsAsync();
+        Task<List<ThermalPaste>> GetAllThermalPastesAsync();
+        Task<List<Ups>> GetAllUpsSystemsAsync();
+        Task<List<OpticalDrive>> GetAllOpticalDrivesAsync();
+        Task<List<OperatingSystem>> GetAllOperatingSystemsAsync();
+        Task<List<CaseAccessory>> GetAllCaseAccessoriesAsync();
     }
 }

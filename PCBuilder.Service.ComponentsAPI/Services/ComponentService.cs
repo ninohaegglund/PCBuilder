@@ -2,16 +2,8 @@
 using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using Monitor = PCBuilder.Service.ComponentsAPI.Models.Monitor;
+using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
 namespace PCBuilder.Service.ComponentsAPI.Services
 {
@@ -26,29 +18,93 @@ namespace PCBuilder.Service.ComponentsAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<List<CPU>> GetAllCPUsAsync() => await _repository.GetAllCPUsAsync();
-        public async Task<List<PSU>> GetAllPSUsAsync() => await _repository.GetAllPSUsAsync();
-        public async Task<List<Motherboard>> GetAllMotherboardsAsync() => await _repository.GetAllMotherboardsAsync();
-        public async Task<List<Chassi>> GetAllCasesAsync() => await _repository.GetAllCasesAsync();
-        public async Task<List<Keyboard>> GetAllKeyboardsAsync() => await _repository.GetAllKeyboardsAsync();
-        public async Task<List<Mouse>> GetAllMiceAsync() => await _repository.GetAllMiceAsync();
-        public async Task<List<Headset>> GetAllHeadsetsAsync() => await _repository.GetAllHeadsetsAsync();
-        public async Task<List<GPU>> GetAllGPUsAsync() => await _repository.GetAllGPUsAsync();
-        public async Task<List<RAM>> GetAllRAMModulesAsync() => await _repository.GetAllRAMModulesAsync();
-        public async Task<List<StorageDevice>> GetAllStorageDevicesAsync() => await _repository.GetAllStorageDevicesAsync();
-        public async Task<List<CPUCooling>> GetAllCPUCoolersAsync() => await _repository.GetAllCPUCoolersAsync();
-        public async Task<List<ChassiCooling>> GetAllChassiCoolersAsync() => await _repository.GetAllChassiCoolersAsync();
-        public async Task<List<DisplayMonitor>> GetAllMonitorsAsync() => await _repository.GetAllMonitorsAsync();
-        public async Task<List<Speaker>> GetAllSpeakersAsync() => await _repository.GetAllSpeakersAsync();
+        // Lookups
+        public Task<List<Manufacturer>> GetAllManufacturersAsync() =>
+            _repository.GetAllManufacturersAsync();
 
-        public async Task<List<Components>> GetComponentsAsync(IEnumerable<int> ids)
-        {
-            if (ids == null || !ids.Any())
-                return new List<Components>();
-            var components = await _repository.GetComponentsAsync(ids);
-            if (components == null || !components.Any())
-                return new List<Components>();
-            return components.ToList();
-        }
+        public Task<List<Color>> GetAllColorsAsync() =>
+            _repository.GetAllColorsAsync();
+
+        public Task<List<FormFactor>> GetAllFormFactorsAsync() =>
+            _repository.GetAllFormFactorsAsync();
+
+        // Core components
+        public Task<List<Cpu>> GetAllCPUsAsync() =>
+            _repository.GetAllCPUsAsync();
+
+        public Task<List<VideoCard>> GetAllGPUsAsync() =>
+            _repository.GetAllGPUsAsync();
+
+        public Task<List<MemoryKit>> GetAllRAMModulesAsync() =>
+            _repository.GetAllRAMModulesAsync();
+
+        public Task<List<Motherboard>> GetAllMotherboardsAsync() =>
+            _repository.GetAllMotherboardsAsync();
+
+        public Task<List<Case>> GetAllCasesAsync() =>
+            _repository.GetAllCasesAsync();
+
+        public Task<List<PowerSupply>> GetAllPSUsAsync() =>
+            _repository.GetAllPSUsAsync();
+
+        public Task<List<CpuCooler>> GetAllCPUCoolersAsync() =>
+            _repository.GetAllCPUCoolersAsync();
+
+        public Task<List<CaseFan>> GetAllChassiCoolersAsync() =>
+            _repository.GetAllChassiCoolersAsync();
+
+        // Storage
+        public Task<List<InternalHardDrive>> GetAllInternalStorageDevicesAsync() =>
+            _repository.GetAllInternalStorageDevicesAsync();
+
+        public Task<List<ExternalHardDrive>> GetAllExternalStorageDevicesAsync() =>
+            _repository.GetAllExternalStorageDevicesAsync();
+
+        // Peripherals
+        public Task<List<Monitor>> GetAllMonitorsAsync() =>
+            _repository.GetAllMonitorsAsync();
+
+        public Task<List<Mouse>> GetAllMiceAsync() =>
+            _repository.GetAllMiceAsync();
+
+        public Task<List<Keyboard>> GetAllKeyboardsAsync() =>
+            _repository.GetAllKeyboardsAsync();
+
+        public Task<List<Headphones>> GetAllHeadsetsAsync() =>
+            _repository.GetAllHeadsetsAsync();
+
+        public Task<List<Speakers>> GetAllSpeakersAsync() =>
+            _repository.GetAllSpeakersAsync();
+
+        public Task<List<Webcam>> GetAllWebcamsAsync() =>
+            _repository.GetAllWebcamsAsync();
+
+        // Other components
+        public Task<List<FanController>> GetAllFanControllersAsync() =>
+            _repository.GetAllFanControllersAsync();
+
+        public Task<List<WirelessNetworkCard>> GetAllWirelessNetworkCardsAsync() =>
+            _repository.GetAllWirelessNetworkCardsAsync();
+
+        public Task<List<WiredNetworkCard>> GetAllWiredNetworkCardsAsync() =>
+            _repository.GetAllWiredNetworkCardsAsync();
+
+        public Task<List<SoundCard>> GetAllSoundCardsAsync() =>
+            _repository.GetAllSoundCardsAsync();
+
+        public Task<List<ThermalPaste>> GetAllThermalPastesAsync() =>
+            _repository.GetAllThermalPastesAsync();
+
+        public Task<List<Ups>> GetAllUpsSystemsAsync() =>
+            _repository.GetAllUpsSystemsAsync();
+
+        public Task<List<OpticalDrive>> GetAllOpticalDrivesAsync() =>
+            _repository.GetAllOpticalDrivesAsync();
+
+        public Task<List<OperatingSystem>> GetAllOperatingSystemsAsync() =>
+            _repository.GetAllOperatingSystemsAsync();
+
+        public Task<List<CaseAccessory>> GetAllCaseAccessoriesAsync() =>
+            _repository.GetAllCaseAccessoriesAsync();
     }
 }

@@ -1,16 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+
+using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using PCBuilder.Services.ComponentsAPI.Data;
+using Monitor = PCBuilder.Service.ComponentsAPI.Models.Monitor;
+using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
 namespace PCBuilder.Service.ComponentsAPI.Repositories
 {
@@ -23,36 +18,93 @@ namespace PCBuilder.Service.ComponentsAPI.Repositories
             _context = context;
         }
 
-        public async Task<List<CPU>> GetAllCPUsAsync() => await _context.CPUs.AsNoTracking().ToListAsync();
-        public async Task<List<PSU>> GetAllPSUsAsync() => await _context.PSUs.AsNoTracking().ToListAsync();
-        public async Task<List<Motherboard>> GetAllMotherboardsAsync() => await _context.Motherboards.AsNoTracking().ToListAsync();
-        public async Task<List<Chassi>> GetAllCasesAsync() => await _context.Cases.AsNoTracking().ToListAsync();
-        public async Task<List<Keyboard>> GetAllKeyboardsAsync() => await _context.Keyboards.AsNoTracking().ToListAsync();
-        public async Task<List<Mouse>> GetAllMiceAsync() => await _context.Mice.AsNoTracking().ToListAsync();
-        public async Task<List<Headset>> GetAllHeadsetsAsync() => await _context.Headsets.AsNoTracking().ToListAsync();
-        public async Task<List<GPU>> GetAllGPUsAsync() => await _context.GPUs.AsNoTracking().ToListAsync();
-        public async Task<List<RAM>> GetAllRAMModulesAsync() => await _context.RAMModules.AsNoTracking().ToListAsync();
-        public async Task<List<StorageDevice>> GetAllStorageDevicesAsync() => await _context.Storages.AsNoTracking().ToListAsync();
-        public async Task<List<CPUCooling>> GetAllCPUCoolersAsync() => await _context.CPUCoolers.AsNoTracking().ToListAsync();
-        public async Task<List<ChassiCooling>> GetAllChassiCoolersAsync() => await _context.ChassiCooling.AsNoTracking().ToListAsync();
-        public async Task<List<DisplayMonitor>> GetAllMonitorsAsync() => await _context.Monitors.AsNoTracking().ToListAsync();
-        public async Task<List<Speaker>> GetAllSpeakersAsync() => await _context.Speakers.AsNoTracking().ToListAsync();
+        // Lookups
+        public async Task<List<Manufacturer>> GetAllManufacturersAsync() =>
+            await _context.Manufacturers.AsNoTracking().ToListAsync();
 
-        public async Task<IEnumerable<Components>> GetComponentsAsync(IEnumerable<int> ids)
-        {
-            if (ids == null)
-                return new List<Components>();
+        public async Task<List<Color>> GetAllColorsAsync() =>
+          await _context.Colors.AsNoTracking().ToListAsync();
 
-            var idList = ids as IList<int> ?? ids.ToList();
-            if (!idList.Any())
-                return new List<Components>();
+        public async Task<List<FormFactor>> GetAllFormFactorsAsync() =>
+            await _context.FormFactors.AsNoTracking().ToListAsync();
 
-           var components = await _context.Components
-                .AsNoTracking()
-                .Where(c => idList.Contains(c.Id))
-                .ToListAsync();
+        // Core components
+        public async Task<List<Cpu>> GetAllCPUsAsync() =>
+            await _context.Cpus.AsNoTracking().ToListAsync();
 
-            return components;
-        }
+        public async Task<List<VideoCard>> GetAllGPUsAsync() =>
+            await _context.VideoCards.AsNoTracking().ToListAsync();
+
+        public async Task<List<MemoryKit>> GetAllRAMModulesAsync() =>
+            await _context.MemoryKits.AsNoTracking().ToListAsync();
+
+        public async Task<List<Motherboard>> GetAllMotherboardsAsync() =>
+            await _context.Motherboards.AsNoTracking().ToListAsync();
+
+        public async Task<List<Case>> GetAllCasesAsync() =>
+            await _context.Cases.AsNoTracking().ToListAsync();
+
+        public async Task<List<PowerSupply>> GetAllPSUsAsync() =>
+            await _context.PowerSupplies.AsNoTracking().ToListAsync();
+
+        public async Task<List<CpuCooler>> GetAllCPUCoolersAsync() =>
+            await _context.CpuCoolers.AsNoTracking().ToListAsync();
+
+        public async Task<List<CaseFan>> GetAllChassiCoolersAsync() =>
+            await _context.CaseFans.AsNoTracking().ToListAsync();
+
+        // Storage
+        public async Task<List<InternalHardDrive>> GetAllInternalStorageDevicesAsync() =>
+            await _context.InternalHardDrives.AsNoTracking().ToListAsync();
+
+        public async Task<List<ExternalHardDrive>> GetAllExternalStorageDevicesAsync() =>
+            await _context.ExternalHardDrives.AsNoTracking().ToListAsync();
+
+        // Peripherals
+        public async Task<List<Monitor>> GetAllMonitorsAsync() =>
+            await _context.Monitors.AsNoTracking().ToListAsync();
+
+        public async Task<List<Mouse>> GetAllMiceAsync() =>
+            await _context.Mice.AsNoTracking().ToListAsync();
+
+        public async Task<List<Keyboard>> GetAllKeyboardsAsync() =>
+            await _context.Keyboards.AsNoTracking().ToListAsync();
+
+        public async Task<List<Headphones>> GetAllHeadsetsAsync() =>
+            await _context.Headphones.AsNoTracking().ToListAsync();
+
+        public async Task<List<Speakers>> GetAllSpeakersAsync() =>
+            await _context.Speakers.AsNoTracking().ToListAsync();
+
+        public async Task<List<Webcam>> GetAllWebcamsAsync() =>
+            await _context.Webcams.AsNoTracking().ToListAsync();
+
+        // Other components
+        public async Task<List<FanController>> GetAllFanControllersAsync() =>
+            await _context.FanControllers.AsNoTracking().ToListAsync();
+
+        public async Task<List<WirelessNetworkCard>> GetAllWirelessNetworkCardsAsync() =>
+            await _context.WirelessNetworkCards.AsNoTracking().ToListAsync();
+
+        public async Task<List<WiredNetworkCard>> GetAllWiredNetworkCardsAsync() =>
+            await _context.WiredNetworkCards.AsNoTracking().ToListAsync();
+
+        public async Task<List<SoundCard>> GetAllSoundCardsAsync() =>
+            await _context.SoundCards.AsNoTracking().ToListAsync();
+
+        public async Task<List<ThermalPaste>> GetAllThermalPastesAsync() =>
+            await _context.ThermalPastes.AsNoTracking().ToListAsync();
+
+        public async Task<List<Ups>> GetAllUpsSystemsAsync() =>
+            await _context.UpsSystems.AsNoTracking().ToListAsync();
+
+        public async Task<List<OpticalDrive>> GetAllOpticalDrivesAsync() =>
+            await _context.OpticalDrives.AsNoTracking().ToListAsync();
+
+        public async Task<List<OperatingSystem>> GetAllOperatingSystemsAsync() =>
+            await _context.OperatingSystems.AsNoTracking().ToListAsync();
+
+        public async Task<List<CaseAccessory>> GetAllCaseAccessoriesAsync() =>
+            await _context.CaseAccessories.AsNoTracking().ToListAsync();
     }
 }
