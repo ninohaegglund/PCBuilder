@@ -1,4 +1,6 @@
-﻿namespace PCBuilder.Service.ComponentsAPI.Models.DTOs
+using System.Collections.Generic;
+
+namespace PCBuilder.Service.ComponentsAPI.Models.DTOs
 {
     public class AllComponentsDto
     {
@@ -23,6 +25,8 @@
         public List<UpsDto> Ups { get; set; } = new();
         public List<OperatingSystemDto> OperatingSystems { get; set; } = new();
         public List<CaseAccessoryDto> CaseAccessories { get; set; } = new();
+
+        // Added missing properties referenced by ComponentService
         public List<ManufacturerDto> Manufacturers { get; set; } = new();
         public List<ColorDto> Colors { get; set; } = new();
         public List<FormFactorDto> FormFactors { get; set; } = new();

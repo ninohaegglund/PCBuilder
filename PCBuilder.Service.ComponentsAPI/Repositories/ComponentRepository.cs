@@ -17,11 +17,9 @@ namespace PCBuilder.Service.ComponentsAPI.Repositories
 
         public async Task<T?> GetByIdAsync<T>(int id) where T : class
         {
-            // Antag: primärnyckeln heter "Id" och är int
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity is not null)
             {
-                // Detach för att efterlikna AsNoTracking()
                 _context.Entry(entity).State = EntityState.Detached;
             }
             return entity;

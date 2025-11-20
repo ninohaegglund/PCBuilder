@@ -1,5 +1,7 @@
 ﻿
 
+using PCBuilder.Service.ComponentsAPI.Models.DTOs;
+
 namespace PCBuilder.Service.ComponentsAPI.Models
 {
     public class Manufacturer
@@ -22,6 +24,34 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public ICollection<Headphones> Headphones { get; set; } = new List<Headphones>();
         public ICollection<Speakers> Speakers { get; set; } = new List<Speakers>();
         public ICollection<Webcam> Webcams { get; set; } = new List<Webcam>();
+    }
+
+    public class AllComponents
+    {
+        public List<CPUDto> Cpus { get; set; } = new();
+        public List<GPUDto> Gpus { get; set; } = new();
+        public List<RAMDto> Rams { get; set; } = new();
+        public List<MotherboardDto> Motherboards { get; set; } = new();
+        public List<CaseDto> Cases { get; set; } = new();
+        public List<PSUDto> Psus { get; set; } = new();
+        public List<CPUCoolerDto> CpuCoolers { get; set; } = new();
+        public List<CaseFanDto> CaseFans { get; set; } = new();
+        public List<InternalStorageDto> InternalStorages { get; set; } = new();
+        public List<ExternalStorageDto> ExternalStorages { get; set; } = new();
+        public List<MonitorDto> Monitors { get; set; } = new();
+        public List<KeyboardDto> Keyboards { get; set; } = new();
+        public List<MouseDto> Mice { get; set; } = new();
+        public List<HeadphonesDto> Headphones { get; set; } = new();
+        public List<SpeakersDto> Speakers { get; set; } = new();
+        public List<WebcamDto> Webcams { get; set; } = new();
+        public List<FanControllerDto> FanControllers { get; set; } = new();
+        public List<SoundCardDto> SoundCards { get; set; } = new();
+        public List<UpsDto> UpsUnits { get; set; } = new();
+        public List<OperatingSystemDto> OperatingSystems { get; set; } = new();
+        public List<CaseAccessoryDto> CaseAccessories { get; set; } = new();
+        public List<ManufacturerDto> Manufacturers { get; set; } = new();
+        public List<ColorDto> Colors { get; set; } = new();
+        public List<FormFactorDto> FormFactors { get; set; } = new();
     }
 
     public class Color
