@@ -10,8 +10,7 @@ namespace PCBuilder.Service.ComponentsAPI.Interfaces
 
         Task<AllComponentsDto> GetAllComponentsAsync();
 
-        Task<List<Manufacturer>> GetAllManufacturersAsync();
-        Task<List<Color>> GetAllColorsAsync();
+        Task<List<ManufacturerDto>> GetAllManufacturersAsync();
         Task<List<FormFactor>> GetAllFormFactorsAsync();
     }
 }

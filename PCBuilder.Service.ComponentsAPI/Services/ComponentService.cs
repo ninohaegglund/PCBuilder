@@ -28,8 +28,6 @@ namespace PCBuilder.Service.ComponentsAPI.Services
 
         public async Task<AllComponentsDto> GetAllComponentsAsync()
         {
-            // Obs: Här blir det explicit samling per typ (för att DTO:n är starkt typad).
-            // Det är fortfarande centralt generiskt i repository/service för övriga operationer.
             var dto = new AllComponentsDto
             {
                 Cpus = await GetAllAsync<Cpu>(),
@@ -58,11 +56,11 @@ namespace PCBuilder.Service.ComponentsAPI.Services
             return dto;
         }
 
-        public Task<List<Manufacturer>> GetAllManufacturersAsync() =>
-            GetAllAsync<Manufacturer>();
-
-        public Task<List<Color>> GetAllColorsAsync() =>
-            GetAllAsync<Color>();
+        public async Task<List<ManufacturerDto>> GetAllManufacturersAsync()
+        {
+            var manufacturers = await GetAllAsync<Manufacturer>();
+            return _mapper.Map<List<ManufacturerDto>>(manufacturers);
+        }
 
         public Task<List<FormFactor>> GetAllFormFactorsAsync() =>
             GetAllAsync<FormFactor>();

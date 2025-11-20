@@ -1,6 +1,7 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using PCBuilder.Service.ComponentsAPI;
+using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
 using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 using PCBuilder.Service.ComponentsAPI.Repositories;
@@ -26,7 +27,7 @@ var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
+    app.UseSwagger();   
     app.UseSwaggerUI();
 }
 
