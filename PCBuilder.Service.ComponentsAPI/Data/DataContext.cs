@@ -65,26 +65,19 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<Ups>().ToTable("UPS");
             modelBuilder.Entity<OperatingSystem>().ToTable("OperatingSystems");
             modelBuilder.Entity<CaseAccessory>().ToTable("CaseAccessories");
-
             modelBuilder.Entity<Manufacturer>().ToTable("Manufacturers");
             modelBuilder.Entity<FormFactor>().ToTable("FormFactors");
 
-            // Indexes
             modelBuilder.Entity<Cpu>(e => e.HasIndex(x => x.ManufacturerId));
             modelBuilder.Entity<VideoCard>(e =>
             {
                 e.HasIndex(x => x.ManufacturerId);
-                e.HasIndex(x => x.ColorId);
             });
             modelBuilder.Entity<Motherboard>(e =>
             {
                 e.HasIndex(x => x.ManufacturerId);
-                e.HasIndex(x => x.ColorId);
                 e.HasIndex(x => x.Socket);
             });
-            modelBuilder.Entity<Case>(e => e.HasIndex(x => x.ColorId));
-            modelBuilder.Entity<PowerSupply>(e => e.HasIndex(x => x.ColorId));
-            modelBuilder.Entity<CpuCooler>(e => e.HasIndex(x => x.ColorId));
         }
     }
 }

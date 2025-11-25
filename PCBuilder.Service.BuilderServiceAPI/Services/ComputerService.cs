@@ -76,7 +76,6 @@ public class ComputerService : IComputerService
             dto.Headphones = _mapper.Map<HeadphonesDto>(headphones);
         }
 
-        // 1:N-komponenter
         if (computer.GPUIds is { Count: > 0 })
         {
             var gpus = await _componentsService.GetGpusAsync(computer.GPUIds);
@@ -131,7 +130,6 @@ public class ComputerService : IComputerService
             dto.SpeakerIds = computer.SpeakerIds.ToList();
         }
 
-        // Id + basfält
         dto.CpuId = computer.CPUId;
         dto.MotherboardId = computer.MotherboardId;
         dto.CaseId = computer.CaseId;

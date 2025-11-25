@@ -34,7 +34,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models.DTOs
             CreateMap<CaseAccessory, CaseAccessoryDto>().ReverseMap();
 
             CreateMap<Manufacturer, ManufacturerDto>().ReverseMap();
-            CreateMap<Color, ColorDto>().ReverseMap();
             CreateMap<FormFactor, FormFactorDto>().ReverseMap();
         }
     }
