@@ -5,6 +5,7 @@ using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
 
@@ -26,35 +27,124 @@ public class ComputerService : IComputerService
 
     private async Task PopulateComponentsAsync(ComputerDTO dto, Computer computer)
     {
-        if (computer.GPUIds != null && computer.GPUIds.Any())
-            dto.GPUs = (await _componentsService.GetGpusAsync(computer.GPUIds)).ToList();
-        if (computer.RAMIds != null && computer.RAMIds.Any())
-            dto.RAMs = (await _componentsService.GetRamsAsync(computer.RAMIds)).ToList();
-        if (computer.StorageIds != null && computer.StorageIds.Any())
-            dto.Storages = (await _componentsService.GetStoragesAsync(computer.StorageIds)).ToList();
-        if (computer.CaseFanIds != null && computer.CaseFanIds.Any())
-            dto.CaseFans = (await _componentsService.GetCaseFansAsync(computer.CaseFanIds)).ToList();
-        if (computer.MonitorIds != null && computer.MonitorIds.Any())
-            dto.Monitors = (await _componentsService.GetMonitorsAsync(computer.MonitorIds)).ToList();
-        if (computer.SpeakerIds != null && computer.SpeakerIds.Any())
-            dto.Speakers = (await _componentsService.GetSpeakersAsync(computer.SpeakerIds)).ToList();
-
+        // 1:1-komponenter
         if (computer.CPUId.HasValue)
-            dto.CPU = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
+        {
+            var cpu = (await _componentsService.GetCpusAsync(new[] { computer.CPUId.Value })).FirstOrDefault();
+            dto.Cpu = _mapper.Map<CPUDto>(cpu);
+        }
+
         if (computer.PSUId.HasValue)
-            dto.PSU = (await _componentsService.GetPsusAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
+        {
+            var psu = (await _componentsService.GetPowerSuppliesAsync(new[] { computer.PSUId.Value })).FirstOrDefault();
+            dto.PowerSupply = _mapper.Map<PSUDto>(psu);
+        }
+
         if (computer.MotherboardId.HasValue)
-            dto.Motherboard = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
+        {
+            var mb = (await _componentsService.GetMotherboardsAsync(new[] { computer.MotherboardId.Value })).FirstOrDefault();
+            dto.Motherboard = _mapper.Map<MotherboardDto>(mb);
+        }
+
         if (computer.CaseId.HasValue)
-            dto.Case = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
+        {
+            var pcCase = (await _componentsService.GetCasesAsync(new[] { computer.CaseId.Value })).FirstOrDefault();
+            dto.Case = _mapper.Map<CaseDto>(pcCase);
+        }
+
         if (computer.CpuCoolerId.HasValue)
-            dto.CPUCooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
+        {
+            var cooler = (await _componentsService.GetCpuCoolersAsync(new[] { computer.CpuCoolerId.Value })).FirstOrDefault();
+            dto.CpuCooler = _mapper.Map<CPUCoolerDto>(cooler);
+        }
+
         if (computer.KeyboardId.HasValue)
-            dto.Keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
+        {
+            var keyboard = (await _componentsService.GetKeyboardsAsync(new[] { computer.KeyboardId.Value })).FirstOrDefault();
+            dto.Keyboard = _mapper.Map<KeyboardDto>(keyboard);
+        }
+
         if (computer.MouseId.HasValue)
-            dto.Mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
+        {
+            var mouse = (await _componentsService.GetMiceAsync(new[] { computer.MouseId.Value })).FirstOrDefault();
+            dto.Mouse = _mapper.Map<MouseDto>(mouse);
+        }
+
         if (computer.HeadsetId.HasValue)
-            dto.Headset = (await _componentsService.GetHeadsetsAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
+        {
+            var headphones = (await _componentsService.GetHeadphonesAsync(new[] { computer.HeadsetId.Value })).FirstOrDefault();
+            dto.Headphones = _mapper.Map<HeadphonesDto>(headphones);
+        }
+
+        // 1:N-komponenter
+        if (computer.GPUIds is { Count: > 0 })
+        {
+            var gpus = await _componentsService.GetGpusAsync(computer.GPUIds);
+            dto.Gpus = _mapper.Map<List<GPUDto>>(gpus);
+            dto.GpuIds = computer.GPUIds.ToList();
+
+            if (computer.GPUIds.Count == 1)
+                dto.Gpu = dto.Gpus.FirstOrDefault();
+        }
+
+        if (computer.RAMIds is { Count: > 0 })
+        {
+            var rams = await _componentsService.GetRamsAsync(computer.RAMIds);
+            dto.Rams = _mapper.Map<List<RAMDto>>(rams);
+            dto.RamIds = computer.RAMIds.ToList();
+        }
+
+        if (computer.StorageIds is { Count: > 0 })
+        {
+            var internalTask = _componentsService.GetInternalStoragesAsync(computer.StorageIds);
+            var externalTask = _componentsService.GetExternalStoragesAsync(computer.StorageIds);
+            await Task.WhenAll(internalTask, externalTask);
+
+            var internalStorages = await internalTask;
+            var externalStorages = await externalTask;
+
+            dto.InternalStorages = _mapper.Map<List<InternalStorageDto>>(internalStorages);
+            dto.ExternalStorages = _mapper.Map<List<ExternalStorageDto>>(externalStorages);
+
+            dto.InternalStorageIds = computer.StorageIds.ToList();
+            dto.ExternalStorageIds = computer.StorageIds.ToList();
+        }
+
+        if (computer.CaseFanIds is { Count: > 0 })
+        {
+            var fans = await _componentsService.GetCaseFansAsync(computer.CaseFanIds);
+            dto.CaseFans = _mapper.Map<List<CaseFanDto>>(fans);
+            dto.CaseFanIds = computer.CaseFanIds.ToList();
+        }
+
+        if (computer.MonitorIds is { Count: > 0 })
+        {
+            var monitors = await _componentsService.GetMonitorsAsync(computer.MonitorIds);
+            dto.Monitors = _mapper.Map<List<MonitorDto>>(monitors);
+            dto.MonitorIds = computer.MonitorIds.ToList();
+        }
+
+        if (computer.SpeakerIds is { Count: > 0 })
+        {
+            var speakers = await _componentsService.GetSpeakersAsync(computer.SpeakerIds);
+            dto.Speakers = _mapper.Map<List<SpeakersDto>>(speakers);
+            dto.SpeakerIds = computer.SpeakerIds.ToList();
+        }
+
+        // Id + basfält
+        dto.CpuId = computer.CPUId;
+        dto.MotherboardId = computer.MotherboardId;
+        dto.CaseId = computer.CaseId;
+        dto.PowerSupplyId = computer.PSUId;
+        dto.CpuCoolerId = computer.CpuCoolerId;
+        dto.KeyboardId = computer.KeyboardId;
+        dto.MouseId = computer.MouseId;
+        dto.HeadphonesId = computer.HeadsetId;
+
+        dto.Id = computer.Id;
+        dto.Name = computer.ComputerName;
+        dto.CustomerId = computer.CustomerId;
+        dto.CreatedAt = computer.CreatedAt;
     }
 
     public async Task<ResponseDTO> GetAllComputersAsync()

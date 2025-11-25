@@ -15,15 +15,15 @@
                         <ul class="list-unstyled mb-4">
                             <li>
                                 <strong>CPU:</strong>
-                                @(item.CPU?.Manufacturer ?? "-")
+                                @(item.Cpu?.Manufacturer ?? "-")
                             </li>
                             <li>
                                 <strong>GPU:</strong>
-                                @(item.GPUs != null && item.GPUs.Any() ? string.Join(", ", item.GPUs) : "-")
+                                @(string.IsNullOrWhiteSpace(item.Gpu.Name) ? "-" : item.Gpu)
                             </li>
                             <li>
                                 <strong>RAM:</strong>
-                                @(item.RAMs != null && item.RAMs.Any() ? string.Join(", ", item.RAMs) : "-")
+                                @(item.Rams != null && item.Rams.Any() ? string.Join(", ", item.Rams) : "-")
                             </li>
                         </ul>
                         <div class="text-end">

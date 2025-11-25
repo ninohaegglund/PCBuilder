@@ -223,4 +223,4 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
             return Ok(item);
         }
     }
-}
+} 

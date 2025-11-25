@@ -52,20 +52,6 @@ namespace PCBuilder.Service.ComponentsAPI.Services
         {
             _repository = repository;
             _mapper = mapper;
-            ValidateMappings();
-        }
-
-        private void ValidateMappings()
-        {
-            // Kasta tidigt om någon DTO saknar mapping i AutoMapper-profilen
-            foreach (var kv in _dtoToEntity)
-            {
-                if (_mapper.ConfigurationProvider.FindTypeMapFor(kv.Value, kv.Key) == null)
-                {
-                    throw new InvalidOperationException(
-                        $"Saknar AutoMapper-map från {kv.Value.Name} till {kv.Key.Name}. Lägg till CreateMap<{kv.Value.Name}, {kv.Key.Name}> i ComponentProfile.");
-                }
-            }
         }
 
         public async Task<TDto?> GetByIdAsync<TDto>(int id)
