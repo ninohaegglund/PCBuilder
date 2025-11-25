@@ -12,75 +12,83 @@
                 <div class="col-md-4 fw-bold">PC Name:</div>
                 <div class="col-md-8">@Model.Name</div>
             </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">CPU:</div>
+                <div class="col-md-8">@Model.OperatingSystem (@(Model.OperatingSystemId?.ToString() ?? "-"))</div>
+            </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">CPU:</div>
-                <div class="col-md-8">@Model.CPU?.ModelName (@(Model.CPUId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Cpu.Name (@(Model.CpuId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Motherboard:</div>
-                <div class="col-md-8">@Model.Motherboard?.ModelName (@(Model.MotherboardId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Motherboard.Name (@(Model.MotherboardId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">PSU:</div>
-                <div class="col-md-8">@Model.PSU?.ModelName (@(Model.PSUId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.PowerSupply?.Name (@(Model.PowerSupplyId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Case:</div>
-                <div class="col-md-8">@Model.Case?.ModelName (@(Model.CaseId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Case?.Name (@(Model.CaseId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">CPU Cooler:</div>
-                <div class="col-md-8">@Model.CPUCooler?.ModelName (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.CpuCooler?.Name (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
             </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Keyboard:</div>
-                <div class="col-md-8">@Model.Keyboard?.ModelName (@(Model.KeyboardId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Keyboard?.Name (@(Model.KeyboardId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Mouse:</div>
-                <div class="col-md-8">@Model.Mouse?.ModelName (@(Model.MouseId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Mouse?.Name (@(Model.MouseId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Headset:</div>
-                <div class="col-md-8">@Model.Headset?.ModelName (@(Model.HeadsetId?.ToString() ?? "-"))</div>
+                <div class="col-md-8">@Model.Headphones?.Name (@(Model.HeadphonesId?.ToString() ?? "-"))</div>
             </div>
             <hr />
             <div class="row mb-3">
-                <div class="col-md-4 fw-bold">GPUs:</div>
-                <div class="col-md-8">
-                    @(Model.GPUs != null && Model.GPUs.Any() ? string.Join(", ", Model.GPUs.Select(g => g.ModelName)) : "-")
-                </div>
+                <div class="col-md-4 fw-bold">Headset:</div>
+                <div class="col-md-8">@Model.Gpu?.Name (@(Model.GpuId?.ToString() ?? "-"))</div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">RAM:</div>
                 <div class="col-md-8">
-                    @(Model.RAMs != null && Model.RAMs.Any() ? string.Join(", ", Model.RAMs.Select(r => r.ModelName)) : "-")
+                    @(Model.Rams != null && Model.Rams.Any() ? string.Join(", ", Model.Rams.Select(r => r.Name)) : "-")
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Storage:</div>
                 <div class="col-md-8">
-                    @(Model.Storages != null && Model.Storages.Any() ? string.Join(", ", Model.Storages.Select(s => s.ModelName)) : "-")
+                    @(Model.ExternalStorages != null && Model.ExternalStorages.Any() ? string.Join(", ", Model.ExternalStorages.Select(s => s.Name)) : "-")
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-4 fw-bold">Storage:</div>
+                <div class="col-md-8">
+                    @(Model.InternalStorages != null && Model.InternalStorages.Any() ? string.Join(", ", Model.InternalStorages.Select(s => s.Name)) : "-")
                 </div>
             </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Case Fans:</div>
                 <div class="col-md-8">
-                    @((Model.CaseFans != null && Model.CaseFans.Any()) ? string.Join(", ", Model.CaseFans.Select(s => s.ModelName)) : "-")    
+                    @((Model.CaseFans != null && Model.CaseFans.Any()) ? string.Join(", ", Model.CaseFans.Select(s => s.Name)) : "-")    
                 </div>
             </div>
             <hr />
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Monitors:</div>
                 <div class="col-md-8">
-                    @((Model.Monitors != null && Model.Monitors.Any()) ? string.Join(", ", Model.Monitors.Select(s => s.ModelName)) : "-")
+                    @((Model.Monitors != null && Model.Monitors.Any()) ? string.Join(", ", Model.Monitors.Select(s => s.Name)) : "-")
                 </div>
             <div class="row mb-3">
                 <div class="col-md-4 fw-bold">Speakers:</div>
                 <div class="col-md-8">
-                    @((Model.Speakers != null && Model.Speakers.Any()) ? string.Join(", ", Model.Speakers.Select(s => s.ModelName)) : "-")
+                    @((Model.Speakers != null && Model.Speakers.Any()) ? string.Join(", ", Model.Speakers.Select(s => s.Name)) : "-")
                 </div>
             </div>
             <hr />
@@ -92,4 +100,5 @@
             </div>
         </div>
     </div>
+</div>
 </div>

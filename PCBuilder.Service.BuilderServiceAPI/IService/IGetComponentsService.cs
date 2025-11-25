@@ -1,31 +1,26 @@
-﻿using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+﻿using PCBuilder.Service.ComponentsAPI.Models;
 
-namespace PCBuilder.Service.BuilderServiceAPI.IService
+public interface IGetComponentsService
 {
-    public interface IGetComponentsService
-    {
-        Task<List<ChassiCooling>> GetCaseFansAsync(IEnumerable<int> ids);
-        Task<List<Chassi>> GetCasesAsync(IEnumerable<int> ids);
-        Task<List<CPUCooling>> GetCpuCoolersAsync(IEnumerable<int> ids);
-        Task<List<CPU>> GetCpusAsync(IEnumerable<int> ids);
-        Task<List<GPU>> GetGpusAsync(IEnumerable<int> ids);
-        Task<List<Headset>> GetHeadsetsAsync(IEnumerable<int> ids);
-        Task<List<Keyboard>> GetKeyboardsAsync(IEnumerable<int> ids);
-        Task<List<Mouse>> GetMiceAsync(IEnumerable<int> ids);
-        Task<List<DisplayMonitor>> GetMonitorsAsync(IEnumerable<int> ids);
-        Task<List<Motherboard>> GetMotherboardsAsync(IEnumerable<int> ids);
-        Task<List<PSU>> GetPsusAsync(IEnumerable<int> ids);
-        Task<List<RAM>> GetRamsAsync(IEnumerable<int> ids);
-        Task<List<Speaker>> GetSpeakersAsync(IEnumerable<int> ids);
-        Task<List<StorageDevice>> GetStoragesAsync(IEnumerable<int> ids);
-    }
+    Task<List<Cpu>> GetCpusAsync(IEnumerable<int> ids);
+    Task<List<VideoCard>> GetGpusAsync(IEnumerable<int> ids);
+    Task<List<MemoryKit>> GetRamsAsync(IEnumerable<int> ids);
+    Task<List<Motherboard>> GetMotherboardsAsync(IEnumerable<int> ids);
+    Task<List<Case>> GetCasesAsync(IEnumerable<int> ids);
+    Task<List<PowerSupply>> GetPowerSuppliesAsync(IEnumerable<int> ids);
+    Task<List<CpuCooler>> GetCpuCoolersAsync(IEnumerable<int> ids);
+    Task<List<CaseFan>> GetCaseFansAsync(IEnumerable<int> ids);
+    Task<List<InternalHardDrive>> GetInternalStoragesAsync(IEnumerable<int> ids);
+    Task<List<ExternalHardDrive>> GetExternalStoragesAsync(IEnumerable<int> ids);
+    Task<List<PCBuilder.Service.ComponentsAPI.Models.Monitor>> GetMonitorsAsync(IEnumerable<int> ids);
+    Task<List<Keyboard>> GetKeyboardsAsync(IEnumerable<int> ids);
+    Task<List<Mouse>> GetMiceAsync(IEnumerable<int> ids);
+    Task<List<Headphones>> GetHeadphonesAsync(IEnumerable<int> ids);
+    Task<List<Speakers>> GetSpeakersAsync(IEnumerable<int> ids);
+    Task<List<Webcam>> GetWebcamsAsync(IEnumerable<int> ids);
+    Task<List<FanController>> GetFanControllersAsync(IEnumerable<int> ids);
+    Task<List<SoundCard>> GetSoundCardsAsync(IEnumerable<int> ids);
+    Task<List<Ups>> GetUpsSystemsAsync(IEnumerable<int> ids);
+    Task<List<PCBuilder.Service.ComponentsAPI.Models.OperatingSystem>> GetOperatingSystemsAsync(IEnumerable<int> ids);
+    Task<List<CaseAccessory>> GetCaseAccessoriesAsync(IEnumerable<int> ids);
 }

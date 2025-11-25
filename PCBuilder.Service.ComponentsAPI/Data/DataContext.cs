@@ -1,69 +1,90 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PCBuilder.Service.ComponentsAPI.Models;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Chassi;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Cooling;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Headsets;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Keyboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Mice;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.IO.Speakers;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.Motherboards;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.PSUs;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.RAM;
-using PCBuilder.Services.ComponentsAPI.Models.ComputerParts.StorageDevice;
+using Monitor = PCBuilder.Service.ComponentsAPI.Models.Monitor;
+using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
-public class DataContext : DbContext
+namespace PCBuilder.Services.ComponentsAPI.Data
 {
-    public DataContext(DbContextOptions<DataContext> options) : base(options) { }
-
-    public DbSet<Components> Components { get; set; } = null!;
-    public DbSet<CPU> CPUs { get; set; } = null!;
-    public DbSet<CPUCooling> CPUCoolers { get; set; } = null!;
-    public DbSet<Motherboard> Motherboards { get; set; } = null!;
-    public DbSet<PSU> PSUs { get; set; } = null!;
-    public DbSet<Chassi> Cases { get; set; } = null!;
-    public DbSet<Keyboard> Keyboards { get; set; } = null!;
-    public DbSet<Mouse> Mice { get; set; } = null!;
-    public DbSet<Headset> Headsets { get; set; } = null!;
-    public DbSet<GPU> GPUs { get; set; } = null!;
-    public DbSet<RAM> RAMModules { get; set; } = null!;
-    public DbSet<StorageDevice> Storages { get; set; } = null!;
-    public DbSet<ChassiCooling> ChassiCooling { get; set; } = null!;
-    public DbSet<DisplayMonitor> Monitors { get; set; } = null!;
-    public DbSet<Speaker> Speakers { get; set; } = null!;
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class DataContext : DbContext  
     {
-        base.OnModelCreating(modelBuilder);
-
-        modelBuilder.Entity<CPU>().ToTable("CPUs");
-        modelBuilder.Entity<CPUCooling>().ToTable("CPUCoolers");
-        modelBuilder.Entity<Motherboard>().ToTable("Motherboards");
-        modelBuilder.Entity<PSU>().ToTable("PSUs");
-        modelBuilder.Entity<Chassi>().ToTable("Cases");
-        modelBuilder.Entity<Keyboard>().ToTable("Keyboards");
-        modelBuilder.Entity<Mouse>().ToTable("Mice");
-        modelBuilder.Entity<Headset>().ToTable("Headsets");
-        modelBuilder.Entity<GPU>().ToTable("GPUs");  
-        modelBuilder.Entity<RAM>().ToTable("RAMModules");
-        modelBuilder.Entity<StorageDevice>().ToTable("Storages");
-        modelBuilder.Entity<ChassiCooling>().ToTable("ChassiCooling");
-        modelBuilder.Entity<DisplayMonitor>().ToTable("Monitors");
-        modelBuilder.Entity<Speaker>().ToTable("Speakers");
-        modelBuilder.Entity<Components>().ToTable("Components");
-
-        // Automatically apply enum to string conversion for all enum properties
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        public DataContext(DbContextOptions<DataContext> options)
+            : base(options)
         {
-            foreach (var property in entityType.GetProperties())
+        }
+
+        public DbSet<Cpu> Cpus { get; set; } = null!;
+        public DbSet<VideoCard> VideoCards { get; set; } = null!;
+        public DbSet<MemoryKit> MemoryKits { get; set; } = null!;
+        public DbSet<Motherboard> Motherboards { get; set; } = null!;
+        public DbSet<Case> Cases { get; set; } = null!;
+        public DbSet<PowerSupply> PowerSupplies { get; set; } = null!;
+        public DbSet<CpuCooler> CpuCoolers { get; set; } = null!;
+        public DbSet<CaseFan> CaseFans { get; set; } = null!;
+        public DbSet<InternalHardDrive> InternalHardDrives { get; set; } = null!;
+        public DbSet<ExternalHardDrive> ExternalHardDrives { get; set; } = null!;
+        public DbSet<Monitor> Monitors { get; set; } = null!;
+        public DbSet<Mouse> Mice { get; set; } = null!;
+        public DbSet<Keyboard> Keyboards { get; set; } = null!;
+        public DbSet<Headphones> Headphones { get; set; } = null!;
+        public DbSet<Speakers> Speakers { get; set; } = null!;
+        public DbSet<Webcam> Webcams { get; set; } = null!;
+        public DbSet<FanController> FanControllers { get; set; } = null!;
+        public DbSet<SoundCard> SoundCards { get; set; } = null!;
+        public DbSet<Ups> UpsSystems { get; set; } = null!;
+        public DbSet<OperatingSystem> OperatingSystems { get; set; } = null!;
+        public DbSet<CaseAccessory> CaseAccessories { get; set; } = null!;
+
+        // Lookup tables
+        public DbSet<Manufacturer> Manufacturers { get; set; } = null!;
+        public DbSet<FormFactor> FormFactors { get; set; } = null!;
+
+        // ────────────────── OnModelCreating ──────────────────
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Table names
+            modelBuilder.Entity<Cpu>().ToTable("CPUs");
+            modelBuilder.Entity<VideoCard>().ToTable("GPUs");
+            modelBuilder.Entity<MemoryKit>().ToTable("RAMModules");
+            modelBuilder.Entity<Motherboard>().ToTable("Motherboards");
+            modelBuilder.Entity<Case>().ToTable("Cases");
+            modelBuilder.Entity<PowerSupply>().ToTable("PSUs");
+            modelBuilder.Entity<CpuCooler>().ToTable("CPUCoolers");
+            modelBuilder.Entity<CaseFan>().ToTable("ChassiCooling");
+            modelBuilder.Entity<InternalHardDrive>().ToTable("Storages");
+            modelBuilder.Entity<ExternalHardDrive>().ToTable("ExternalStorages");
+            modelBuilder.Entity<Monitor>().ToTable("Monitors");
+            modelBuilder.Entity<Mouse>().ToTable("Mice");
+            modelBuilder.Entity<Keyboard>().ToTable("Keyboards");
+            modelBuilder.Entity<Headphones>().ToTable("Headsets");
+            modelBuilder.Entity<Speakers>().ToTable("Speakers");
+            modelBuilder.Entity<Webcam>().ToTable("Webcams");
+            modelBuilder.Entity<FanController>().ToTable("FanControllers");
+            modelBuilder.Entity<SoundCard>().ToTable("SoundCards");
+            modelBuilder.Entity<Ups>().ToTable("UPS");
+            modelBuilder.Entity<OperatingSystem>().ToTable("OperatingSystems");
+            modelBuilder.Entity<CaseAccessory>().ToTable("CaseAccessories");
+
+            modelBuilder.Entity<Manufacturer>().ToTable("Manufacturers");
+            modelBuilder.Entity<FormFactor>().ToTable("FormFactors");
+
+            // Indexes
+            modelBuilder.Entity<Cpu>(e => e.HasIndex(x => x.ManufacturerId));
+            modelBuilder.Entity<VideoCard>(e =>
             {
-                if (property.ClrType.IsEnum)
-                {
-                    var converterType = typeof(EnumToStringConverter<>).MakeGenericType(property.ClrType);
-                    var converter = Activator.CreateInstance(converterType) as ValueConverter;
-                    property.SetValueConverter(converter);
-                }
-            }
+                e.HasIndex(x => x.ManufacturerId);
+                e.HasIndex(x => x.ColorId);
+            });
+            modelBuilder.Entity<Motherboard>(e =>
+            {
+                e.HasIndex(x => x.ManufacturerId);
+                e.HasIndex(x => x.ColorId);
+                e.HasIndex(x => x.Socket);
+            });
+            modelBuilder.Entity<Case>(e => e.HasIndex(x => x.ColorId));
+            modelBuilder.Entity<PowerSupply>(e => e.HasIndex(x => x.ColorId));
+            modelBuilder.Entity<CpuCooler>(e => e.HasIndex(x => x.ColorId));
         }
     }
 }
