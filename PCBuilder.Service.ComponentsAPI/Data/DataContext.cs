@@ -36,7 +36,6 @@ namespace PCBuilder.Services.ComponentsAPI.Data
 
         // Lookup tables
         public DbSet<Manufacturer> Manufacturers { get; set; } = null!;
-        public DbSet<Color> Colors { get; set; } = null!;
         public DbSet<FormFactor> FormFactors { get; set; } = null!;
 
         // ────────────────── OnModelCreating ──────────────────
@@ -68,7 +67,6 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<CaseAccessory>().ToTable("CaseAccessories");
 
             modelBuilder.Entity<Manufacturer>().ToTable("Manufacturers");
-            modelBuilder.Entity<Color>().ToTable("Colors");
             modelBuilder.Entity<FormFactor>().ToTable("FormFactors");
 
             // Indexes

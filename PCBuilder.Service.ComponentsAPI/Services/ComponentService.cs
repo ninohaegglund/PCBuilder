@@ -44,7 +44,6 @@ namespace PCBuilder.Service.ComponentsAPI.Services
             { typeof(MouseDto), typeof(Mouse) },
             { typeof(KeyboardDto), typeof(Keyboard) },
             { typeof(ManufacturerDto), typeof(Manufacturer) },
-            { typeof(ColorDto), typeof(Color) },
             { typeof(FormFactorDto), typeof(FormFactor) }
         };
 
@@ -120,7 +119,6 @@ namespace PCBuilder.Service.ComponentsAPI.Services
                 { "operatingSystems", _repository.GetAllAsync<OperatingSystemModel>() },
                 { "caseAccessories", _repository.GetAllAsync<CaseAccessory>() },
                 { "manufacturers", _repository.GetAllAsync<Manufacturer>() },
-                { "colors", _repository.GetAllAsync<Color>() },
                 { "formFactors", _repository.GetAllAsync<FormFactor>() }
             };
 
@@ -154,7 +152,6 @@ namespace PCBuilder.Service.ComponentsAPI.Services
                 OperatingSystems = _mapper.Map<List<OperatingSystemDto>>(GetResult<OperatingSystemModel>("operatingSystems")),
                 CaseAccessories = _mapper.Map<List<CaseAccessoryDto>>(GetResult<CaseAccessory>("caseAccessories")),
                 Manufacturers = _mapper.Map<List<ManufacturerDto>>(GetResult<Manufacturer>("manufacturers")),
-                Colors = _mapper.Map<List<ColorDto>>(GetResult<Color>("colors")),
                 FormFactors = _mapper.Map<List<FormFactorDto>>(GetResult<FormFactor>("formFactors"))
             };
         }

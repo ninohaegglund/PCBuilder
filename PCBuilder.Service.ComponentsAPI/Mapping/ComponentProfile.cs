@@ -32,7 +32,6 @@ namespace PCBuilder.Service.ComponentsAPI.Mapping
             CreateMap<Mouse, MouseDto>();
             CreateMap<Keyboard, KeyboardDto>();
             CreateMap<Manufacturer, ManufacturerDto>();
-            CreateMap<Color, ColorDto>();
             CreateMap<FormFactor, FormFactorDto>();
         }
     }

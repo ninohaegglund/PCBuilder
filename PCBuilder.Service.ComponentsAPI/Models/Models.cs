@@ -54,25 +54,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public List<FormFactorDto> FormFactors { get; set; } = new();
     }
 
-    public class Color
-    {
-        public int Id { get; set; }
-        public string Name { get; set; } = null!;
-        public ICollection<VideoCard> VideoCards { get; set; } = new List<VideoCard>();
-        public ICollection<MemoryKit> MemoryKits { get; set; } = new List<MemoryKit>();
-        public ICollection<Motherboard> Motherboards { get; set; } = new List<Motherboard>();
-        public ICollection<Case> Cases { get; set; } = new List<Case>();
-        public ICollection<PowerSupply> PowerSupplies { get; set; } = new List<PowerSupply>();
-        public ICollection<CpuCooler> CpuCoolers { get; set; } = new List<CpuCooler>();
-        public ICollection<CaseFan> CaseFans { get; set; } = new List<CaseFan>();
-        public ICollection<FanController> FanControllers { get; set; } = new List<FanController>();
-        public ICollection<ExternalHardDrive> ExternalHardDrives { get; set; } = new List<ExternalHardDrive>();
-        public ICollection<Headphones> Headphones { get; set; } = new List<Headphones>();
-        public ICollection<Speakers> Speakers { get; set; } = new List<Speakers>();
-        public ICollection<Mouse> Mice { get; set; } = new List<Mouse>();
-        public ICollection<Keyboard> Keyboards { get; set; } = new List<Keyboard>();
-    }
-
     public class FormFactor
     {
         public int Id { get; set; }
@@ -107,8 +88,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int? CoreClock { get; set; }       
         public int? BoostClock { get; set; }         
         public int? LengthMM { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public decimal? Price { get; set; }
     }
 
@@ -122,8 +101,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int SpeedMTs { get; set; }            
         public int? CasLatency { get; set; }
         public decimal? FirstWordLatency { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public decimal? Price { get; set; }
         public decimal? PricePerGB => TotalCapacityGB > 0 ? Price / TotalCapacityGB : null;
     }
@@ -140,8 +117,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public FormFactor? FormFactor { get; set; }
         public int? MaxMemoryGB { get; set; }
         public int? MemorySlots { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public bool? HasWiFi { get; set; }
         public decimal? Price { get; set; }
     }
@@ -151,8 +126,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public string? Type { get; set; }                
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public int? IncludedPowerSupplyWatts { get; set; } 
         public string? SidePanel { get; set; }    
         public decimal? ExternalVolumeLiters { get; set; }
@@ -168,8 +141,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string? EfficiencyRating { get; set; }  
         public int Wattage { get; set; }
         public string? Modular { get; set; }        
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public decimal? Price { get; set; }
     }
 
@@ -183,8 +154,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int? RpmMax { get; set; }
         public decimal? NoiseLevelMin { get; set; }
         public decimal? NoiseLevelMax { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public decimal? Price { get; set; }
     }
 
@@ -193,8 +162,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int SizeMM { get; set; }              
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
         public int? RpmMin { get; set; }
         public int? RpmMax { get; set; }
         public decimal? AirflowMin { get; set; }
@@ -236,8 +203,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int? ChannelWattage { get; set; }
         public bool Pwm { get; set; }
         public string? FormFactor { get; set; } 
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class OperatingSystem
@@ -272,8 +237,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public decimal? Wattage { get; set; }
         public int? FrequencyMinHz { get; set; }
         public int? FrequencyMaxKhz { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class Webcam
@@ -297,8 +260,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string? Interface { get; set; }
         public long CapacityGB { get; set; }
         public decimal? PricePerGB { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class Ups
@@ -321,8 +282,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public bool Microphone { get; set; }
         public bool Wireless { get; set; }
         public string? EnclosureType { get; set; }       
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class Monitor
@@ -348,8 +307,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string? Connection { get; set; }      
         public int? MaxDpi { get; set; }
         public string? HandOrientation { get; set; }    
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 
     public class Keyboard
@@ -363,7 +320,5 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         
         public bool Tenkeyless { get; set; }
         public string? Connection { get; set; }
-        public int? ColorId { get; set; }
-        public Color? Color { get; set; }
     }
 }
