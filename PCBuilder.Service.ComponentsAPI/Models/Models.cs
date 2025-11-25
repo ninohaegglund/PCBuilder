@@ -50,7 +50,6 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public List<OperatingSystemDto> OperatingSystems { get; set; } = new();
         public List<CaseAccessoryDto> CaseAccessories { get; set; } = new();
         public List<ManufacturerDto> Manufacturers { get; set; } = new();
-        public List<ColorDto> Colors { get; set; } = new();
         public List<FormFactorDto> FormFactors { get; set; } = new();
     }
 
