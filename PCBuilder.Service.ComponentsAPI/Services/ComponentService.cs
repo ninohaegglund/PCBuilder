@@ -94,65 +94,55 @@ namespace PCBuilder.Service.ComponentsAPI.Services
 
         public async Task<AllComponentsDto> GetAllComponentsAsync()
         {
-            // Hämta entiteter parallellt (valfritt optimering)
-            var tasks = new Dictionary<string, Task>
-            {
-                { "cpus", _repository.GetAllAsync<Cpu>() },
-                { "gpus", _repository.GetAllAsync<VideoCard>() },
-                { "rams", _repository.GetAllAsync<MemoryKit>() },
-                { "motherboards", _repository.GetAllAsync<Motherboard>() },
-                { "cases", _repository.GetAllAsync<Case>() },
-                { "psus", _repository.GetAllAsync<PowerSupply>() },
-                { "cpuCoolers", _repository.GetAllAsync<CpuCooler>() },
-                { "caseFans", _repository.GetAllAsync<CaseFan>() },
-                { "internalStorage", _repository.GetAllAsync<InternalHardDrive>() },
-                { "externalStorage", _repository.GetAllAsync<ExternalHardDrive>() },
-                { "monitors", _repository.GetAllAsync<MonitorModel>() },
-                { "keyboards", _repository.GetAllAsync<Keyboard>() },
-                { "mice", _repository.GetAllAsync<Mouse>() },
-                { "headphones", _repository.GetAllAsync<Headphones>() },
-                { "speakers", _repository.GetAllAsync<Speakers>() },
-                { "webcams", _repository.GetAllAsync<Webcam>() },
-                { "fanControllers", _repository.GetAllAsync<FanController>() },
-                { "soundCards", _repository.GetAllAsync<SoundCard>() },
-                { "ups", _repository.GetAllAsync<Ups>() },
-                { "operatingSystems", _repository.GetAllAsync<OperatingSystemModel>() },
-                { "caseAccessories", _repository.GetAllAsync<CaseAccessory>() },
-                { "manufacturers", _repository.GetAllAsync<Manufacturer>() },
-                { "formFactors", _repository.GetAllAsync<FormFactor>() }
-            };
-
-            await Task.WhenAll(tasks.Values);
-
-            // Hämta resultat från Task<ResultType>
-            List<T> GetResult<T>(string key) =>
-                (List<T>)tasks[key].GetType().GetProperty("Result")!.GetValue(tasks[key])!;
+            var cpus = await _repository.GetAllAsync<Cpu>();
+            var gpus = await _repository.GetAllAsync<VideoCard>();
+            var rams = await _repository.GetAllAsync<MemoryKit>();
+            var motherboards = await _repository.GetAllAsync<Motherboard>();
+            var cases = await _repository.GetAllAsync<Case>();
+            var psus = await _repository.GetAllAsync<PowerSupply>();
+            var cpuCoolers = await _repository.GetAllAsync<CpuCooler>();
+            var caseFans = await _repository.GetAllAsync<CaseFan>();
+            var internalStorage = await _repository.GetAllAsync<InternalHardDrive>();
+            var externalStorage = await _repository.GetAllAsync<ExternalHardDrive>();
+            var monitors = await _repository.GetAllAsync<MonitorModel>();
+            var keyboards = await _repository.GetAllAsync<Keyboard>();
+            var mice = await _repository.GetAllAsync<Mouse>();
+            var headphones = await _repository.GetAllAsync<Headphones>();
+            var speakers = await _repository.GetAllAsync<Speakers>();
+            var webcams = await _repository.GetAllAsync<Webcam>();
+            var fanControllers = await _repository.GetAllAsync<FanController>();
+            var soundCards = await _repository.GetAllAsync<SoundCard>();
+            var ups = await _repository.GetAllAsync<Ups>();
+            var operatingSystems = await _repository.GetAllAsync<OperatingSystemModel>();
+            var caseAccessories = await _repository.GetAllAsync<CaseAccessory>();
+            var manufacturers = await _repository.GetAllAsync<Manufacturer>();
+            var formFactors = await _repository.GetAllAsync<FormFactor>();
 
             return new AllComponentsDto
             {
-                Cpus = _mapper.Map<List<CPUDto>>(GetResult<Cpu>("cpus")),
-                Gpus = _mapper.Map<List<GPUDto>>(GetResult<VideoCard>("gpus")),
-                Rams = _mapper.Map<List<RAMDto>>(GetResult<MemoryKit>("rams")),
-                Motherboards = _mapper.Map<List<MotherboardDto>>(GetResult<Motherboard>("motherboards")),
-                Cases = _mapper.Map<List<CaseDto>>(GetResult<Case>("cases")),
-                Psus = _mapper.Map<List<PSUDto>>(GetResult<PowerSupply>("psus")),
-                CpuCoolers = _mapper.Map<List<CPUCoolerDto>>(GetResult<CpuCooler>("cpuCoolers")),
-                CaseFans = _mapper.Map<List<CaseFanDto>>(GetResult<CaseFan>("caseFans")),
-                InternalStorages = _mapper.Map<List<InternalStorageDto>>(GetResult<InternalHardDrive>("internalStorage")),
-                ExternalStorages = _mapper.Map<List<ExternalStorageDto>>(GetResult<ExternalHardDrive>("externalStorage")),
-                Monitors = _mapper.Map<List<MonitorDto>>(GetResult<MonitorModel>("monitors")),
-                Keyboards = _mapper.Map<List<KeyboardDto>>(GetResult<Keyboard>("keyboards")),
-                Mice = _mapper.Map<List<MouseDto>>(GetResult<Mouse>("mice")),
-                Headphones = _mapper.Map<List<HeadphonesDto>>(GetResult<Headphones>("headphones")),
-                Speakers = _mapper.Map<List<SpeakersDto>>(GetResult<Speakers>("speakers")),
-                Webcams = _mapper.Map<List<WebcamDto>>(GetResult<Webcam>("webcams")),
-                FanControllers = _mapper.Map<List<FanControllerDto>>(GetResult<FanController>("fanControllers")),
-                SoundCards = _mapper.Map<List<SoundCardDto>>(GetResult<SoundCard>("soundCards")),
-                Ups = _mapper.Map<List<UpsDto>>(GetResult<Ups>("ups")),
-                OperatingSystems = _mapper.Map<List<OperatingSystemDto>>(GetResult<OperatingSystemModel>("operatingSystems")),
-                CaseAccessories = _mapper.Map<List<CaseAccessoryDto>>(GetResult<CaseAccessory>("caseAccessories")),
-                Manufacturers = _mapper.Map<List<ManufacturerDto>>(GetResult<Manufacturer>("manufacturers")),
-                FormFactors = _mapper.Map<List<FormFactorDto>>(GetResult<FormFactor>("formFactors"))
+                Cpus = _mapper.Map<List<CPUDto>>(cpus),
+                Gpus = _mapper.Map<List<GPUDto>>(gpus),
+                Rams = _mapper.Map<List<RAMDto>>(rams),
+                Motherboards = _mapper.Map<List<MotherboardDto>>(motherboards),
+                Cases = _mapper.Map<List<CaseDto>>(cases),
+                Psus = _mapper.Map<List<PSUDto>>(psus),
+                CpuCoolers = _mapper.Map<List<CPUCoolerDto>>(cpuCoolers),
+                CaseFans = _mapper.Map<List<CaseFanDto>>(caseFans),
+                InternalStorages = _mapper.Map<List<InternalStorageDto>>(internalStorage),
+                ExternalStorages = _mapper.Map<List<ExternalStorageDto>>(externalStorage),
+                Monitors = _mapper.Map<List<MonitorDto>>(monitors),
+                Keyboards = _mapper.Map<List<KeyboardDto>>(keyboards),
+                Mice = _mapper.Map<List<MouseDto>>(mice),
+                Headphones = _mapper.Map<List<HeadphonesDto>>(headphones),
+                Speakers = _mapper.Map<List<SpeakersDto>>(speakers),
+                Webcams = _mapper.Map<List<WebcamDto>>(webcams),
+                FanControllers = _mapper.Map<List<FanControllerDto>>(fanControllers),
+                SoundCards = _mapper.Map<List<SoundCardDto>>(soundCards),
+                Ups = _mapper.Map<List<UpsDto>>(ups),
+                OperatingSystems = _mapper.Map<List<OperatingSystemDto>>(operatingSystems),
+                CaseAccessories = _mapper.Map<List<CaseAccessoryDto>>(caseAccessories),
+                Manufacturers = _mapper.Map<List<ManufacturerDto>>(manufacturers),
+                FormFactors = _mapper.Map<List<FormFactorDto>>(formFactors)
             };
         }
 
