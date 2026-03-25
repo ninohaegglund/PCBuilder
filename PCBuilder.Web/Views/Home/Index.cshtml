@@ -2,151 +2,273 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4 font-monospace">Welcome Home</h1>
-    <p>
-        <a></a><i class="bi bi-bluesky"></i>
-    </p>
-    <div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
+<div class="container py-4 home-page">
 
-        <a asp-controller="Computer" asp-action="ComputerIndex" type="button" class="btn btn-dark btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="left" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Popover Title"><i class="bi bi-pc-display-horizontal"></i> Computers</a>
-        <button type="button" class="btn btn-danger btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Popover Title"><i class="bi bi-bag-heart-fill"></i> Orders</button>
-        <button type="button" class="btn btn-success btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="bottom" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Popover Title"><i class="bi bi-amazon"></i> Shop</button>
-        <button type="button" class="btn btn-info btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Popover Title"><i class="bi bi-tools"></i> Workshop</button>
-        <button type="button" class="btn btn-warning btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Popover Title"><i class="bi bi-currency-exchange"></i> Finances</button>
-        <a asp-controller="Coupon" asp-action="CouponIndex" class="btn btn-primary btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Coupons"><i class="bi bi-receipt"></i> Coupons</a>
-        <a asp-controller="Computer" asp-action="CreateComputerIndex" class="btn btn-light btn-lg" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." data-bs-original-title="Coupons"><i class="bi bi-receipt"></i> Custom Build</a>
+    <!-- Hero -->
+    <section class="hero-panel p-4 p-md-5 mb-5">
+        <div class="row align-items-center g-4">
+            <div class="col-lg-6 text-start">
+                <span class="badge bg-warning text-dark border border-dark mb-3 px-3 py-2">
+                    Custom PC Builder
+                </span>
 
+                <h1 class="display-4 fw-bold mb-3">
+                    Build your next PC with PcBuilder <i class="bi bi-pc-display"></i>
+                </h1>
 
-        <div class="carousel-inner">
-            <div class="carousel-item active" data-bs-interval="5000">
-                <img src="~/images/image-asset.gif" class="d-block w-25" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>First slide label</h5>
-                    <p>Some representative placeholder content for the first slide.</p>
+                <p class="lead mb-4">
+                    Browse components, create custom builds, compare options, and manage your store features in one place.
+                </p>
+
+                <div class="d-flex flex-wrap gap-3">
+                    <a asp-controller="Computer" asp-action="CreateComputerIndex" class="btn btn-primary btn-lg">
+                        <i class="bi bi-pc-display-horizontal me-2"></i>Start Building
+                    </a>
+
+                    <a asp-controller="Computer" asp-action="ComputerIndex" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-grid-3x3-gap-fill me-2"></i>Browse Computers
+                    </a>
+
+                    <a asp-controller="Coupon" asp-action="CouponIndex" class="btn btn-info btn-lg text-dark">
+                        <i class="bi bi-receipt me-2"></i>Coupons
+                    </a>
                 </div>
-            </div>
-            <div class="carousel-item" data-bs-interval="5000">
-                <img src="~/images/alexandre-etendard-360.gif" class="d-block w-50" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Second slide label</h5>
-                    <p>Some representative placeholder content for the second slide.</p>
-                </div>
-            </div>
-            <div class="carousel-item" data-bs-interval="5000">
-                <img src="~/images/about4.gif" class="d-block w-25" alt="...">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Third slide label</h5>
-                    <p>Some representative placeholder content for the third slide.</p>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
 
-    <div class="card-group mt-5">
-        <div class="card border-dark-subtle m-2 shadow-sm hover-shadow">
-            <img src="~/images/c106ad08-24b4-4d2e-88ee-632d9635faeb.jpg" class="card-img-top" alt="...">
-            <div class="card-body bg-light-subtle">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card border-dark-subtle m-2 shadow-sm hover-shadow">
-            <img src="~/images/hayden-arthur-pc-render.jpg" class="card-img-top" alt="...">
-            <div class="card-body bg-light-subtle">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This card has supporting text below as a natural lead-in to additional content.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-        <div class="card border-dark-subtle m-2 shadow-sm hover-shadow ">
-            <img src="~/images/e9e8fa22b6ea44fc8df14eb564908401.jpg" class="card-img-top" alt="...">
-            <div class="card-body bg-light-subtle">
-                <h5 class="card-title">Card title</h5>
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This card has even longer content than the first to show that equal height action.</p>
-                <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-            </div>
-        </div>
-    </div>
-
-    <div class="container mt-5">
-     
-        <div class="row g-4 justify-content-center">
-            <div class="col-6 col-md-3">
-                <div class="card shadow-sm h-100 text-center border-0 bg-light  hover-shadow">
-                    <div class="card-body">
-                        <i class="bi bi-cpu-fill display-4 text-primary mb-2"></i>
-                        <h6 class="card-title">Browse Components</h6>
-                        <a asp-controller="Component" asp-action="ComputerIndex" class="stretched-link"></a>
+                <div class="row g-3 mt-4">
+                    <div class="col-6 col-md-4">
+                        <div class="mini-stat">
+                            <i class="bi bi-cpu-fill"></i>
+                            <span>Components</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="mini-stat">
+                            <i class="bi bi-tools"></i>
+                            <span>Custom Builds</span>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-4">
+                        <div class="mini-stat">
+                            <i class="bi bi-cart-check-fill"></i>
+                            <span>Shop Ready</span>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-6 col-md-3">
-                <div class="card shadow-sm h-100 text-center border-0 bg-light  hover-shadow">
-                    <div class="card-body">
-                        <i class="bi bi-cart-check-fill display-4 text-success mb-2"></i>
-                        <h6 class="card-title">Shop Now</h6>
-                        <a asp-controller="Shop" asp-action="Index" class="stretched-link"></a>
+
+            <div class="col-lg-6">
+                <div id="homeCarousel" class="carousel slide showcase-panel" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#homeCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
                     </div>
-                </div>
-            </div>
-            <div class="col-6 col-md-3">
-                <div class="card shadow-sm h-100 text-center border-0 bg-light  hover-shadow">
-                    <div class="card-body">
-                        <i class="bi bi-receipt display-4 text-warning mb-2"></i>
-                        <h6 class="card-title">View Coupons</h6>
-                        <a asp-controller="Coupon" asp-action="CouponIndex" class="stretched-link"></a>
+
+                    <div class="carousel-inner rounded-4 overflow-hidden">
+                        <div class="carousel-item active" data-bs-interval="5000">
+                            <img src="~/images/image-asset.gif" class="d-block w-100 hero-carousel-img" alt="Custom PC build preview">
+                            <div class="carousel-caption custom-caption">
+                                <h5 class="fw-bold">Create custom builds</h5>
+                                <p>Pick parts and assemble a machine that matches your needs.</p>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item" data-bs-interval="5000">
+                            <img src="~/images/alexandre-etendard-360.gif" class="d-block w-100 hero-carousel-img" alt="PC showcase animation">
+                            <div class="carousel-caption custom-caption">
+                                <h5 class="fw-bold">Browse complete systems</h5>
+                                <p>Explore available computers and compare your options.</p>
+                            </div>
+                        </div>
+
+                        <div class="carousel-item" data-bs-interval="5000">
+                            <img src="~/images/about4.gif" class="d-block w-100 hero-carousel-img" alt="Gaming PC visual">
+                            <div class="carousel-caption custom-caption">
+                                <h5 class="fw-bold">Manage deals and offers</h5>
+                                <p>Use coupons and pricing tools to make builds more affordable.</p>
+                            </div>
+                        </div>
                     </div>
+
+                    <button class="carousel-control-prev" type="button" data-bs-target="#homeCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+
+                    <button class="carousel-control-next" type="button" data-bs-target="#homeCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="container mt-5">
-        <h3 class="mb-4 text-dark">Reviews</h3>
-        <div class="row">
+    <!-- Quick actions -->
+    <section class="mb-5">
+        <div class="row g-4">
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Component" asp-action="ComputerIndex" class="text-decoration-none">
+                    <div class="feature-tile h-100">
+                        <i class="bi bi-cpu-fill display-6 mb-3"></i>
+                        <h5 class="fw-bold">Components</h5>
+                        <p class="mb-0 text-muted">Browse processors, GPUs, memory, storage, and more.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Shop" asp-action="Index" class="text-decoration-none">
+                    <div class="feature-tile h-100">
+                        <i class="bi bi-cart-fill display-6 mb-3"></i>
+                        <h5 class="fw-bold">Shop</h5>
+                        <p class="mb-0 text-muted">Explore parts and systems available for purchase.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Coupon" asp-action="CouponIndex" class="text-decoration-none">
+                    <div class="feature-tile h-100">
+                        <i class="bi bi-ticket-perforated-fill display-6 mb-3"></i>
+                        <h5 class="fw-bold">Coupons</h5>
+                        <p class="mb-0 text-muted">Find discount codes and current offers.</p>
+                    </div>
+                </a>
+            </div>
+
+            <div class="col-6 col-lg-3">
+                <a asp-controller="Computer" asp-action="CreateComputerIndex" class="text-decoration-none">
+                    <div class="feature-tile h-100">
+                        <i class="bi bi-wrench-adjustable-circle-fill display-6 mb-3"></i>
+                        <h5 class="fw-bold">Custom Build</h5>
+                        <p class="mb-0 text-muted">Start building a PC tailored to your own requirements.</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured cards -->
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+                <h2 class="fw-bold mb-1">Featured inspiration</h2>
+                <p class="text-muted mb-0">A few ideas to show what your platform can help users create.</p>
+            </div>
+        </div>
+
+        <div class="row g-4">
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm">
+                <div class="card content-card h-100">
+                    <img src="~/images/c106ad08-24b4-4d2e-88ee-632d9635faeb.jpg" class="card-img-top content-img" alt="High performance gaming PC">
                     <div class="card-body">
-                        <p class="card-text">"Super easy to use and a great selection of parts!"</p>
-                        <p class="card-text"><small class="text-muted">- Alex P.</small></p>
+                        <h5 class="card-title fw-bold">Gaming Builds</h5>
+                        <p class="card-text">
+                            High-performance systems designed for smooth gameplay, strong graphics performance, and future upgrades.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm">
+                <div class="card content-card h-100">
+                    <img src="~/images/hayden-arthur-pc-render.jpg" class="card-img-top content-img" alt="Balanced everyday desktop PC">
                     <div class="card-body">
-                        <p class="card-text">"Super easy to use and a great selection of parts!"</p>
-                        <p class="card-text"><small class="text-muted">- Alex P.</small></p>
+                        <h5 class="card-title fw-bold">Balanced Setups</h5>
+                        <p class="card-text">
+                            Practical computers for study, development, and daily tasks with a strong price-to-performance balance.
+                        </p>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4">
-                <div class="card border-0 shadow-sm">
+                <div class="card content-card h-100">
+                    <img src="~/images/e9e8fa22b6ea44fc8df14eb564908401.jpg" class="card-img-top content-img" alt="Workstation style PC">
                     <div class="card-body">
-                        <p class="card-text">"Super easy to use and a great selection of parts!"</p>
-                        <p class="card-text"><small class="text-muted">- Alex P.</small></p>
+                        <h5 class="card-title fw-bold">Workstation Focus</h5>
+                        <p class="card-text">
+                            Component choices for heavier workflows such as editing, rendering, multitasking, and software development.
+                        </p>
                     </div>
                 </div>
             </div>
-            
         </div>
-    </div>
+    </section>
+
+    <!-- Platform highlights -->
+    <section class="mb-5">
+        <div class="row g-4">
+            <div class="col-md-6 col-xl-3">
+                <div class="info-card h-100">
+                    <i class="bi bi-pc-display-horizontal fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Computer Catalog</h5>
+                    <p class="mb-0">Display all available computer builds in a structured and user-friendly overview.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="info-card h-100">
+                    <i class="bi bi-tools fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Workshop Tools</h5>
+                    <p class="mb-0">Support assembly, configuration, and other workshop-related workflows.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="info-card h-100">
+                    <i class="bi bi-bag-heart-fill fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Orders</h5>
+                    <p class="mb-0">Track customer purchases and order activity from one central area.</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-xl-3">
+                <div class="info-card h-100">
+                    <i class="bi bi-currency-exchange fs-1 mb-3"></i>
+                    <h5 class="fw-bold">Finances</h5>
+                    <p class="mb-0">Work toward better pricing insights, coupon handling, and future reporting features.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Reviews -->
+    <section class="mb-4">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">What users say</h2>
+            <p class="text-muted mb-0">Replace these later with real reviews or project demo feedback.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="review-card h-100">
+                    <p class="mb-3">
+                        “The custom build flow made it much easier to understand how a full PC setup comes together.”
+                    </p>
+                    <strong>- Alex P.</strong>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="review-card h-100">
+                    <p class="mb-3">
+                        “The layout is clean and the shortcuts to components, builds, and coupons are easy to find.”
+                    </p>
+                    <strong>- Sara M.</strong>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="review-card h-100">
+                    <p class="mb-3">
+                        “A solid starting point for a PC builder platform, especially for browsing and creating builds.”
+                    </p>
+                    <strong>- David R.</strong>
+                </div>
+            </div>
+        </div>
+    </section>
 
 </div>
