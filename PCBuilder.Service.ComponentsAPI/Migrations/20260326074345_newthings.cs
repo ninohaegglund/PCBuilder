@@ -5,7 +5,7 @@
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Components : Migration
+    public partial class newthings : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -27,16 +27,21 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Colors",
+                name: "ExternalStorages",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Interface = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CapacityGB = table.Column<long>(type: "bigint", nullable: false),
+                    PricePerGB = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Colors", x => x.Id);
+                    table.PrimaryKey("PK_ExternalStorages", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -137,30 +142,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ExternalStorages",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Interface = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CapacityGB = table.Column<long>(type: "bigint", nullable: false),
-                    PricePerGB = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ExternalStorages", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ExternalStorages_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Cases",
                 columns: table => new
                 {
@@ -168,7 +149,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     IncludedPowerSupplyWatts = table.Column<int>(type: "int", nullable: true),
                     SidePanel = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExternalVolumeLiters = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -179,11 +159,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cases", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Cases_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Cases_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -199,7 +174,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     SizeMM = table.Column<int>(type: "int", nullable: false),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     RpmMin = table.Column<int>(type: "int", nullable: true),
                     RpmMax = table.Column<int>(type: "int", nullable: true),
                     AirflowMin = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
@@ -213,11 +187,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ChassiCooling", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ChassiCooling_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_ChassiCooling_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -238,18 +207,12 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     RpmMax = table.Column<int>(type: "int", nullable: true),
                     NoiseLevelMin = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     NoiseLevelMax = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_CPUCoolers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CPUCoolers_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CPUCoolers_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -295,17 +258,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     ChannelWattage = table.Column<int>(type: "int", nullable: true),
                     Pwm = table.Column<bool>(type: "bit", nullable: false),
                     FormFactor = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FanControllers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FanControllers_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_FanControllers_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -326,17 +283,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     CoreClock = table.Column<int>(type: "int", nullable: true),
                     BoostClock = table.Column<int>(type: "int", nullable: true),
                     LengthMM = table.Column<int>(type: "int", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GPUs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_GPUs_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_GPUs_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -358,17 +309,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Microphone = table.Column<bool>(type: "bit", nullable: false),
                     Wireless = table.Column<bool>(type: "bit", nullable: false),
                     EnclosureType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Headsets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Headsets_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Headsets_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -389,17 +334,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Backlit = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Tenkeyless = table.Column<bool>(type: "bit", nullable: false),
                     Connection = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Keyboards", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Keyboards_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Keyboards_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -419,17 +358,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Connection = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     MaxDpi = table.Column<int>(type: "int", nullable: true),
                     HandOrientation = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Mice", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Mice_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Mice_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -476,18 +409,12 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     FormFactorId = table.Column<int>(type: "int", nullable: true),
                     MaxMemoryGB = table.Column<int>(type: "int", nullable: true),
                     MemorySlots = table.Column<int>(type: "int", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     HasWiFi = table.Column<bool>(type: "bit", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Motherboards", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Motherboards_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Motherboards_FormFactors_FormFactorId",
                         column: x => x.FormFactorId,
@@ -511,18 +438,12 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     EfficiencyRating = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Wattage = table.Column<int>(type: "int", nullable: false),
                     Modular = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PSUs", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PSUs_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_PSUs_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -538,21 +459,16 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TotalCapacityGB = table.Column<int>(type: "int", nullable: false),
+                    ModulesCount = table.Column<int>(type: "int", nullable: false),
                     SpeedMTs = table.Column<int>(type: "int", nullable: false),
                     CasLatency = table.Column<int>(type: "int", nullable: true),
                     FirstWordLatency = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_RAMModules", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_RAMModules_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_RAMModules_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -572,17 +488,11 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     Wattage = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     FrequencyMinHz = table.Column<int>(type: "int", nullable: true),
                     FrequencyMaxKhz = table.Column<int>(type: "int", nullable: true),
-                    ColorId = table.Column<int>(type: "int", nullable: true),
                     ManufacturerId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Speakers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Speakers_Colors_ColorId",
-                        column: x => x.ColorId,
-                        principalTable: "Colors",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Speakers_Manufacturers_ManufacturerId",
                         column: x => x.ManufacturerId,
@@ -616,29 +526,14 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cases_ColorId",
-                table: "Cases",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Cases_ManufacturerId",
                 table: "Cases",
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ChassiCooling_ColorId",
-                table: "ChassiCooling",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ChassiCooling_ManufacturerId",
                 table: "ChassiCooling",
                 column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CPUCoolers_ColorId",
-                table: "CPUCoolers",
-                column: "ColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CPUCoolers_ManufacturerId",
@@ -651,24 +546,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ExternalStorages_ColorId",
-                table: "ExternalStorages",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FanControllers_ColorId",
-                table: "FanControllers",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_FanControllers_ManufacturerId",
                 table: "FanControllers",
                 column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_GPUs_ColorId",
-                table: "GPUs",
-                column: "ColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GPUs_ManufacturerId",
@@ -676,29 +556,14 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Headsets_ColorId",
-                table: "Headsets",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Headsets_ManufacturerId",
                 table: "Headsets",
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Keyboards_ColorId",
-                table: "Keyboards",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Keyboards_ManufacturerId",
                 table: "Keyboards",
                 column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Mice_ColorId",
-                table: "Mice",
-                column: "ColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Mice_ManufacturerId",
@@ -709,11 +574,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 name: "IX_Monitors_ManufacturerId",
                 table: "Monitors",
                 column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Motherboards_ColorId",
-                table: "Motherboards",
-                column: "ColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Motherboards_FormFactorId",
@@ -731,29 +591,14 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                 column: "Socket");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PSUs_ColorId",
-                table: "PSUs",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_PSUs_ManufacturerId",
                 table: "PSUs",
                 column: "ManufacturerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_RAMModules_ColorId",
-                table: "RAMModules",
-                column: "ColorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_RAMModules_ManufacturerId",
                 table: "RAMModules",
                 column: "ManufacturerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Speakers_ColorId",
-                table: "Speakers",
-                column: "ColorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Speakers_ManufacturerId",
@@ -834,9 +679,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "FormFactors");
-
-            migrationBuilder.DropTable(
-                name: "Colors");
 
             migrationBuilder.DropTable(
                 name: "Manufacturers");

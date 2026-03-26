@@ -12,8 +12,8 @@ using PCBuilder.Services.CustomerAPI.Data;
 namespace PCBuilder.Services.CustomerAPI.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    [Migration("20251016190108_Customers")]
-    partial class Customers
+    [Migration("20260326075049_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

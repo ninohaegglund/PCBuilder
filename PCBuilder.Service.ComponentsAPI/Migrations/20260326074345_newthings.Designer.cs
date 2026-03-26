@@ -11,8 +11,8 @@ using PCBuilder.Services.ComponentsAPI.Data;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20251125110920_Components")]
-    partial class Components
+    [Migration("20260326074345_newthings")]
+    partial class newthings
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -31,9 +31,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
 
                     b.Property<decimal?>("ExternalVolumeLiters")
                         .HasColumnType("decimal(18,2)");
@@ -61,8 +58,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -109,9 +104,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<decimal?>("AirflowMin")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("ManufacturerId")
                         .HasColumnType("int");
 
@@ -142,28 +134,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorId");
-
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("ChassiCooling", (string)null);
-                });
-
-            modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Color", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Colors", (string)null);
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Cpu", b =>
@@ -217,9 +190,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsAio")
                         .HasColumnType("bit");
 
@@ -250,8 +220,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorId");
-
                     b.HasIndex("ManufacturerId");
 
                     b.ToTable("CPUCoolers", (string)null);
@@ -267,9 +235,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.Property<long>("CapacityGB")
                         .HasColumnType("bigint");
-
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Interface")
                         .HasColumnType("nvarchar(max)");
@@ -289,8 +254,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorId");
-
                     b.ToTable("ExternalStorages", (string)null);
                 });
 
@@ -306,9 +269,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.Property<int?>("Channels")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ColorId")
                         .HasColumnType("int");
 
                     b.Property<string>("FormFactor")
@@ -328,8 +288,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -361,9 +319,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EnclosureType")
                         .HasColumnType("nvarchar(max)");
 
@@ -393,8 +348,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -448,9 +401,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<string>("Backlit")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Connection")
                         .HasColumnType("nvarchar(max)");
 
@@ -474,8 +424,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -510,13 +458,13 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<int?>("CasLatency")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<decimal?>("FirstWordLatency")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ManufacturerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModulesCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -533,8 +481,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -595,9 +541,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("FormFactorId")
                         .HasColumnType("int");
 
@@ -626,8 +569,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ColorId");
-
                     b.HasIndex("FormFactorId");
 
                     b.HasIndex("ManufacturerId");
@@ -644,9 +585,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Connection")
                         .HasColumnType("nvarchar(max)");
@@ -671,8 +609,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -713,9 +649,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("EfficiencyRating")
                         .HasColumnType("nvarchar(max)");
 
@@ -739,8 +672,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -793,9 +724,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Configuration")
                         .HasColumnType("nvarchar(max)");
 
@@ -819,8 +747,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -867,9 +793,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.Property<string>("Chipset")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ColorId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("CoreClock")
                         .HasColumnType("int");
 
@@ -890,8 +813,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ColorId");
 
                     b.HasIndex("ManufacturerId");
 
@@ -940,28 +861,16 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Case", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Cases")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Cases")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.CaseFan", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("CaseFans")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("CaseFans")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Cpu", b =>
@@ -975,76 +884,37 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.CpuCooler", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("CpuCoolers")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("CpuCoolers")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
-                });
-
-            modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.ExternalHardDrive", b =>
-                {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("ExternalHardDrives")
-                        .HasForeignKey("ColorId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.FanController", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("FanControllers")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("FanControllers")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Headphones", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Headphones")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Headphones")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Keyboard", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Keyboards")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Keyboards")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.MemoryKit", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("MemoryKits")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("MemoryKits")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Monitor", b =>
@@ -1056,10 +926,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Motherboard", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Motherboards")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.FormFactor", "FormFactor")
                         .WithMany()
                         .HasForeignKey("FormFactorId");
@@ -1068,8 +934,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .WithMany("Motherboards")
                         .HasForeignKey("ManufacturerId");
 
-                    b.Navigation("Color");
-
                     b.Navigation("FormFactor");
 
                     b.Navigation("Manufacturer");
@@ -1077,54 +941,30 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Mouse", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Mice")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Mice")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.PowerSupply", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("PowerSupplies")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("PowerSupplies")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Speakers", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("Speakers")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Speakers")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.VideoCard", b =>
                 {
-                    b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Color", "Color")
-                        .WithMany("VideoCards")
-                        .HasForeignKey("ColorId");
-
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", "Manufacturer")
                         .WithMany("VideoCards")
                         .HasForeignKey("ManufacturerId");
-
-                    b.Navigation("Color");
 
                     b.Navigation("Manufacturer");
                 });
@@ -1134,35 +974,6 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                     b.HasOne("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", null)
                         .WithMany("Webcams")
                         .HasForeignKey("ManufacturerId");
-                });
-
-            modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Color", b =>
-                {
-                    b.Navigation("CaseFans");
-
-                    b.Navigation("Cases");
-
-                    b.Navigation("CpuCoolers");
-
-                    b.Navigation("ExternalHardDrives");
-
-                    b.Navigation("FanControllers");
-
-                    b.Navigation("Headphones");
-
-                    b.Navigation("Keyboards");
-
-                    b.Navigation("MemoryKits");
-
-                    b.Navigation("Mice");
-
-                    b.Navigation("Motherboards");
-
-                    b.Navigation("PowerSupplies");
-
-                    b.Navigation("Speakers");
-
-                    b.Navigation("VideoCards");
                 });
 
             modelBuilder.Entity("PCBuilder.Service.ComponentsAPI.Models.Manufacturer", b =>

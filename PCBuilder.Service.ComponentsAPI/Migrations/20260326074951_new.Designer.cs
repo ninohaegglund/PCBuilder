@@ -11,8 +11,8 @@ using PCBuilder.Services.ComponentsAPI.Data;
 namespace PCBuilder.Service.ComponentsAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20260323133021_init")]
-    partial class init
+    [Migration("20260326074951_new")]
+    partial class @new
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -462,6 +462,9 @@ namespace PCBuilder.Service.ComponentsAPI.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ManufacturerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ModulesCount")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")

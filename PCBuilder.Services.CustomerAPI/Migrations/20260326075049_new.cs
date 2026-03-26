@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Services.CustomerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class Customers : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
