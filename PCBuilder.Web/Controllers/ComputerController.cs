@@ -5,6 +5,7 @@ using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
+using System.Text.Json;
 
 namespace PCBuilder.Web.Controllers;
 
@@ -68,14 +69,22 @@ public class ComputerController : Controller
 
     public async Task<IActionResult> ComputerIndex()
     {
-        ResponseDTO? response = await _computerService.GetAllComputersAsync();
+        var response = await _computerService.GetAllComputersAsync();
 
-        List<ComputerDTO>? list = null;
-        if (response != null && response.Result != null)
+        if (response == null || !response.IsSuccess)
         {
-            list = response.Result as List<ComputerDTO>;
+            TempData["error"] = response?.Result?.ToString() ?? "Failed to load computers.";
+            return View(new List<ComputerDTO>());
         }
-        return View(list);          
+
+        var list = response.Result switch
+        {
+            List<ComputerDTO> typed => typed,
+            JsonElement json => JsonSerializer.Deserialize<List<ComputerDTO>>(json.GetRawText()) ?? new List<ComputerDTO>(),
+            _ => new List<ComputerDTO>()
+        };
+
+        return View(list);
     }
 
     public async Task<IActionResult> ComponentsIndex(int id)

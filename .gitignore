@@ -375,3 +375,8 @@ FodyWeavers.xsd
 /PCBuilder.Services.CustomerAPI/appsettings.Development.json
 /PCBuilder.Services.OrderAPI/appsettings.Development.json
 /PCBuilder.Services.OrderAPI/appsettings.json
+/PCBuilder.Service.BuilderServiceAPI/Migrations/20260323203531_builderservice.cs
+/PCBuilder.Service.BuilderServiceAPI/Migrations
+/PCBuilder.Service.ComponentsAPI/Migrations/20260325220146_updatememorykit.cs
+/PCBuilder.Service.ComponentsAPI/Migrations/20260325220146_updatememorykit.Designer.cs
+/PCBuilder.Service.ComponentsAPI/Migrations/DataContextModelSnapshot.cs
