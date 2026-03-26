@@ -95,13 +95,18 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public int Id { get; set; }
         public string Name { get; set; } = null!;
         public int TotalCapacityGB { get; set; }
-        public int ModulesCount { get; }
-        public int CapacityPerModuleGB => TotalCapacityGB / ModulesCount;
-        public int SpeedMTs { get; set; }            
+
+        public int ModulesCount { get; set; }  // allow persistence / population
+
+        public int? CapacityPerModuleGB =>
+            ModulesCount > 0 ? TotalCapacityGB / ModulesCount : (int?)null;
+
+        public int SpeedMTs { get; set; }
         public int? CasLatency { get; set; }
         public decimal? FirstWordLatency { get; set; }
         public decimal? Price { get; set; }
-        public decimal? PricePerGB => TotalCapacityGB > 0 ? Price / TotalCapacityGB : null;
+        public decimal? PricePerGB =>
+            TotalCapacityGB > 0 ? Price / TotalCapacityGB : null;
     }
 
     public class Motherboard

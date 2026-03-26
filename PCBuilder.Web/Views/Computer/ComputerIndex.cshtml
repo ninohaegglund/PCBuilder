@@ -4,34 +4,44 @@
 <div class="container mt-4">
     <div class="row g-4">
         <h1 class="text-center">Computers</h1>
-        @foreach (var item in Model ?? new List<ComputerDTO>())
+
+        @if (Model == null || !Model.Any())
         {
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                <div class="card card-hover  border-light bg-light-subtle  h-100 shadow-sm" style="max-width: 20rem;">
-                    <div class="card-header fw-bold bg-dark-subtle ">
-                        @item.Name
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-unstyled mb-4">
-                            <li>
-                                <strong>CPU:</strong>
-                                @(item.Cpu?.Manufacturer ?? "-")
-                            </li>
-                            <li>
-                                <strong>GPU:</strong>
-                                @(string.IsNullOrWhiteSpace(item.Gpu.Name) ? "-" : item.Gpu)
-                            </li>
-                            <li>
-                                <strong>RAM:</strong>
-                                @(item.Rams != null && item.Rams.Any() ? string.Join(", ", item.Rams) : "-")
-                            </li>
-                        </ul>
-                        <div class="text-end">
-                            <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info me-2">Details</a>
+            <div class="col-12">
+                <div class="alert alert-info mb-0">No computers found.</div>
+            </div>
+        }
+        else
+        {
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                    <div class="card card-hover border-light bg-light-subtle h-100 shadow-sm" style="max-width: 20rem;">
+                        <div class="card-header fw-bold bg-dark-subtle">
+                            @item.Name
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled mb-4">
+                                <li>
+                                    <strong>CPU:</strong>
+                                    @(item.Cpu?.Name ?? "-")
+                                </li>
+                                <li>
+                                    <strong>GPU:</strong>
+                                    @(item.Gpu?.Name ?? "-")
+                                </li>
+                                <li>
+                                    <strong>Case:</strong>
+                                    @(item.Case?.Name ?? "-")
+                                </li>
+                            </ul>
+                            <div class="text-end">
+                                <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info me-2">Details</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

@@ -394,3 +394,195 @@ form .form-control {
         height: 120px;
     }
 }
+
+/* nav*/
+
+.playful-navbar {
+    background: #d9ff70;
+    border: 3px solid #111;
+    border-radius: 1.25rem;
+    box-shadow: 7px 7px 0 #111;
+    padding: 0.85rem 1rem;
+}
+
+.playful-brand {
+    font-weight: 800;
+    font-size: 1.35rem;
+    color: #111 !important;
+    background: #fff;
+    border: 3px solid #111;
+    border-radius: 0.9rem;
+    padding: 0.55rem 0.9rem;
+    box-shadow: 4px 4px 0 #111;
+    text-decoration: none;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+    .playful-brand:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #111;
+        color: #111 !important;
+    }
+
+.playful-toggler {
+    border: 3px solid #111 !important;
+    border-radius: 0.85rem;
+    background: #fff;
+    box-shadow: 4px 4px 0 #111;
+}
+
+.playful-nav-link {
+    color: #111 !important;
+    font-weight: 700;
+    background: #fff;
+    border: 3px solid #111;
+    border-radius: 0.9rem;
+    padding: 0.55rem 0.9rem !important;
+    box-shadow: 4px 4px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+    .playful-nav-link:hover,
+    .playful-nav-link:focus {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #111;
+        background: #7fdfff;
+    }
+
+.playful-dropdown {
+    border: 3px solid #111;
+    border-radius: 1rem;
+    box-shadow: 6px 6px 0 #111;
+    padding: 0.5rem;
+}
+
+    .playful-dropdown .dropdown-item {
+        border-radius: 0.75rem;
+        font-weight: 600;
+        padding: 0.65rem 0.85rem;
+    }
+
+        .playful-dropdown .dropdown-item:hover {
+            background: #ffe16a;
+            color: #111;
+        }
+
+/* Search */
+.playful-search {
+    align-items: center;
+}
+
+.playful-search-input {
+    border: 3px solid #111 !important;
+    border-radius: 0.9rem !important;
+    box-shadow: 4px 4px 0 #111;
+    background: #fff;
+    min-width: 220px;
+    font-weight: 600;
+}
+
+    .playful-search-input:focus {
+        box-shadow: 4px 4px 0 #111 !important;
+        border-color: #111 !important;
+    }
+
+.playful-search-btn {
+    border: 3px solid #111 !important;
+    border-radius: 0.9rem !important;
+    box-shadow: 4px 4px 0 #111;
+    font-weight: 700;
+}
+
+    .playful-search-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #111;
+    }
+
+/*footer*/
+
+.playful-footer {
+    padding-bottom: 1.5rem;
+}
+
+.footer-card {
+    background: #fff;
+    border: 3px solid #111;
+    border-radius: 1.25rem;
+    box-shadow: 7px 7px 0 #111;
+    padding: 1.25rem;
+    height: 100%;
+}
+
+    .footer-card p,
+    .footer-card small {
+        color: #444;
+    }
+
+.footer-chip {
+    display: inline-block;
+    text-decoration: none;
+    color: #111;
+    font-weight: 700;
+    background: #d9ff70;
+    border: 3px solid #111;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    box-shadow: 3px 3px 0 #111;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+    .footer-chip:hover {
+        color: #111;
+        background: #7fdfff;
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0 #111;
+    }
+
+.footer-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 46px;
+    height: 46px;
+    margin-left: 0.35rem;
+    text-decoration: none;
+    color: #111;
+    background: #ffe16a;
+    border: 3px solid #111;
+    border-radius: 0.9rem;
+    box-shadow: 4px 4px 0 #111;
+    font-size: 1.1rem;
+    transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+
+    .footer-icon:hover {
+        color: #111;
+        background: #8df0c8;
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #111;
+    }
+
+
+@media (max-width: 991.98px) {
+    .playful-navbar {
+        padding: 1rem;
+    }
+
+    .playful-search {
+        margin-top: 1rem;
+    }
+
+    .playful-search-input {
+        min-width: 0;
+        width: 100%;
+    }
+
+    .footer-card {
+        text-align: left !important;
+    }
+
+    .footer-icon {
+        margin-left: 0;
+        margin-right: 0.35rem;
+    }
+}
