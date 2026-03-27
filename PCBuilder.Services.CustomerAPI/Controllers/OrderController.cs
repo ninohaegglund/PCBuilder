@@ -4,7 +4,7 @@ using PCBuilder.Services.CustomerAPI.Response;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 
-[Route("api/order")]
+[Route("api/orders")]
 [ApiController]
 public class OrderController
 {
@@ -26,20 +26,17 @@ public class OrderController
     {
         return await _service.GetOrderByIdAsync(id);
     }
-    [HttpPut]
-    [Route("accept/{orderId:int}")]
+    [HttpPut("{orderId:int}/accept")]
     public async Task<ResponseDTO> AcceptOrder(int orderId)
     {
         return await _service.AcceptOrder(orderId);
     }
-    [HttpPut]
-    [Route("reject/{orderId:int}")]
+    [HttpPut("{orderId:int}/reject")]
     public async Task<ResponseDTO> RejectOrder(int orderId)
     {
         return await _service.RejectOrder(orderId);
     }
-    [HttpPut]
-    [Route("complete/{orderId:int}")]
+    [HttpPut("{orderId:int}/complete")]
     public async Task<ResponseDTO> CompleteOrder(int orderId)
     {
         return await _service.CompleteOrder(orderId);
