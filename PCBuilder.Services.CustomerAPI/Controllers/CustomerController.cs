@@ -7,7 +7,7 @@ namespace PCBuilder.Services.CustomerAPI.Controllers;
 
 [Route("api/customer")]
 [ApiController]
-public class CustomerController
+public class CustomerController : ControllerBase
 {
     private readonly ICustomerService _service;
     public CustomerController(ICustomerService customerService)

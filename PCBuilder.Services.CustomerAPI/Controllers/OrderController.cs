@@ -6,7 +6,7 @@ namespace PCBuilder.Services.CustomerAPI.Controllers;
 
 [Route("api/orders")]
 [ApiController]
-public class OrderController
+public class OrderController : ControllerBase
 {
     private readonly IOrderService _service;
     public OrderController(IOrderService orderService)
@@ -26,16 +26,19 @@ public class OrderController
     {
         return await _service.GetOrderByIdAsync(id);
     }
+
     [HttpPut("{orderId:int}/accept")]
     public async Task<ResponseDTO> AcceptOrder(int orderId)
     {
         return await _service.AcceptOrder(orderId);
     }
+
     [HttpPut("{orderId:int}/reject")]
     public async Task<ResponseDTO> RejectOrder(int orderId)
     {
         return await _service.RejectOrder(orderId);
     }
+
     [HttpPut("{orderId:int}/complete")]
     public async Task<ResponseDTO> CompleteOrder(int orderId)
     {

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.BuilderServiceAPI.Enums;
 using PCBuilder.Services.CustomerAPI.DTO;
-using PCBuilder.Services.CustomerAPI.IRepositories;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Repositories;
 using PCBuilder.Services.CustomerAPI.Response;
 using System;
 
@@ -16,10 +13,12 @@ public class OrderService : IOrderService
 
     private readonly IMapper _mapper;
     private readonly IOrderRepository _orderRepository;
+    private readonly ICustomerRepository _customerRepository;
 
-    public OrderService(IOrderRepository orderRepository, IMapper mapper)
+    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper)
     {
         _orderRepository = orderRepository;
+        _customerRepository = customerRepository;
         _mapper = mapper;
     }
     public async Task<ResponseDTO> GetAllOrdersAsync()
@@ -27,7 +26,28 @@ public class OrderService : IOrderService
         try
         {
             var orders = await _orderRepository.GetAllOrders();
-            var orderDTOs = _mapper.Map<List<OrderDTO>>(orders);
+            var orderDTOs = new List<OrderListDTO>();
+
+            foreach (var order in orders)
+            {
+                var customer = await _customerRepository.GetCustomerById(order.CustomerId);
+
+                var dto = new OrderListDTO
+                {
+                    Id = order.Id,
+                    CustomerId = order.CustomerId,
+                    CustomerName = customer?.Name ?? "Unknown customer",
+                    CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
+                    ComputerId = order.ComputerId,
+                    Budget = order.Budget,
+                    Description = order.Description,
+                    DetailedDescription = order.DetailedDescription,
+                    Status = (OrderStatus)order.Status,
+                    CreatedAt = order.CreatedAt
+                };
+
+                orderDTOs.Add(dto);
+            }
 
             return new ResponseDTO
             {
@@ -44,7 +64,7 @@ public class OrderService : IOrderService
             };
         }
     }
-    public  async Task<ResponseDTO> GetOrderByIdAsync(int id)
+    public async Task<ResponseDTO> GetOrderByIdAsync(int id)
     {
         try
         {
@@ -59,7 +79,21 @@ public class OrderService : IOrderService
                 };
             }
 
-            var orderDTO = _mapper.Map<OrderDTO>(order);
+            var customer = await _customerRepository.GetCustomerById(order.CustomerId);
+
+            var orderDTO = new OrderListDTO
+            {
+                Id = order.Id,
+                CustomerId = order.CustomerId,
+                CustomerName = customer?.Name ?? "Unknown customer",
+                CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
+                ComputerId = order.ComputerId,
+                Budget = order.Budget,
+                Description = order.Description,
+                DetailedDescription = order.DetailedDescription,
+                Status = (OrderStatus)order.Status,
+                CreatedAt = order.CreatedAt
+            };
 
             return new ResponseDTO
             {
@@ -78,22 +112,23 @@ public class OrderService : IOrderService
     }
     public Task<ResponseDTO> AcceptOrder(int orderId)
     {
-        //- Hämta en order,
-        //- kontrollera att den finns kolla så att den är pending
-        //- skapa en computer via API
-        //- Få tillbaka nytt computerId,
-        //- uppdatera ordern status till inprogress och spara computerId i ordern,
+        // Hämta en order,
+        // kontrollera att den finns
+        // kolla så att den är pending
+        // skapa en computer via API
+        // Få tillbaka nytt computerId,
+        // uppdatera ordern status till inprogress och spara computerId i ordern,
 
         throw new NotImplementedException();
     }
     public Task<ResponseDTO> RejectOrder(int orderId)
     {
 
-        //hämta ordern
-        //kontrollera att den finns
-        //kanske kontrollera att den inte redan är klar
-        //sätta Status = Cancelled
-        //spara
+        // hämta ordern
+        // kontrollera att den finns
+        // kanske kontrollera att den inte redan är klar
+        // sätta Status = Cancelled
+        // spara
 
 
         throw new NotImplementedException();

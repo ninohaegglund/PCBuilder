@@ -1,6 +1,6 @@
 ﻿using PCBuilder.Services.CustomerAPI.Models;
 
-namespace PCBuilder.Services.CustomerAPI.IRepositories;
+namespace PCBuilder.Services.CustomerAPI.IRepository;
 
 public interface IOrderRepository
 {

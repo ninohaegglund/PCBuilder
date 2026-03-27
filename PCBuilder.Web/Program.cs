@@ -12,6 +12,10 @@ using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
 using PCBuilder.Services.ComponentsAPI.Data;
 using PCBuilder.Services.CustomerAPI.Data;
+using PCBuilder.Services.CustomerAPI.IRepository;
+using PCBuilder.Services.CustomerAPI.IServices;
+using PCBuilder.Services.CustomerAPI.Repositories;
+using PCBuilder.Services.CustomerAPI.Services;
 using PCBuilder.Web.Service;
 using PCBuilder.Web.Service.IService;
 using PCBuilder.Web.Utility;
@@ -41,7 +45,6 @@ builder.Services.AddDbContext<CustomerDbContext>(options =>
 
 
 builder.Services.AddScoped<IBaseService, BaseService>();
-builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IComputerService, ComputerService>();
 builder.Services.AddScoped<IComponentService, ComponentService>();
 builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
@@ -49,6 +52,10 @@ builder.Services.AddScoped<IInventoryItemService, InventoryItemService>();
 builder.Services.AddScoped<IGetComponentsService, GetComponentsService>();
 builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
+builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 

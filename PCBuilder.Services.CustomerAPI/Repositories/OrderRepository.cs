@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PCBuilder.Services.CustomerAPI.Data;
-using PCBuilder.Services.CustomerAPI.IRepositories;
+using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.Models;
 
 namespace PCBuilder.Services.CustomerAPI.Repositories;
