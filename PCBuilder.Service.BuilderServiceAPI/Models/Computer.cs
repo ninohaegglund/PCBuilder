@@ -6,11 +6,7 @@ public class Computer
 {
     public int Id { get; set; }
     public string? ComputerName { get; set; }
-    public bool IsBuilt { get; set; }
-
-    //public Customer Customer { get; set; }
-    public int CustomerId { get; set; }
-
+    public bool IsBuilt { get; set; } 
     public Status Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
