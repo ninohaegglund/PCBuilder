@@ -141,7 +141,6 @@ public class ComputerService : IComputerService
 
         dto.Id = computer.Id;
         dto.Name = computer.ComputerName;
-        dto.CustomerId = computer.CustomerId;
         dto.CreatedAt = computer.CreatedAt;
     }
 
