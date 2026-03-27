@@ -380,3 +380,5 @@ FodyWeavers.xsd
 /PCBuilder.Service.ComponentsAPI/Migrations/20260325220146_updatememorykit.cs
 /PCBuilder.Service.ComponentsAPI/Migrations/20260325220146_updatememorykit.Designer.cs
 /PCBuilder.Service.ComponentsAPI/Migrations/DataContextModelSnapshot.cs
+/PCBuilder.Service.ComponentsAPI/Migrations
+/PCBuilder.Services.TestAPI/Migrations
