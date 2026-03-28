@@ -16,9 +16,7 @@ using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Repositories;
 using PCBuilder.Services.CustomerAPI.Services;
-using PCBuilder.Web.Service;
-using PCBuilder.Web.Service.IService;
-using PCBuilder.Web.Utility;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -31,7 +29,6 @@ builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
     client.BaseAddress = new Uri("https://localhost:7255/");
 }); 
 
-SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"]!;
 
 
 builder.Services.AddDbContext<BuildDataContext>(options =>
@@ -44,7 +41,6 @@ builder.Services.AddDbContext<CustomerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryDb")));
 
 
-builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IComputerService, ComputerService>();
 builder.Services.AddScoped<IComponentService, ComponentService>();
 builder.Services.AddScoped<IComponentRepository, ComponentRepository>();
