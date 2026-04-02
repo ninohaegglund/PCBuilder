@@ -14,7 +14,7 @@ public class DbSeederCustomer
 
         var webProjectRoot = FindProjectRoot("PCBuilder.Web") ?? Directory.GetCurrentDirectory();
         var imageFolder = Path.Combine(webProjectRoot, "wwwroot", "images", "customers");
-
+        var urlPath = webProjectRoot.Replace('\\', '/');
         var imageFiles = Directory.GetFiles(imageFolder, "*.png").ToList();
 
         var jsonPath = Path.Combine(webProjectRoot, "wwwroot", "images", "customers", "names.json");
@@ -37,8 +37,7 @@ public class DbSeederCustomer
                 name = "Unknown Customer";
             }
 
-            var relativePath = Path.Combine("images", "customers", Path.GetFileName(image));
-
+            var relativePath = $"/images/customers/{Path.GetFileName(image)}";
             context.Customers.Add(new Customer
             {
                 Name = name,

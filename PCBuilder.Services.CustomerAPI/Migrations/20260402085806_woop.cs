@@ -6,21 +6,24 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Services.CustomerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class woop : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CreatedAt",
-                table: "Customers");
-
-            migrationBuilder.AddColumn<string>(
-                name: "ImageUrl",
-                table: "Customers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+            migrationBuilder.CreateTable(
+                name: "Customers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Customers", x => x.Id);
+                });
 
             migrationBuilder.CreateTable(
                 name: "Orders",
@@ -46,18 +49,10 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Customers");
+
+            migrationBuilder.DropTable(
                 name: "Orders");
-
-            migrationBuilder.DropColumn(
-                name: "ImageUrl",
-                table: "Customers");
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "CreatedAt",
-                table: "Customers",
-                type: "datetime2",
-                nullable: false,
-                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
         }
     }
 }
