@@ -1,9 +1,6 @@
-﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
-using PCBuilder.Service.BuilderServiceAPI.Models;
+﻿namespace PCBuilder.Services.CustomerAPI.DTO;
 
-namespace PCBuilder.Services.CustomerAPI.Models;
-
-public class Order
+public class OrderDTO
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
