@@ -6,7 +6,7 @@ public interface IOrderService
 {
     Task<ResponseDTO> GetAllOrdersAsync();
     Task<ResponseDTO> GetOrderByIdAsync(int id);
-    Task<ResponseDTO> AcceptOrder(int orderId);
-    public Task<ResponseDTO> RejectOrder(int orderId);
-    public Task<ResponseDTO> CompleteOrder(int orderId);
+    Task<ResponseDTO> AcceptOrderAsync(int orderId);
+    public Task<ResponseDTO> RejectOrderAsync(int orderId);
+    public Task<ResponseDTO> CompleteOrderAsync(int orderId);
 }

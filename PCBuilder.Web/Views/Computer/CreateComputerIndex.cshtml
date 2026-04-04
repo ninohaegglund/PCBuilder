@@ -18,6 +18,34 @@
 
             <div class="builder-body">
 
+                @if (ViewBag.AcceptedOrderId != null)
+                {
+                    <div class="alert alert-info border-0 shadow-sm" role="alert">
+                        <div class="d-flex align-items-center gap-3">
+                            @if (ViewBag.AcceptedOrderCustomerImageUrl != null)
+                            {
+                                <img src="@ViewBag.AcceptedOrderCustomerImageUrl"
+                                     alt="@ViewBag.AcceptedOrderCustomerName"
+                                     style="width:48px; height:48px; object-fit:cover; border-radius:50%;" />
+                            }
+                            <div>
+                                <div class="fw-bold">Accepted order: #@ViewBag.AcceptedOrderId</div>
+                                @if (ViewBag.AcceptedOrderCustomerName != null)
+                                {
+                                    <div class="small text-muted">Customer: @ViewBag.AcceptedOrderCustomerName</div>
+                                }
+                            </div>
+                        </div>
+                        <div>@ViewBag.AcceptedOrderDescription</div>
+                    </div>
+                }
+                else if (ViewBag.OrderInfoError != null)
+                {
+                    <div class="alert alert-warning border-0 shadow-sm" role="alert">
+                        @ViewBag.OrderInfoError
+                    </div>
+                }
+
                 <div class="builder-section">
                     <h4 class="builder-section-title">
                         <i class="bi bi-tag-fill me-2"></i>Basic Info

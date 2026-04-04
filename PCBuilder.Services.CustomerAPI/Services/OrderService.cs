@@ -110,36 +110,133 @@ public class OrderService : IOrderService
             };
         }
     }
-    public Task<ResponseDTO> AcceptOrder(int orderId)
+    public async Task<ResponseDTO> AcceptOrderAsync(int orderId)
     {
-        // Hämta en order,
-        // kontrollera att den finns
-        // kolla så att den är pending
-        // skapa en computer via API
-        // Få tillbaka nytt computerId,
-        // uppdatera ordern status till inprogress och spara computerId i ordern,
+        try
+        {
+            var order = await _orderRepository.GetOrderById(orderId);
 
-        throw new NotImplementedException();
+            if (order == null)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Order with id {orderId} not found."
+                };
+            }
+
+            if (order.Status != Models.OrderStatus.Pending)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Only pending orders can be accepted."
+                };
+            }
+
+            order.Status = Models.OrderStatus.InProgress;
+            await _orderRepository.UpdateOrder(order);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = "Order accepted successfully.",
+                Result = order
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
     }
-    public Task<ResponseDTO> RejectOrder(int orderId)
+    public async Task<ResponseDTO> RejectOrderAsync(int orderId)
     {
-       
-        // hämta ordern
-        // kontrollera att den finns
-        // kanske kontrollera att den inte redan är klar
-        // sätta Status = Cancelled
-        // spara
+        try
+        {
+            var order = await _orderRepository.GetOrderById(orderId);
 
+            if (order == null)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Order with id {orderId} not found."
+                };
+            }
 
-        throw new NotImplementedException();
+            if (order.Status == Models.OrderStatus.Completed)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Completed orders cannot be rejected."
+                };
+            }
+
+            order.Status = Models.OrderStatus.Rejected;
+            await _orderRepository.UpdateOrder(order);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = "Order rejected successfully.",
+                Result = order
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
     }
-    public Task<ResponseDTO> CompleteOrder(int orderId)
+    public async Task<ResponseDTO> CompleteOrderAsync(int orderId)
     {
-        // hämta ordern
-        // kontrollera att den finns
-        // kontrollera att den är InProgress
-        // sätta Status = Completed
-        // spara
-        throw new NotImplementedException();
+        try
+        {
+            var order = await _orderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Order with id {orderId} not found."
+                };
+            }
+
+            if (order.Status != Models.OrderStatus.InProgress)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Only in-progress orders can be completed."
+                };
+            }
+
+            order.Status = Models.OrderStatus.Completed;
+            await _orderRepository.UpdateOrder(order);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = "Order completed successfully.",
+                Result = order
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
     }
 }

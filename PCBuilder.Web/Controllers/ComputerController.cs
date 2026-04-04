@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using NewtonsoftJson = Newtonsoft.Json;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
+using PCBuilder.Services.CustomerAPI.DTO;
+using PCBuilder.Services.CustomerAPI.IServices;
 using System.Text.Json;
 
 namespace PCBuilder.Web.Controllers;
@@ -13,15 +16,37 @@ public class ComputerController : Controller
 {
     private readonly IComputerService _computerService;
     private readonly IComponentService _componentService;
-    public ComputerController(IComputerService computerService, IComponentService componentService)
+    private readonly IOrderService _orderService;
+    public ComputerController(IComputerService computerService, IComponentService componentService, IOrderService orderService)
     {
         _computerService = computerService;
         _componentService = componentService;
+        _orderService = orderService;
     }
 
     [HttpGet]
-    public async Task<IActionResult> CreateComputerIndex()
+    public async Task<IActionResult> CreateComputerIndex(int? orderId)
     {
+        if (orderId.HasValue)
+        {
+            PCBuilder.Services.CustomerAPI.Response.ResponseDTO? orderResponse = await _orderService.GetOrderByIdAsync(orderId.Value);
+
+            if (orderResponse != null && orderResponse.IsSuccess)
+            {
+                var order = NewtonsoftJson.JsonConvert.DeserializeObject<OrderListDTO>(
+                    NewtonsoftJson.JsonConvert.SerializeObject(orderResponse.Result));
+
+                ViewBag.AcceptedOrderId = order?.Id;
+                ViewBag.AcceptedOrderDescription = order?.Description;
+                ViewBag.AcceptedOrderCustomerName = order?.CustomerName;
+                ViewBag.AcceptedOrderCustomerImageUrl = order?.CustomerImageUrl;
+            }
+            else
+            {
+                ViewBag.OrderInfoError = orderResponse?.Message ?? "Could not load order info.";
+            }
+        }
+
         var allComponents = await _componentService.GetAllComponentsAsync();
 
         ViewBag.CPUs = new SelectList(allComponents.Cpus, "Id", "Name");
@@ -80,7 +105,7 @@ public class ComputerController : Controller
         var list = response.Result switch
         {
             List<ComputerDTO> typed => typed,
-            JsonElement json => JsonSerializer.Deserialize<List<ComputerDTO>>(json.GetRawText()) ?? new List<ComputerDTO>(),
+            JsonElement json => System.Text.Json.JsonSerializer.Deserialize<List<ComputerDTO>>(json.GetRawText()) ?? new List<ComputerDTO>(),
             _ => new List<ComputerDTO>()
         };
 

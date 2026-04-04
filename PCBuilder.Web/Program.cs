@@ -16,6 +16,7 @@ using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Repositories;
 using PCBuilder.Services.CustomerAPI.Services;
+using PCBuilder.Web.Services;
 
 
 
@@ -28,6 +29,11 @@ builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7255/");
 }); 
+
+builder.Services.AddHttpClient("CustomerAPI", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CustomerAPI"] ?? "https://localhost:7290/");
+});
 
 
 
@@ -50,7 +56,7 @@ builder.Services.AddScoped<IBuilderBaseService, BuilderBaseService>();
 builder.Services.AddScoped<ComputerCreateDTO>();
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
-builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderService, OrderApiService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
