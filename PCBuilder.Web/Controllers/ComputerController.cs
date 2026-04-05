@@ -27,6 +27,8 @@ public class ComputerController : Controller
     [HttpGet]
     public async Task<IActionResult> CreateComputerIndex(int? orderId)
     {
+        var model = new ComputerCreateDTO();
+
         if (orderId.HasValue)
         {
             PCBuilder.Services.CustomerAPI.Response.ResponseDTO? orderResponse = await _orderService.GetOrderByIdAsync(orderId.Value);
@@ -40,6 +42,45 @@ public class ComputerController : Controller
                 ViewBag.AcceptedOrderDescription = order?.Description;
                 ViewBag.AcceptedOrderCustomerName = order?.CustomerName;
                 ViewBag.AcceptedOrderCustomerImageUrl = order?.CustomerImageUrl;
+
+                if (order != null)
+                {
+                    model.CustomerId = order.CustomerId;
+
+                    if (order.ComputerId.HasValue)
+                    {
+                        var computerResponse = await _computerService.GetComputerByIdAsync(order.ComputerId.Value);
+                        if (computerResponse != null && computerResponse.IsSuccess)
+                        {
+                            var existingComputer = NewtonsoftJson.JsonConvert.DeserializeObject<ComputerDTO>(
+                                NewtonsoftJson.JsonConvert.SerializeObject(computerResponse.Result));
+
+                            if (existingComputer != null)
+                            {
+                                model = new ComputerCreateDTO
+                                {
+                                    Id = existingComputer.Id,
+                                    Name = existingComputer.Name,
+                                    CustomerId = existingComputer.CustomerId,
+                                    CPUId = existingComputer.CpuId,
+                                    PSUId = existingComputer.PowerSupplyId,
+                                    MotherboardId = existingComputer.MotherboardId,
+                                    CaseId = existingComputer.CaseId,
+                                    CpuCoolerId = existingComputer.CpuCoolerId,
+                                    KeyboardId = existingComputer.KeyboardId,
+                                    MouseId = existingComputer.MouseId,
+                                    HeadsetId = existingComputer.HeadphonesId,
+                                    GPUIds = existingComputer.GpuIds ?? new List<int>(),
+                                    RAMIds = existingComputer.RamIds ?? new List<int>(),
+                                    StorageIds = existingComputer.InternalStorageIds ?? existingComputer.ExternalStorageIds ?? new List<int>(),
+                                    CaseFanIds = existingComputer.CaseFanIds ?? new List<int>(),
+                                    MonitorIds = existingComputer.MonitorIds ?? new List<int>(),
+                                    SpeakerIds = existingComputer.SpeakerIds ?? new List<int>()
+                                };
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -65,23 +106,63 @@ public class ComputerController : Controller
         ViewBag.Headphones = new SelectList(allComponents.Headphones, "Id", "Name");
         ViewBag.Speakers = new SelectList(allComponents.Speakers, "Id", "Name");
 
-        return View(new ComputerCreateDTO());
+        return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateComputerIndex(ComputerCreateDTO computer)
+    public async Task<IActionResult> CreateComputerIndex(ComputerCreateDTO computer, int? orderId)
     {
+        if (orderId.HasValue)
+        {
+            var orderResponse = await _orderService.GetOrderByIdAsync(orderId.Value);
+            var order = orderResponse != null && orderResponse.IsSuccess
+                ? NewtonsoftJson.JsonConvert.DeserializeObject<OrderListDTO>(NewtonsoftJson.JsonConvert.SerializeObject(orderResponse.Result))
+                : null;
+
+            if (order != null)
+            {
+                ViewBag.AcceptedOrderId = order.Id;
+                ViewBag.AcceptedOrderDescription = order.Description;
+                ViewBag.AcceptedOrderCustomerName = order.CustomerName;
+                ViewBag.AcceptedOrderCustomerImageUrl = order.CustomerImageUrl;
+
+                computer.CustomerId = order.CustomerId;
+                if (order.ComputerId.HasValue && computer.Id <= 0)
+                {
+                    computer.Id = order.ComputerId.Value;
+                }
+            }
+        }
+
         if (!ModelState.IsValid)
         {
+            var allComponentsInvalid = await _componentService.GetAllComponentsAsync();
+            ViewBag.CPUs = new SelectList(allComponentsInvalid.Cpus, "Id", "Name");
+            ViewBag.GPUs = new SelectList(allComponentsInvalid.Gpus, "Id", "Name");
+            ViewBag.RAMs = new SelectList(allComponentsInvalid.Rams, "Id", "Name");
+            ViewBag.Motherboards = new SelectList(allComponentsInvalid.Motherboards, "Id", "Name");
+            ViewBag.Cases = new SelectList(allComponentsInvalid.Cases, "Id", "Name");
+            ViewBag.PSUs = new SelectList(allComponentsInvalid.Psus, "Id", "Name");
+            ViewBag.CPUCoolers = new SelectList(allComponentsInvalid.CpuCoolers, "Id", "Name");
+            ViewBag.CaseFans = new SelectList(allComponentsInvalid.CaseFans, "Id", "Name");
+            ViewBag.InternalStorages = new SelectList(allComponentsInvalid.InternalStorages, "Id", "Name");
+            ViewBag.ExternalStorages = new SelectList(allComponentsInvalid.ExternalStorages, "Id", "Name");
+            ViewBag.Monitors = new SelectList(allComponentsInvalid.Monitors, "Id", "Name");
+            ViewBag.Keyboards = new SelectList(allComponentsInvalid.Keyboards, "Id", "Name");
+            ViewBag.Mice = new SelectList(allComponentsInvalid.Mice, "Id", "Name");
+            ViewBag.Headphones = new SelectList(allComponentsInvalid.Headphones, "Id", "Name");
+            ViewBag.Speakers = new SelectList(allComponentsInvalid.Speakers, "Id", "Name");
             return View(computer);
         }
 
-        var response = await _computerService.CreateComputerAsync(computer);
+        var response = computer.Id > 0
+            ? await _computerService.UpdateComputerAsync(computer.Id, computer)
+            : await _computerService.CreateComputerAsync(computer);
 
         if (response != null && response.IsSuccess)
         {
-            TempData["success"] = "Computer created successfully";
+            TempData["success"] = computer.Id > 0 ? "Computer updated successfully" : "Computer created successfully";
             return RedirectToAction("ComputerIndex");
         }
         else
@@ -121,13 +202,49 @@ public class ComputerController : Controller
         {
             computer = response.Result as ComputerDTO;
         }
+
+        var linkedOrder = await GetLinkedOrderByComputerIdAsync(id);
+        ViewBag.LinkedOrderId = linkedOrder?.Id;
+        ViewBag.IsLinkedToOrder = linkedOrder != null;
+
         return View(computer);
     }
 
     public async Task<IActionResult> DeleteComputer(int id)
     {
+        var linkedOrder = await GetLinkedOrderByComputerIdAsync(id);
+        if (linkedOrder != null)
+        {
+            TempData["error"] = $"Computer is linked to order #{linkedOrder.Id} and cannot be deleted.";
+            return RedirectToAction(nameof(ComponentsIndex), new { id });
+        }
+
         ResponseDTO? response = await _computerService.DeleteComputerAsync(id);
+
+        if (response != null && response.IsSuccess)
+        {
+            TempData["success"] = "Computer deleted successfully.";
+        }
+        else
+        {
+            TempData["error"] = response?.Result?.ToString() ?? "Failed to delete computer.";
+        }
+
         return RedirectToAction("ComputerIndex");
+    }
+
+    private async Task<OrderListDTO?> GetLinkedOrderByComputerIdAsync(int computerId)
+    {
+        var ordersResponse = await _orderService.GetAllOrdersAsync();
+        if (ordersResponse == null || !ordersResponse.IsSuccess || ordersResponse.Result == null)
+        {
+            return null;
+        }
+
+        var orders = NewtonsoftJson.JsonConvert.DeserializeObject<List<OrderListDTO>>(
+            NewtonsoftJson.JsonConvert.SerializeObject(ordersResponse.Result));
+
+        return orders?.FirstOrDefault(x => x.ComputerId == computerId);
     }
 }
 

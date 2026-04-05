@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
 using PCBuilder.Service.BuilderServiceAPI.Enums;
+using BuilderComputerCreateDTO = PCBuilder.Service.BuilderServiceAPI.DTO.Response.ComputerCreateDTO;
+using BuilderResponseDTO = PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response.ResponseDTO;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
-using System;
+using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace PCBuilder.Services.CustomerAPI.Services;
 
@@ -14,12 +17,14 @@ public class OrderService : IOrderService
     private readonly IMapper _mapper;
     private readonly IOrderRepository _orderRepository;
     private readonly ICustomerRepository _customerRepository;
+    private readonly IHttpClientFactory _httpClientFactory;
 
-    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper)
+    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper, IHttpClientFactory httpClientFactory)
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
         _mapper = mapper;
+        _httpClientFactory = httpClientFactory;
     }
     public async Task<ResponseDTO> GetAllOrdersAsync()
     {
@@ -125,13 +130,35 @@ public class OrderService : IOrderService
                 };
             }
 
-            if (order.Status != Models.OrderStatus.Pending)
+            if (order.Status == Models.OrderStatus.Completed || order.Status == Models.OrderStatus.Rejected)
             {
                 return new ResponseDTO
                 {
                     IsSuccess = false,
-                    Message = "Only pending orders can be accepted."
+                    Message = "Only pending or active orders can be accepted."
                 };
+            }
+
+            if (order.Status == Models.OrderStatus.InProgress && order.ComputerId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = true,
+                    Message = "Order already accepted.",
+                    Result = order
+                };
+            }
+
+            if (!order.ComputerId.HasValue)
+            {
+                var customer = await _customerRepository.GetCustomerById(order.CustomerId);
+                var createDraftResponse = await CreateDraftComputerForOrderAsync(order, customer?.Name);
+                if (!createDraftResponse.IsSuccess)
+                {
+                    return createDraftResponse;
+                }
+
+                order.ComputerId = (int?)createDraftResponse.Result;
             }
 
             order.Status = Models.OrderStatus.InProgress;
@@ -238,5 +265,85 @@ public class OrderService : IOrderService
                 Message = ex.Message
             };
         }
+    }
+
+    private async Task<ResponseDTO> CreateDraftComputerForOrderAsync(Models.Order order, string? customerName)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("BuilderAPI");
+            var safeCustomerName = string.IsNullOrWhiteSpace(customerName) ? "Customer" : customerName.Trim();
+            var createDto = new BuilderComputerCreateDTO
+            {
+                Name = $"Order #{order.Id} {safeCustomerName}",
+                CustomerId = order.CustomerId
+            };
+
+            var httpResponse = await client.PostAsJsonAsync("api/computer", createDto);
+            var responseContent = await httpResponse.Content.ReadAsStringAsync();
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Failed to create draft computer. HTTP {(int)httpResponse.StatusCode}."
+                };
+            }
+
+            var builderResponse = JsonSerializer.Deserialize<BuilderResponseDTO>(
+                responseContent,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+
+            if (builderResponse == null || !builderResponse.IsSuccess || builderResponse.Result == null)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = builderResponse?.Message ?? "Builder API returned an invalid response."
+                };
+            }
+
+            var computerId = ExtractComputerId(builderResponse.Result);
+            if (!computerId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Could not read computer id from Builder API response."
+                };
+            }
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Result = computerId.Value
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
+    }
+
+    private static int? ExtractComputerId(object result)
+    {
+        if (result is JsonElement element)
+        {
+            if (element.ValueKind == JsonValueKind.Object)
+            {
+                if (element.TryGetProperty("id", out var idProp) && idProp.TryGetInt32(out var idLower))
+                    return idLower;
+
+                if (element.TryGetProperty("Id", out var idPropPascal) && idPropPascal.TryGetInt32(out var idPascal))
+                    return idPascal;
+            }
+        }
+
+        return null;
     }
 }

@@ -49,4 +49,40 @@ public class OrderController : Controller
         TempData["error"] = response?.Message ?? "Failed to accept order.";
         return RedirectToAction(nameof(OrderIndex));
     }
+
+    [HttpGet]
+    [Route("order/reject/{orderId:int}", Name = "RejectOrderWeb")]
+    public async Task<IActionResult> RejectOrder(int orderId)
+    {
+        ResponseDTO? response = await _orderService.RejectOrderAsync(orderId);
+
+        if (response != null && response.IsSuccess)
+        {
+            TempData["success"] = "Order rejected successfully.";
+        }
+        else
+        {
+            TempData["error"] = response?.Message ?? "Failed to reject order.";
+        }
+
+        return RedirectToAction(nameof(OrderIndex));
+    }
+
+    [HttpGet]
+    [Route("order/complete/{orderId:int}", Name = "CompleteOrderWeb")]
+    public async Task<IActionResult> CompleteOrder(int orderId)
+    {
+        ResponseDTO? response = await _orderService.CompleteOrderAsync(orderId);
+
+        if (response != null && response.IsSuccess)
+        {
+            TempData["success"] = "Order completed successfully.";
+        }
+        else
+        {
+            TempData["error"] = response?.Message ?? "Failed to complete order.";
+        }
+
+        return RedirectToAction(nameof(OrderIndex));
+    }
 }
