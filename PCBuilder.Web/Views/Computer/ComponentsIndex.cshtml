@@ -113,7 +113,15 @@ else
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Actions:</div>
                     <div class="col-md-8">
-                        <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                        @if (ViewBag.IsLinkedToOrder == true)
+                        {
+                            <button type="button" class="btn btn-danger" disabled>Delete</button>
+                            <span class="ms-2 text-muted">Linked to order #@ViewBag.LinkedOrderId</span>
+                        }
+                        else
+                        {
+                            <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                        }
                     </div>
                 </div>
             </div>

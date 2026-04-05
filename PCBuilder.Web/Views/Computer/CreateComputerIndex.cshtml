@@ -4,7 +4,11 @@
     ViewData["Title"] = "Build Computer";
 }
 
-<form asp-action="Create" method="post">
+<form asp-action="CreateComputerIndex" method="post">
+    @if (ViewBag.AcceptedOrderId != null)
+    {
+        <input type="hidden" name="orderId" value="@ViewBag.AcceptedOrderId" />
+    }
     <div class="container mt-4 mb-5">
         <div class="builder-shell">
 
@@ -17,6 +21,34 @@
             </div>
 
             <div class="builder-body">
+
+                @if (ViewBag.AcceptedOrderId != null)
+                {
+                    <div class="alert alert-info border-0 shadow-sm" role="alert">
+                        <div class="d-flex align-items-center gap-3">
+                            @if (ViewBag.AcceptedOrderCustomerImageUrl != null)
+                            {
+                                <img src="@ViewBag.AcceptedOrderCustomerImageUrl"
+                                     alt="@ViewBag.AcceptedOrderCustomerName"
+                                     style="width:48px; height:48px; object-fit:cover; border-radius:50%;" />
+                            }
+                            <div>
+                                <div class="fw-bold">Accepted order: #@ViewBag.AcceptedOrderId</div>
+                                @if (ViewBag.AcceptedOrderCustomerName != null)
+                                {
+                                    <div class="small text-muted">Customer: @ViewBag.AcceptedOrderCustomerName</div>
+                                }
+                            </div>
+                        </div>
+                        <div>@ViewBag.AcceptedOrderDescription</div>
+                    </div>
+                }
+                else if (ViewBag.OrderInfoError != null)
+                {
+                    <div class="alert alert-warning border-0 shadow-sm" role="alert">
+                        @ViewBag.OrderInfoError
+                    </div>
+                }
 
                 <div class="builder-section">
                     <h4 class="builder-section-title">
@@ -141,7 +173,7 @@
                     <i class="bi bi-arrow-left"></i> View Computers
                 </a>
                 <button asp-action="CreateComputerIndex" type="submit" class="btn btn-success">
-                    <i class="bi bi-check-lg"></i> Create
+                    <i class="bi bi-check-lg"></i> Save
                 </button>
             </div>
         </div>
