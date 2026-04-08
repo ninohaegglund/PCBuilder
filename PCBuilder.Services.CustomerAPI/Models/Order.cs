@@ -7,6 +7,7 @@ public class Order
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
+    public int ReviewId { get; set; }
     public int? ComputerId { get; set; }
     public int Budget { get; set; }
     public string Description { get; set; } = string.Empty;
