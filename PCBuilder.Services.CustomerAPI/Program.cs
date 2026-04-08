@@ -8,6 +8,10 @@ using PCBuilder.Services.CustomerAPI.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddHttpClient("BuilderAPI", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:BuilderAPI"] ?? "https://localhost:7219/");
+});
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
 builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderService, OrderService>();

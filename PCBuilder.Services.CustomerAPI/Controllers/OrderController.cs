@@ -30,18 +30,18 @@ public class OrderController : ControllerBase
     [HttpPut("{orderId:int}/accept")]
     public async Task<ResponseDTO> AcceptOrder(int orderId)
     {
-        return await _service.AcceptOrder(orderId);
+        return await _service.AcceptOrderAsync(orderId);
     }
 
     [HttpPut("{orderId:int}/reject")]
     public async Task<ResponseDTO> RejectOrder(int orderId)
     {
-        return await _service.RejectOrder(orderId);
+        return await _service.RejectOrderAsync(orderId);
     }
 
     [HttpPut("{orderId:int}/complete")]
     public async Task<ResponseDTO> CompleteOrder(int orderId)
     {
-        return await _service.CompleteOrder(orderId);
+        return await _service.CompleteOrderAsync(orderId);
     }
 }
