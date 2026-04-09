@@ -5,7 +5,7 @@ namespace PCBuilder.Services.CustomerAPI.IServices
 {
     public interface IReviewService
     {
-        Task<ResponseDTO> GetAllReviewsAsync();
-        Task<ResponseDTO> GetReviewsByCustomerIdAsync(int id);
+        Task<ResponseDTO> GetAllReviews();
+        Task<ResponseDTO> GetReviewsByCustomerId(int id);
     }
 }

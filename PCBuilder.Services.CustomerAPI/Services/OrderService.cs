@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using PCBuilder.Service.BuilderServiceAPI.Enums;
 using BuilderComputerCreateDTO = PCBuilder.Service.BuilderServiceAPI.DTO.Response.ComputerCreateDTO;
 using BuilderResponseDTO = PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response.ResponseDTO;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
-using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace PCBuilder.Services.CustomerAPI.Services;
