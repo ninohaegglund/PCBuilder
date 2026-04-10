@@ -40,8 +40,10 @@ public class ComputerController : Controller
 
                 ViewBag.AcceptedOrderId = order?.Id;
                 ViewBag.AcceptedOrderDescription = order?.Description;
+                ViewBag.AcceptedOrderDescription = order?.DetailedDescription;
                 ViewBag.AcceptedOrderCustomerName = order?.CustomerName;
                 ViewBag.AcceptedOrderCustomerImageUrl = order?.CustomerImageUrl;
+                ViewBag.AcceptedOrderBudget = order?.Budget;
 
                 if (order != null)
                 {

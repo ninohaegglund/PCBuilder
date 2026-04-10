@@ -24,6 +24,26 @@ public class ComputerService : IComputerService
         _componentsService = getComponentsService;
         _computerRepository = computerRepository;
     }
+    private decimal CalculateTotalPrice(ComputerDTO dto)
+    {
+        return
+            (dto.Cpu?.Price ?? 0) +
+            (dto.Motherboard?.Price ?? 0) +
+            (dto.Case?.Price ?? 0) +
+            (dto.PowerSupply?.Price ?? 0) +
+            (dto.CpuCooler?.Price ?? 0) +
+            (dto.Keyboard?.Price ?? 0) +
+            (dto.Mouse?.Price ?? 0) +
+            (dto.Headphones?.Price ?? 0) +
+            (dto.OperatingSystem?.Price ?? 0) +
+            (dto.Rams?.Sum(r => r.Price ?? 0) ?? 0) +
+            (dto.InternalStorages?.Sum(s => s.Price ?? 0) ?? 0) +
+            (dto.ExternalStorages?.Sum(s => s.Price ?? 0) ?? 0) +
+            (dto.CaseFans?.Sum(f => f.Price ?? 0) ?? 0) +
+            (dto.Monitors?.Sum(m => m.Price ?? 0) ?? 0) +
+            (dto.Speakers?.Sum(s => s.Price ?? 0) ?? 0) +
+            (dto.Gpus?.Sum(g => g.Price ?? 0) ?? 0);
+    }
 
     private async Task PopulateComponentsAsync(ComputerDTO dto, Computer computer)
     {
@@ -142,6 +162,8 @@ public class ComputerService : IComputerService
         dto.Id = computer.Id;
         dto.Name = computer.ComputerName;
         dto.CreatedAt = computer.CreatedAt;
+
+        dto.TotalPrice = CalculateTotalPrice(dto);
     }
 
     public async Task<ResponseDTO> GetAllComputersAsync()

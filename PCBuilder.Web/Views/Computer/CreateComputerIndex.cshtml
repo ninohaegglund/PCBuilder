@@ -40,7 +40,10 @@
                                 }
                             </div>
                         </div>
-                        <div>@ViewBag.AcceptedOrderDescription</div>
+
+                        <div><strong>Description:</strong> @ViewBag.AcceptedOrderDescription</div>
+                        <div><strong>Budget:</strong> @ViewBag.AcceptedOrderBudget kr</div>
+                     
                     </div>
                 }
                 else if (ViewBag.OrderInfoError != null)

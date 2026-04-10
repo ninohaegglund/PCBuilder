@@ -103,7 +103,21 @@ else
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">RAM:</div>
                     <div class="col-md-8">
-                        @(Model.Rams != null && Model.Rams.Any() ? string.Join(", ", Model.Rams.Select(r => r.Name)) : "-")
+                        @if (Model.Rams != null && Model.Rams.Any())
+                        {
+
+
+                            <div>
+                                @(Model.Rams != null && Model.Rams.Any()
+                                                        ? string.Join(", ", Model.Rams.Select(r => $"{r.Name} ({r.Price} kr)"))
+                                                        : "-")
+                    </div>
+                            <span class="fw-bold">Total RAM price: @Model.Rams.Sum(r => r.Price) kr</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
                     </div>
                 </div>
                 <div class="row mb-3">
