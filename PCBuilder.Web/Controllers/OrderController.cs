@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Newtonsoft.Json;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
@@ -6,6 +7,7 @@ using PCBuilder.Services.CustomerAPI.Response;
 
 namespace PCBuilder.Web.Controllers;
 
+[Authorize]
 public class OrderController : Controller
 {
 
@@ -36,6 +38,7 @@ public class OrderController : Controller
 
     [HttpGet]
     [Route("order/accept/{orderId:int}", Name = "AcceptOrderWeb")]
+    [Authorize(Roles = "Admin,User,Customer")]
     public async Task<IActionResult> AcceptOrder(int orderId)
     {
         ResponseDTO? response = await _orderService.AcceptOrderAsync(orderId);
@@ -52,6 +55,7 @@ public class OrderController : Controller
 
     [HttpGet]
     [Route("order/reject/{orderId:int}", Name = "RejectOrderWeb")]
+    [Authorize(Roles = "Admin,User,Customer")]
     public async Task<IActionResult> RejectOrder(int orderId)
     {
         ResponseDTO? response = await _orderService.RejectOrderAsync(orderId);
@@ -70,6 +74,7 @@ public class OrderController : Controller
 
     [HttpGet]
     [Route("order/complete/{orderId:int}", Name = "CompleteOrderWeb")]
+    [Authorize(Roles = "Admin,User,Customer")]
     public async Task<IActionResult> CompleteOrder(int orderId)
     {
         ResponseDTO? response = await _orderService.CompleteOrderAsync(orderId);

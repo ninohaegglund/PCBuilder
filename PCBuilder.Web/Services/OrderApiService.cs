@@ -1,16 +1,20 @@
 using Newtonsoft.Json;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
+using Microsoft.AspNetCore.Http;
+using System.Net.Http.Headers;
 
 namespace PCBuilder.Web.Services;
 
 public class OrderApiService : IOrderService
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderApiService(IHttpClientFactory httpClientFactory)
+    public OrderApiService(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
         _httpClientFactory = httpClientFactory;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public Task<ResponseDTO> GetAllOrdersAsync() => SendAsync(HttpMethod.Get, "api/orders");
@@ -29,6 +33,13 @@ public class OrderApiService : IOrderService
         {
             var client = _httpClientFactory.CreateClient("CustomerAPI");
             using var request = new HttpRequestMessage(method, url);
+
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("AuthToken");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
             using var response = await client.SendAsync(request);
             var content = await response.Content.ReadAsStringAsync();
 

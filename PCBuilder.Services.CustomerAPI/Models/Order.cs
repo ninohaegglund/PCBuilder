@@ -1,12 +1,11 @@
-﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
-using PCBuilder.Service.BuilderServiceAPI.Models;
-
+﻿
 namespace PCBuilder.Services.CustomerAPI.Models;
 
 public class Order
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
+    public Guid? UserId { get; set; }
     public int ReviewId { get; set; }
     public int? ComputerId { get; set; }
     public int Budget { get; set; }

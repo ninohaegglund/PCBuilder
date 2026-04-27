@@ -692,3 +692,43 @@ select.playful-input[multiple] {
         margin-right: 0.35rem;
     }
 }
+
+/* account pages */
+
+.auth-page {
+    max-width: 980px;
+}
+
+.auth-shell {
+    max-width: 760px;
+}
+
+.auth-shell-login {
+    max-width: 620px;
+}
+
+.auth-header {
+    background: linear-gradient(135deg, #d9ff70 0%, #ffe16a 50%, #7fdfff 100%);
+}
+
+.auth-header p {
+    color: #333;
+    font-weight: 600;
+}
+
+.auth-alt-link {
+    font-weight: 600;
+}
+
+.auth-alt-link a {
+    margin-left: 0.3rem;
+    color: #111;
+    font-weight: 800;
+    text-decoration: none;
+    border-bottom: 2px solid #111;
+}
+
+.auth-alt-link a:hover {
+    color: #111;
+    opacity: 0.85;
+}

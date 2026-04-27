@@ -63,12 +63,23 @@
                         </li>
                     </ul>
 
-                    <form class="d-flex playful-search" role="search">
-                        <input class="form-control me-2 playful-search-input" type="search" placeholder="Search builds or parts">
-                        <button class="btn btn-warning playful-search-btn" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
+                    <div class="d-flex align-items-center gap-3">
+                        <form class="d-flex playful-search" role="search">
+                            <input class="form-control me-2 playful-search-input" type="search" placeholder="Search builds or parts">
+                            <button class="btn btn-warning playful-search-btn" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                        </form>
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <span class="text-dark fw-semibold">@User.Identity.Name</span>
+                            <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-outline-dark btn-sm">Logout</button>
+                            </form>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
