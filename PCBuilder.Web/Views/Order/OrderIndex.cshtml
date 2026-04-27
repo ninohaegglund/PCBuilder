@@ -18,6 +18,7 @@
                     <th>Budget</th>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Detailed Description</th>
                     <th>Created</th>
                     <th></th>
                 </tr>
@@ -37,6 +38,7 @@
                         <td>@item.Budget kr</td>
                         <td>@item.Description</td>
                         <td>@item.Status</td>
+                        <td>@item.DetailedDescription</td>
                         <td>@item.CreatedAt.ToString("yyyy-MM-dd")</td>
                         <td>
                             @if (item.Status == OrderStatus.Pending)

@@ -387,3 +387,4 @@ FodyWeavers.xsd
 /PCBuilder.Services.CustomerAPI/Properties/launchSettings.json
 /PCBuilder.Services.CustomerAPI/Migrations/CustomerDbContextModelSnapshot.cs
 /PCBuilder.Services.CustomerAPI/Migrations/20260404175016_init.cs
+/PCBuilder.Services.CustomerAPI/Migrations/20260409091429_reviews.Designer.cs

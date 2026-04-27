@@ -28,7 +28,17 @@ else
 
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">CPU:</div>
-                    <div class="col-md-8">@Model.Cpu?.Name (@(Model.CpuId?.ToString() ?? "-"))</div>
+                    <div class="col-md-8">
+                        @if (Model.Cpu != null)
+                        {
+                            <span>@Model.Cpu.Name</span>
+                            <span class="fw-bold">@Model.Cpu.Price?.ToString("N2") kr</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">Motherboard:</div>
@@ -39,8 +49,20 @@ else
                     <div class="col-md-8">@Model.PowerSupply?.Name (@(Model.PowerSupplyId?.ToString() ?? "-"))</div>
                 </div>
                 <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Case:</div>
-                    <div class="col-md-8">@Model.Case?.Name (@(Model.CaseId?.ToString() ?? "-"))</div>
+
+                 <div class="col-md-4 fw-bold">Case:
+                </div>
+                <div class="col-md-8">
+                    @if (Model.Case != null)
+                    {
+                        <span>@Model.Case.Name</span>
+                        <span class="fw-bold">@Model.Case.Price?.ToString("N2") kr</span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">CPU Cooler:</div>
@@ -66,12 +88,36 @@ else
 
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">GPU:</div>
-                    <div class="col-md-8">@Model.Gpu?.Name (@(Model.GpuId?.ToString() ?? "-"))</div>
+                    <div class="col-md-8">
+                        @if (Model.Gpu != null)
+                        {
+                            <span>@Model.Gpu.Name</span>
+                            <span class="fw-bold">@Model.Gpu.Price?.ToString("N2") kr</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </div>
                 </div>
                 <div class="row mb-3">
                     <div class="col-md-4 fw-bold">RAM:</div>
                     <div class="col-md-8">
-                        @(Model.Rams != null && Model.Rams.Any() ? string.Join(", ", Model.Rams.Select(r => r.Name)) : "-")
+                        @if (Model.Rams != null && Model.Rams.Any())
+                        {
+
+
+                            <div>
+                                @(Model.Rams != null && Model.Rams.Any()
+                                                        ? string.Join(", ", Model.Rams.Select(r => $"{r.Name} ({r.Price} kr)"))
+                                                        : "-")
+                    </div>
+                            <span class="fw-bold">Total RAM price: @Model.Rams.Sum(r => r.Price) kr</span>
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
                     </div>
                 </div>
                 <div class="row mb-3">
@@ -108,10 +154,13 @@ else
                     </div>
                 </div>
 
+
+
                 <hr />
 
                 <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Actions:</div>
+                    <div class="col-md-4 fw-bold">Total Price @Model.TotalPrice kr:</div>
+
                     <div class="col-md-8">
                         @if (ViewBag.IsLinkedToOrder == true)
                         {
@@ -122,6 +171,7 @@ else
                         {
                             <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
                         }
+
                     </div>
                 </div>
             </div>
