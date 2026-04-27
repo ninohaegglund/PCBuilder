@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NewtonsoftJson = Newtonsoft.Json;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
+using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
 using System.Text.Json;
+using NewtonsoftJson = Newtonsoft.Json;
 
 namespace PCBuilder.Web.Controllers;
 
@@ -40,7 +41,7 @@ public class ComputerController : Controller
 
                 ViewBag.AcceptedOrderId = order?.Id;
                 ViewBag.AcceptedOrderDescription = order?.Description;
-                ViewBag.AcceptedOrderDescription = order?.DetailedDescription;
+                ViewBag.AcceptedOrderDetailedDescription = order?.DetailedDescription;
                 ViewBag.AcceptedOrderCustomerName = order?.CustomerName;
                 ViewBag.AcceptedOrderCustomerImageUrl = order?.CustomerImageUrl;
                 ViewBag.AcceptedOrderBudget = order?.Budget;
@@ -77,7 +78,8 @@ public class ComputerController : Controller
                                     StorageIds = existingComputer.InternalStorageIds ?? existingComputer.ExternalStorageIds ?? new List<int>(),
                                     CaseFanIds = existingComputer.CaseFanIds ?? new List<int>(),
                                     MonitorIds = existingComputer.MonitorIds ?? new List<int>(),
-                                    SpeakerIds = existingComputer.SpeakerIds ?? new List<int>()
+                                    SpeakerIds = existingComputer.SpeakerIds ?? new List<int>(),
+                                    TotalPrice = existingComputer.TotalPrice
                                 };
                             }
                         }
@@ -92,22 +94,95 @@ public class ComputerController : Controller
 
         var allComponents = await _componentService.GetAllComponentsAsync();
 
-        ViewBag.CPUs = new SelectList(allComponents.Cpus, "Id", "Name");
-        ViewBag.GPUs = new SelectList(allComponents.Gpus, "Id", "Name");
-        ViewBag.RAMs = new SelectList(allComponents.Rams, "Id", "Name");
-        ViewBag.Motherboards = new SelectList(allComponents.Motherboards, "Id", "Name");
-        ViewBag.Cases = new SelectList(allComponents.Cases, "Id", "Name");
-        ViewBag.PSUs = new SelectList(allComponents.Psus, "Id", "Name");
-        ViewBag.CPUCoolers = new SelectList(allComponents.CpuCoolers, "Id", "Name");
-        ViewBag.CaseFans = new SelectList(allComponents.CaseFans, "Id", "Name");
-        ViewBag.InternalStorages = new SelectList(allComponents.InternalStorages, "Id", "Name");
-        ViewBag.ExternalStorages = new SelectList(allComponents.ExternalStorages, "Id", "Name");
-        ViewBag.Monitors = new SelectList(allComponents.Monitors, "Id", "Name");
-        ViewBag.Keyboards = new SelectList(allComponents.Keyboards, "Id", "Name");
-        ViewBag.Mice = new SelectList(allComponents.Mice, "Id", "Name");
-        ViewBag.Headphones = new SelectList(allComponents.Headphones, "Id", "Name");
-        ViewBag.Speakers = new SelectList(allComponents.Speakers, "Id", "Name");
+        ViewBag.CPUs = allComponents.Cpus.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = $"{c.Name} - {c.Price:N2} kr"
+        }).ToList();
 
+        ViewBag.GPUs = allComponents.Gpus.Select(g => new SelectListItem
+        {
+            Value = g.Id.ToString(),
+            Text = $"{g.Name} - {g.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.RAMs = allComponents.Rams.Select(r => new SelectListItem
+        {
+            Value = r.Id.ToString(),
+            Text = $"{r.Name} - {r.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Motherboards = allComponents.Motherboards.Select(m => new SelectListItem
+        {
+            Value = m.Id.ToString(),
+            Text = $"{m.Name} - {m.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Cases = allComponents.Cases.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = $"{c.Name} - {c.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.PSUs = allComponents.Psus.Select(p => new SelectListItem
+        {
+            Value = p.Id.ToString(),
+            Text = $"{p.Name} - {p.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.CPUCoolers = allComponents.CpuCoolers.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = $"{c.Name} - {c.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.CaseFans = allComponents.CaseFans.Select(c => new SelectListItem
+        {
+            Value = c.Id.ToString(),
+            Text = $"{c.Name} - {c.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Monitors = allComponents.Monitors.Select(m => new SelectListItem
+        {
+            Value = m.Id.ToString(),
+            Text = $"{m.Name} - {m.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Keyboards = allComponents.Keyboards.Select(k => new SelectListItem
+        {
+            Value = k.Id.ToString(),
+            Text = $"{k.Name} - {k.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Mice = allComponents.Mice.Select(m => new SelectListItem
+        {
+            Value = m.Id.ToString(),
+            Text = $"{m.Name} - {m.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Headsets = allComponents.Headphones.Select(h => new SelectListItem
+        {
+            Value = h.Id.ToString(),
+            Text = $"{h.Name} - {h.Price:N2} kr"
+        }).ToList();
+
+        ViewBag.Speakers = allComponents.Speakers.Select(s => new SelectListItem
+        {
+            Value = s.Id.ToString(),
+            Text = $"{s.Name} - {s.Price:N2} kr"
+        }).ToList();
+        ViewBag.Storages = allComponents.InternalStorages
+        .Select(s => new SelectListItem
+        {
+            Value = s.Id.ToString(),
+            Text = $"{s.Name} - {s.Price:N2} kr"
+        })
+        .Concat(allComponents.ExternalStorages.Select(s => new SelectListItem
+        {
+            Value = s.Id.ToString(),
+            Text = $"{s.Name} - {s.Price:N2} kr"
+        }))
+        .ToList();
         return View(model);
     }
 
@@ -140,21 +215,95 @@ public class ComputerController : Controller
         if (!ModelState.IsValid)
         {
             var allComponentsInvalid = await _componentService.GetAllComponentsAsync();
-            ViewBag.CPUs = new SelectList(allComponentsInvalid.Cpus, "Id", "Name");
-            ViewBag.GPUs = new SelectList(allComponentsInvalid.Gpus, "Id", "Name");
-            ViewBag.RAMs = new SelectList(allComponentsInvalid.Rams, "Id", "Name");
-            ViewBag.Motherboards = new SelectList(allComponentsInvalid.Motherboards, "Id", "Name");
-            ViewBag.Cases = new SelectList(allComponentsInvalid.Cases, "Id", "Name");
-            ViewBag.PSUs = new SelectList(allComponentsInvalid.Psus, "Id", "Name");
-            ViewBag.CPUCoolers = new SelectList(allComponentsInvalid.CpuCoolers, "Id", "Name");
-            ViewBag.CaseFans = new SelectList(allComponentsInvalid.CaseFans, "Id", "Name");
-            ViewBag.InternalStorages = new SelectList(allComponentsInvalid.InternalStorages, "Id", "Name");
-            ViewBag.ExternalStorages = new SelectList(allComponentsInvalid.ExternalStorages, "Id", "Name");
-            ViewBag.Monitors = new SelectList(allComponentsInvalid.Monitors, "Id", "Name");
-            ViewBag.Keyboards = new SelectList(allComponentsInvalid.Keyboards, "Id", "Name");
-            ViewBag.Mice = new SelectList(allComponentsInvalid.Mice, "Id", "Name");
-            ViewBag.Headphones = new SelectList(allComponentsInvalid.Headphones, "Id", "Name");
-            ViewBag.Speakers = new SelectList(allComponentsInvalid.Speakers, "Id", "Name");
+            ViewBag.CPUs = allComponentsInvalid.Cpus.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = $"{c.Name} - {c.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.GPUs = allComponentsInvalid.Gpus.Select(g => new SelectListItem
+            {
+                Value = g.Id.ToString(),
+                Text = $"{g.Name} - {g.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.RAMs = allComponentsInvalid.Rams.Select(r => new SelectListItem
+            {
+                Value = r.Id.ToString(),
+                Text = $"{r.Name} - {r.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Motherboards = allComponentsInvalid.Motherboards.Select(m => new SelectListItem
+            {
+                Value = m.Id.ToString(),
+                Text = $"{m.Name} - {m.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Cases = allComponentsInvalid.Cases.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = $"{c.Name} - {c.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.PSUs = allComponentsInvalid.Psus.Select(p => new SelectListItem
+            {
+                Value = p.Id.ToString(),
+                Text = $"{p.Name} - {p.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.CPUCoolers = allComponentsInvalid.CpuCoolers.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = $"{c.Name} - {c.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.CaseFans = allComponentsInvalid.CaseFans.Select(c => new SelectListItem
+            {
+                Value = c.Id.ToString(),
+                Text = $"{c.Name} - {c.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Monitors = allComponentsInvalid.Monitors.Select(m => new SelectListItem
+            {
+                Value = m.Id.ToString(),
+                Text = $"{m.Name} - {m.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Keyboards = allComponentsInvalid.Keyboards.Select(k => new SelectListItem
+            {
+                Value = k.Id.ToString(),
+                Text = $"{k.Name} - {k.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Mice = allComponentsInvalid.Mice.Select(m => new SelectListItem
+            {
+                Value = m.Id.ToString(),
+                Text = $"{m.Name} - {m.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Headsets = allComponentsInvalid.Headphones.Select(h => new SelectListItem
+            {
+                Value = h.Id.ToString(),
+                Text = $"{h.Name} - {h.Price:N2} kr"
+            }).ToList();
+
+            ViewBag.Speakers = allComponentsInvalid.Speakers.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = $"{s.Name} - {s.Price:N2} kr"
+            }).ToList();
+            ViewBag.Storages = allComponentsInvalid.InternalStorages
+            .Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = $"{s.Name} - {s.Price:N2} kr"
+            })
+            .Concat(allComponentsInvalid.ExternalStorages.Select(s => new SelectListItem
+            {
+                Value = s.Id.ToString(),
+                Text = $"{s.Name} - {s.Price:N2} kr"
+            }))
+            .ToList();
             return View(computer);
         }
 

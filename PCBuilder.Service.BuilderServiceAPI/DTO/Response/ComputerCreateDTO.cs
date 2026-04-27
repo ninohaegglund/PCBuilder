@@ -20,5 +20,6 @@ public class ComputerCreateDTO
     public List<int>? SpeakerIds { get; set; }
 
     public int CustomerId { get; set; }
+    public decimal TotalPrice { get; set; }
 
 }
