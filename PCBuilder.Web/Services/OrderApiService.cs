@@ -18,7 +18,6 @@ public class OrderApiService : IOrderService
     }
 
     public Task<ResponseDTO> GetAllOrdersAsync() => SendAsync(HttpMethod.Get, "api/orders");
-
     public Task<ResponseDTO> GetOrderByIdAsync(int id) => SendAsync(HttpMethod.Get, $"api/orders/{id}");
 
     public Task<ResponseDTO> AcceptOrderAsync(int orderId) => SendAsync(HttpMethod.Put, $"api/orders/{orderId}/accept");
