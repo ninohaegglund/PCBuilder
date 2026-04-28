@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using PCBuilder.Service.BuilderServiceAPI.Client;
 using PCBuilder.Service.BuilderServiceAPI.Data;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
@@ -25,6 +27,29 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+    options.IdleTimeout = TimeSpan.FromHours(4);
+});
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.AccessDeniedPath = "/Account/Login";
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = TimeSpan.FromHours(4);
+    });
+
+builder.Services.AddAuthorization(options =>
+{
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+});
 builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
 {
     client.BaseAddress = new Uri("https://localhost:7255/");
@@ -33,6 +58,11 @@ builder.Services.AddHttpClient<ComponentsAPIClient>(client =>
 builder.Services.AddHttpClient("CustomerAPI", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CustomerAPI"] ?? "https://localhost:7290/");
+});
+
+builder.Services.AddHttpClient("IdentityAPI", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ServiceUrls:IdentityAPI"] ?? "https://localhost:7011/");
 });
 
 
@@ -63,6 +93,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
 
 
+
 var app = builder.Build();
 
 
@@ -74,11 +105,16 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
+
+app.UseSession();
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.MapStaticAssets().AllowAnonymous();
 
 app.MapControllerRoute(
     name: "default",

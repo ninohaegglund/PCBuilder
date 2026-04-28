@@ -63,12 +63,87 @@
                         </li>
                     </ul>
 
-                    <form class="d-flex playful-search" role="search">
-                        <input class="form-control me-2 playful-search-input" type="search" placeholder="Search builds or parts">
-                        <button class="btn btn-warning playful-search-btn" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
-                    </form>
+                    <div class="navbar-actions d-flex align-items-center">
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <div class="dropdown">
+                                <button class="btn playful-user-trigger dropdown-toggle"
+                                        type="button"
+                                        data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                    <i class="bi bi-person-circle me-2"></i>
+                                    <span class="playful-user-name">@User.Identity.Name</span>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-menu-end playful-user-dropdown">
+                                    <li>
+                                        <div class="playful-user-dropdown-header">
+                                            <div class="fw-bold">
+                                                <i class="bi bi-person-badge me-2"></i>@User.Identity.Name
+                                            </div>
+                                            <small class="text-muted">Signed in</small>
+                                        </div>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <li>
+                                        <a class="dropdown-item playful-user-dropdown-item"
+                                           asp-controller="Home"
+                                           asp-action="Index">
+                                            <i class="bi bi-house-door-fill me-2"></i>Home
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item playful-user-dropdown-item"
+                                           asp-controller="Computer"
+                                           asp-action="ComputerIndex">
+                                            <i class="bi bi-pc-display me-2"></i>Computers
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item playful-user-dropdown-item"
+                                           asp-controller="Order"
+                                           asp-action="OrderIndex">
+                                            <i class="bi bi-bag-check-fill me-2"></i>Orders
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item playful-user-dropdown-item"
+                                           asp-controller="Order"
+                                           asp-action="OrderIndex">
+                                            <i class="bi bi-nvidia me-2"></i>Components
+                                        </a>
+                                    </li>
+
+                                    <li><hr class="dropdown-divider" /></li>
+
+                                    <li class="px-2 pb-2">
+                                        <form asp-controller="Account" asp-action="Logout" method="post" class="m-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn playful-user-logout w-100">
+                                                <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                            </button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="d-flex gap-2">
+                                <a asp-controller="Account" asp-action="Login" class="nav-link playful-nav-link">
+                                    <i class="bi bi-box-arrow-in-right me-1"></i>Login
+                                </a>
+                                <a asp-controller="Account" asp-action="Register" class="nav-link playful-nav-link">
+                                    <i class="bi bi-person-plus-fill me-1"></i>Register
+                                </a>
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         </nav>
@@ -102,7 +177,7 @@
                             <a asp-controller="Home" asp-action="Index" class="footer-chip">Home</a>
                             <a asp-controller="Home" asp-action="Privacy" class="footer-chip">Privacy</a>
                             <a asp-controller="Computer" asp-action="ComputerIndex" class="footer-chip">Computers</a>
-                            <a asp-controller="Coupon" asp-action="CouponIndex" class="footer-chip">Coupons</a>
+                            <a asp-controller="Order" asp-action="OrderIndex" class="footer-chip">Orders</a>
                         </div>
                     </div>
                 </div>

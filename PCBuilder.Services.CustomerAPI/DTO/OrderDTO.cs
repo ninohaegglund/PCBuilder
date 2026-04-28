@@ -4,6 +4,7 @@ public class OrderDTO
 {
     public int Id { get; set; }
     public int CustomerId { get; set; }
+    public Guid? UserId { get; set; }
     public int? ComputerId { get; set; }
     public int Budget { get; set; }
     public string Description { get; set; } = string.Empty;

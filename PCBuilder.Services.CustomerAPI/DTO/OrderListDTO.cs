@@ -5,6 +5,7 @@ public class OrderListDTO
     public int Id { get; set; }
 
     public int CustomerId { get; set; }
+    public Guid? UserId { get; set; }
     public string CustomerName { get; set; } = string.Empty;
     public string CustomerImageUrl { get; set; } = string.Empty;
 

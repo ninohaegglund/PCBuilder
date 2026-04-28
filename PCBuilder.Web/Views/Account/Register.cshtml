@@ -1,0 +1,65 @@
+@model PCBuilder.Web.ViewModels.Account.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_AuthLayout";
+}
+
+<div class="container py-4 auth-page">
+    <section class="builder-shell auth-shell auth-shell-register mx-auto">
+        <div class="builder-header auth-header text-center">
+            <span class="builder-badge">Create profile</span>
+            <h1 class="mb-2">Register</h1>
+            <p class="mb-0">Get started and join the PCBuilder workshop.</p>
+        </div>
+
+        <div class="builder-body">
+            <form asp-action="Register" method="post" class="row g-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="col-md-6">
+                    <label asp-for="FirstName" class="form-label fw-bold"></label>
+                    <input asp-for="FirstName" class="form-control playful-input" />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="LastName" class="form-label fw-bold"></label>
+                    <input asp-for="LastName" class="form-control playful-input" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label fw-bold"></label>
+                    <input asp-for="Email" class="form-control playful-input" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="Password" class="form-label fw-bold"></label>
+                    <input asp-for="Password" class="form-control playful-input" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="ConfirmPassword" class="form-label fw-bold"></label>
+                    <input asp-for="ConfirmPassword" class="form-control playful-input" />
+                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-success playful-btn-primary w-100">Register</button>
+                </div>
+            </form>
+
+            <div class="auth-alt-link text-center mt-4">
+                <span>Already have an account?</span>
+                <a asp-action="Login">Login</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

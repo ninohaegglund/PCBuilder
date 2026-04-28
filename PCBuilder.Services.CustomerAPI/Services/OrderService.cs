@@ -7,6 +7,7 @@ using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
 using System.Net.Http.Json;
+using System.Security.Claims;
 using System.Text.Json;
 
 namespace PCBuilder.Services.CustomerAPI.Services;
@@ -18,19 +19,36 @@ public class OrderService : IOrderService
     private readonly IOrderRepository _orderRepository;
     private readonly ICustomerRepository _customerRepository;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper, IHttpClientFactory httpClientFactory)
+    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
         _mapper = mapper;
         _httpClientFactory = httpClientFactory;
+        _httpContextAccessor = httpContextAccessor;
     }
     public async Task<ResponseDTO> GetAllOrdersAsync()
     {
         try
         {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
             var orders = await _orderRepository.GetAllOrders();
+            if (!IsCurrentUserAdmin())
+            {
+                orders = orders.Where(x => x.UserId == userId).ToList();
+            }
+
             var orderDTOs = new List<OrderListDTO>();
 
             foreach (var order in orders)
@@ -41,6 +59,7 @@ public class OrderService : IOrderService
                 {
                     Id = order.Id,
                     CustomerId = order.CustomerId,
+                    UserId = order.UserId,
                     CustomerName = customer?.Name ?? "Unknown customer",
                     CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
                     ComputerId = order.ComputerId,
@@ -73,6 +92,16 @@ public class OrderService : IOrderService
     {
         try
         {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
             var order = await _orderRepository.GetOrderById(id);
 
             if (order == null)
@@ -84,12 +113,22 @@ public class OrderService : IOrderService
                 };
             }
 
+            if (!IsCurrentUserAdmin() && order.UserId != userId)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "You do not have access to this order."
+                };
+            }
+
             var customer = await _customerRepository.GetCustomerById(order.CustomerId);
 
             var orderDTO = new OrderListDTO
             {
                 Id = order.Id,
                 CustomerId = order.CustomerId,
+                UserId = order.UserId,
                 CustomerName = customer?.Name ?? "Unknown customer",
                 CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
                 ComputerId = order.ComputerId,
@@ -119,6 +158,16 @@ public class OrderService : IOrderService
     {
         try
         {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
             var order = await _orderRepository.GetOrderById(orderId);
 
             if (order == null)
@@ -141,11 +190,29 @@ public class OrderService : IOrderService
 
             if (order.Status == Models.OrderStatus.InProgress && order.ComputerId.HasValue)
             {
+                if (!IsCurrentUserAdmin() && order.UserId != userId)
+                {
+                    return new ResponseDTO
+                    {
+                        IsSuccess = false,
+                        Message = "This order is already assigned to another user."
+                    };
+                }
+
                 return new ResponseDTO
                 {
                     IsSuccess = true,
                     Message = "Order already accepted.",
                     Result = order
+                };
+            }
+
+            if (!IsCurrentUserAdmin() && order.UserId.HasValue && order.UserId != userId)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "This order is already assigned to another user."
                 };
             }
 
@@ -162,6 +229,7 @@ public class OrderService : IOrderService
             }
 
             order.Status = Models.OrderStatus.InProgress;
+            order.UserId = userId;
             await _orderRepository.UpdateOrder(order);
 
             return new ResponseDTO
@@ -184,6 +252,16 @@ public class OrderService : IOrderService
     {
         try
         {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
             var order = await _orderRepository.GetOrderById(orderId);
 
             if (order == null)
@@ -204,7 +282,17 @@ public class OrderService : IOrderService
                 };
             }
 
+            if (!IsCurrentUserAdmin() && order.UserId != userId)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "You can only reject your own assigned orders."
+                };
+            }
+
             order.Status = Models.OrderStatus.Rejected;
+            order.UserId ??= userId;
             await _orderRepository.UpdateOrder(order);
 
             return new ResponseDTO
@@ -227,6 +315,16 @@ public class OrderService : IOrderService
     {
         try
         {
+            var userId = GetCurrentUserId();
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
             var order = await _orderRepository.GetOrderById(orderId);
 
             if (order == null)
@@ -247,7 +345,17 @@ public class OrderService : IOrderService
                 };
             }
 
+            if (!IsCurrentUserAdmin() && order.UserId != userId)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "You can only complete your own assigned orders."
+                };
+            }
+
             order.Status = Models.OrderStatus.Completed;
+            order.UserId ??= userId;
             await _orderRepository.UpdateOrder(order);
 
             return new ResponseDTO
@@ -345,5 +453,16 @@ public class OrderService : IOrderService
         }
 
         return null;
+    }
+
+    private Guid? GetCurrentUserId()
+    {
+        var userId = _httpContextAccessor.HttpContext?.User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(userId, out var parsed) ? parsed : null;
+    }
+
+    private bool IsCurrentUserAdmin()
+    {
+        return _httpContextAccessor.HttpContext?.User.IsInRole("Admin") == true;
     }
 }

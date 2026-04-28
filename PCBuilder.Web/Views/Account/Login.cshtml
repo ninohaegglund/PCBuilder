@@ -1,0 +1,48 @@
+@model PCBuilder.Web.ViewModels.Account.LoginViewModel
+
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_AuthLayout";
+}
+
+<div class="container py-4 auth-page">
+    <section class="builder-shell auth-shell auth-shell-login mx-auto">
+        <div class="builder-header auth-header text-center">
+            <span class="builder-badge">Welcome back</span>
+            <h1 class="mb-2">Login</h1>
+            <p class="mb-0">Sign in to continue managing builds and orders.</p>
+        </div>
+
+        <div class="builder-body">
+            <form asp-action="Login" method="post" class="row g-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+
+                <div class="col-12">
+                    <label asp-for="Email" class="form-label fw-bold"></label>
+                    <input asp-for="Email" class="form-control playful-input" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+
+                <div class="col-12">
+                    <label asp-for="Password" class="form-label fw-bold"></label>
+                    <input asp-for="Password" class="form-control playful-input" />
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-warning text-dark playful-btn-primary w-100">Login</button>
+                </div>
+            </form>
+
+            <div class="auth-alt-link text-center mt-4">
+                <span>Need an account?</span>
+                <a asp-action="Register">Register here</a>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
