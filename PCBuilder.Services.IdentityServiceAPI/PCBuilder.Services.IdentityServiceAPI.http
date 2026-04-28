@@ -1,6 +1,6 @@
-@PCBuilder.Services.IdentityServiceAPI_HostAddress = http://localhost:5191
+@PCBuilder.Services.IdentityAPI_HostAddress = http://localhost:5191
 
-GET {{PCBuilder.Services.IdentityServiceAPI_HostAddress}}/weatherforecast/
+GET {{PCBuilder.Services.IdentityAPI_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Services.IdentityServiceAPI.JWT;
+﻿namespace PCBuilder.Services.IdentityAPI.JWT;
 
 public class JwtSettings
 {

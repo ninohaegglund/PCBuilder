@@ -1,6 +1,6 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.Models;
+﻿using PCBuilder.Services.IdentityAPI.Models;
 
-namespace PCBuilder.Services.IdentityServiceAPI.JWT;
+namespace PCBuilder.Services.IdentityAPI.JWT;
 
 public interface IJwtTokenGenerator
 {

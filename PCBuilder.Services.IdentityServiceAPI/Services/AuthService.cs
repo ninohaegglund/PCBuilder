@@ -1,11 +1,11 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.Data;
-using PCBuilder.Services.IdentityServiceAPI.DTOs;
-using PCBuilder.Services.IdentityServiceAPI.Interfaces;
-using PCBuilder.Services.IdentityServiceAPI.JWT;
-using PCBuilder.Services.IdentityServiceAPI.Models;
+﻿using PCBuilder.Services.IdentityAPI.Data;
+using PCBuilder.Services.IdentityAPI.DTOs;
+using PCBuilder.Services.IdentityAPI.Interfaces;
+using PCBuilder.Services.IdentityAPI.JWT;
+using PCBuilder.Services.IdentityAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace PCBuilder.Services.IdentityServiceAPI.Services
+namespace PCBuilder.Services.IdentityAPI.Services
 {
     public class AuthService : IAuthService
     {

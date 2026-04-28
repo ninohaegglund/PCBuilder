@@ -1,10 +1,10 @@
 
 using Microsoft.EntityFrameworkCore;
-using PCBuilder.Services.IdentityServiceAPI.Data;
-using PCBuilder.Services.IdentityServiceAPI.Interfaces;
-using PCBuilder.Services.IdentityServiceAPI.JWT;
-using PCBuilder.Services.IdentityServiceAPI.Repositories;
-using PCBuilder.Services.IdentityServiceAPI.Services;
+using PCBuilder.Services.IdentityAPI.Data;
+using PCBuilder.Services.IdentityAPI.Interfaces;
+using PCBuilder.Services.IdentityAPI.JWT;
+using PCBuilder.Services.IdentityAPI.Repositories;
+using PCBuilder.Services.IdentityAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 

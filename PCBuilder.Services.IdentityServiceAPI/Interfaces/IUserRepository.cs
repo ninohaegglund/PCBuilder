@@ -1,6 +1,6 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.Models;
+﻿using PCBuilder.Services.IdentityAPI.Models;
 
-namespace PCBuilder.Services.IdentityServiceAPI.Interfaces;
+namespace PCBuilder.Services.IdentityAPI.Interfaces;
 public interface IUserRepository
 {
     Task<IdentityUser?> GetByEmailAsync(string email);

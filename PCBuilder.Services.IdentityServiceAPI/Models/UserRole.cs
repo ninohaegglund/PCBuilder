@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Services.IdentityServiceAPI.Models;
+﻿namespace PCBuilder.Services.IdentityAPI.Models;
 
 public class UserRole
 {

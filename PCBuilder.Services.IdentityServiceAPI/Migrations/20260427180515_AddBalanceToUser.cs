@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace PCBuilder.Services.IdentityServiceAPI.Migrations
+namespace PCBuilder.Services.IdentityAPI.Migrations
 {
     /// <inheritdoc />
     public partial class AddBalanceToUser : Migration

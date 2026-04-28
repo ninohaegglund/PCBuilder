@@ -1,10 +1,10 @@
 ﻿using System.Security.Claims;
-using PCBuilder.Services.IdentityServiceAPI.DTOs;
-using PCBuilder.Services.IdentityServiceAPI.Interfaces;
+using PCBuilder.Services.IdentityAPI.DTOs;
+using PCBuilder.Services.IdentityAPI.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace PCBuilder.Services.IdentityServiceAPI.Controllers
+namespace PCBuilder.Services.IdentityAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

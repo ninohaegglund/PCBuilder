@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.6.11716.218 insiders
+VisualStudioVersion = 18.6.11716.218
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
@@ -19,7 +19,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Service.BuilderSe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.CustomerAPI", "PCBuilder.Services.CustomerAPI\PCBuilder.Services.CustomerAPI.csproj", "{656B48BA-6950-4072-B094-0D084F584531}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.IdentityServiceAPI", "PCBuilder.Services.IdentityServiceAPI\PCBuilder.Services.IdentityServiceAPI.csproj", "{3CA56158-6105-418B-A897-89AE588048AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.IdentityAPI", "PCBuilder.Services.IdentityServiceAPI\PCBuilder.Services.IdentityAPI.csproj", "{3CA56158-6105-418B-A897-89AE588048AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

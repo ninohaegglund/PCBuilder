@@ -1,6 +1,6 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.DTOs;
+﻿using PCBuilder.Services.IdentityAPI.DTOs;
 
-namespace PCBuilder.Services.IdentityServiceAPI.Interfaces;
+namespace PCBuilder.Services.IdentityAPI.Interfaces;
 
 public interface IAuthService
 {

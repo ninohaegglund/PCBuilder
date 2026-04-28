@@ -1,6 +1,6 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.Models;
+﻿using PCBuilder.Services.IdentityAPI.Models;
 using Microsoft.EntityFrameworkCore;
-namespace PCBuilder.Services.IdentityServiceAPI.Data
+namespace PCBuilder.Services.IdentityAPI.Data
 {
     public static class DbSeeder
     {

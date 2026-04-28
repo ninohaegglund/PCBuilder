@@ -1,11 +1,11 @@
-﻿using PCBuilder.Services.IdentityServiceAPI.Models;
+﻿using PCBuilder.Services.IdentityAPI.Models;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace PCBuilder.Services.IdentityServiceAPI.JWT;
+namespace PCBuilder.Services.IdentityAPI.JWT;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {

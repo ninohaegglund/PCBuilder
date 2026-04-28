@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Services.IdentityServiceAPI.DTOs;
+﻿namespace PCBuilder.Services.IdentityAPI.DTOs;
 
 public class LoginRequestDto
 {

@@ -1,10 +1,10 @@
 ﻿
-using PCBuilder.Services.IdentityServiceAPI.Interfaces;
-using PCBuilder.Services.IdentityServiceAPI.Models;
+using PCBuilder.Services.IdentityAPI.Interfaces;
+using PCBuilder.Services.IdentityAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using PCBuilder.Services.IdentityServiceAPI.Data;
+using PCBuilder.Services.IdentityAPI.Data;
 
-namespace PCBuilder.Services.IdentityServiceAPI.Repositories;
+namespace PCBuilder.Services.IdentityAPI.Repositories;
 
 public class UserRepository : IUserRepository
 {

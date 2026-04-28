@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PCBuilder.Services.IdentityServiceAPI.Data;
+using PCBuilder.Services.IdentityAPI.Data;
 
 #nullable disable
 
-namespace PCBuilder.Services.IdentityServiceAPI.Migrations
+namespace PCBuilder.Services.IdentityAPI.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
     partial class IdentityDbContextModelSnapshot : ModelSnapshot
@@ -22,7 +22,7 @@ namespace PCBuilder.Services.IdentityServiceAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.IdentityUser", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.IdentityUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -70,7 +70,7 @@ namespace PCBuilder.Services.IdentityServiceAPI.Migrations
                     b.ToTable("IdentityUsers");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.Role", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.Role", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -89,7 +89,7 @@ namespace PCBuilder.Services.IdentityServiceAPI.Migrations
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.UserRole", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.UserRole", b =>
                 {
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
@@ -104,15 +104,15 @@ namespace PCBuilder.Services.IdentityServiceAPI.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.UserRole", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.UserRole", b =>
                 {
-                    b.HasOne("PCBuilder.Services.IdentityServiceAPI.Models.Role", "Role")
+                    b.HasOne("PCBuilder.Services.IdentityAPI.Models.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PCBuilder.Services.IdentityServiceAPI.Models.IdentityUser", "User")
+                    b.HasOne("PCBuilder.Services.IdentityAPI.Models.IdentityUser", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -123,12 +123,12 @@ namespace PCBuilder.Services.IdentityServiceAPI.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.IdentityUser", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.IdentityUser", b =>
                 {
                     b.Navigation("UserRoles");
                 });
 
-            modelBuilder.Entity("PCBuilder.Services.IdentityServiceAPI.Models.Role", b =>
+            modelBuilder.Entity("PCBuilder.Services.IdentityAPI.Models.Role", b =>
                 {
                     b.Navigation("UserRoles");
                 });
