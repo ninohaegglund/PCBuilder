@@ -1,76 +1,192 @@
 ﻿@using PCBuilder.Services.CustomerAPI.DTO
 @model IEnumerable<OrderListDTO>
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="text-black">Order List</h1>
-            </div>
-        </div>
-    </div>
+@{
+    var orders = Model?.ToList() ?? new List<OrderListDTO>();
+    var pendingCount = orders.Count(o => o.Status == OrderStatus.Pending);
+    var inProgressCount = orders.Count(o => o.Status == OrderStatus.InProgress);
+    var completedCount = orders.Count(o => o.Status == OrderStatus.Completed);
+    var rejectedCount = orders.Count(o => o.Status == OrderStatus.Rejected);
+}
 
-    <div class="card-body p-4">
-        <table class="table table-borderless align-middle">
-            <thead>
-                <tr class="table-dark">
-                    <th>Customer</th>
-                    <th>Budget</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Detailed Description</th>
-                    <th>Created</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
-                {
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="@item.CustomerImageUrl"
-                                     alt="@item.CustomerName"
-                                     style="width:50px; height:50px; object-fit:cover; border-radius:50%;" />
-                                <span>@item.CustomerName</span>
+<div class="container mt-4 mb-5">
+    <div class="orders-page-shell">
+
+        <div class="orders-page-header text-center">
+            <span class="orders-badge">Order Management</span>
+            <h1 class="mb-2">Order List</h1>
+            <p class="mb-0 text-muted">
+                Review incoming requests, start builds, and move orders through the workflow.
+            </p>
+        </div>
+
+        <div class="orders-page-body">
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-pending">
+                        <div class="order-stat-number">@pendingCount</div>
+                        <div class="order-stat-label">Pending</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-progress">
+                        <div class="order-stat-number">@inProgressCount</div>
+                        <div class="order-stat-label">In Progress</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-completed">
+                        <div class="order-stat-number">@completedCount</div>
+                        <div class="order-stat-label">Completed</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-rejected">
+                        <div class="order-stat-number">@rejectedCount</div>
+                        <div class="order-stat-label">Rejected</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!orders.Any())
+            {
+                <div class="empty-orders-state text-center">
+                    <i class="bi bi-inbox display-4 d-block mb-3"></i>
+                    <h4>No orders found</h4>
+                    <p class="text-muted mb-0">There are currently no customer orders to display.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var item in orders)
+                    {
+                        var statusClass = item.Status switch
+                        {
+                            OrderStatus.Pending => "order-status-pending",
+                            OrderStatus.InProgress => "order-status-progress",
+                            OrderStatus.Completed => "order-status-completed",
+                            OrderStatus.Rejected => "order-status-rejected",
+                            _ => "order-status-default"
+                        };
+
+                        <div class="col-12 col-xl-6">
+                            <div class="order-card h-100">
+
+                                <div class="order-card-top">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@item.CustomerImageUrl"
+                                             alt="@item.CustomerName"
+                                             class="order-customer-avatar" />
+
+                                        <div>
+                                            <div class="fw-bold fs-5">@item.CustomerName</div>
+                                            <div class="text-muted small">
+                                                Created @item.CreatedAt.ToString("yyyy-MM-dd")
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <span class="order-status-badge @statusClass">
+                                        @item.Status
+                                    </span>
+                                </div>
+
+                                <div class="order-card-body">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-sm-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Budget</div>
+                                                <div class="order-info-value">@item.Budget.ToString("N0") kr</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Order ID</div>
+                                                <div class="order-info-value">#@item.Id</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <div class="order-section-label">
+                                            <i class="bi bi-card-text me-2"></i>Description
+                                        </div>
+                                        <div class="order-text-block">
+                                            @(!string.IsNullOrWhiteSpace(item.Description) ? item.Description : "-")
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-0">
+                                        <div class="order-section-label">
+                                            <i class="bi bi-file-earmark-text me-2"></i>Detailed Description
+                                        </div>
+                                        <div class="order-text-block order-text-block-detailed">
+                                            @(!string.IsNullOrWhiteSpace(item.DetailedDescription) ? item.DetailedDescription : "-")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="order-card-footer">
+                                    @if (item.Status == OrderStatus.Pending)
+                                    {
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a asp-route="AcceptOrderWeb"
+                                               asp-route-orderId="@item.Id"
+                                               class="btn order-btn order-btn-success">
+                                                <i class="bi bi-check-circle me-2"></i>Accept
+                                            </a>
+
+                                            <a asp-route="RejectOrderWeb"
+                                               asp-route-orderId="@item.Id"
+                                               class="btn order-btn order-btn-danger-outline">
+                                                <i class="bi bi-x-circle me-2"></i>Reject
+                                            </a>
+                                        </div>
+                                    }
+                                    else if (item.Status == OrderStatus.InProgress)
+                                    {
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a asp-controller="Computer"
+                                               asp-action="CreateComputerIndex"
+                                               asp-route-orderId="@item.Id"
+                                               class="btn order-btn order-btn-info">
+                                                <i class="bi bi-tools me-2"></i>Open Build
+                                            </a>
+
+                                            <a asp-controller="Order"
+                                               asp-action="PriceSummaryIndex"
+                                               asp-route-orderId="@item.Id"
+                                               class="btn order-btn order-btn-primary">
+                                                <i class="bi bi-receipt-cutoff me-2"></i>Price Summary
+                                            </a>
+                                        </div>
+                                    }
+                                    else if (item.Status == OrderStatus.Completed)
+                                    {
+                                        <span class="order-no-actions">
+                                            <i class="bi bi-check2-all me-2"></i>Order completed
+                                        </span>
+                                    }
+                                    else if (item.Status == OrderStatus.Rejected)
+                                    {
+                                        <span class="order-no-actions">
+                                            <i class="bi bi-slash-circle me-2"></i>Order rejected
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="order-no-actions">No actions available</span>
+                                    }
+                                </div>
+
                             </div>
-                        </td>
-                        <td>@item.Budget kr</td>
-                        <td>@item.Description</td>
-                        <td>@item.Status</td>
-                        <td>@item.DetailedDescription</td>
-                        <td>@item.CreatedAt.ToString("yyyy-MM-dd")</td>
-                        <td>
-                            @if (item.Status == OrderStatus.Pending)
-                            {
-                                <div class="d-flex gap-2">
-                                    <a asp-route="AcceptOrderWeb" asp-route-orderId="@item.Id" class="btn btn-success btn-sm">
-                                        <i class="bi bi-check-circle"></i> Accept
-                                    </a>
-                                    <a asp-route="RejectOrderWeb" asp-route-orderId="@item.Id" class="btn btn-outline-danger btn-sm">
-                                        <i class="bi bi-x-circle"></i> Reject
-                                    </a>
-                                </div>
-                            }
-                            else if (item.Status == OrderStatus.InProgress)
-                            {
-                                <div class="d-flex gap-2">
-                                    <a asp-controller="Computer" asp-action="CreateComputerIndex" asp-route-orderId="@item.Id" class="btn btn-info btn-sm">
-                                        <i class="bi bi-eye"></i> View
-                                    </a>
-                                    <a asp-route="CompleteOrderWeb" asp-route-orderId="@item.Id" class="btn btn-primary btn-sm">
-                                        <i class="bi bi-check2-square"></i> Complete
-                                    </a>
-                                </div>
-                            }
-                            else
-                            {
-                                <span class="text-muted">No actions</span>
-                            }
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
     </div>
 </div>
