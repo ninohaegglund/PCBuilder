@@ -5,6 +5,6 @@ namespace PCBuilder.Web.ViewModels.Computer;
 
 public class PriceSummaryVM
 {
-    public OrderDTO Order { get; set; }
-    public ComputerDTO Computer { get; set; }
+    public OrderDTO? Order { get; set; }
+    public ComputerDTO? Computer { get; set; }
 }

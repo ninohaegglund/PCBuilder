@@ -7,6 +7,7 @@ public class RAMDto
 
     public int ManufacturerId { get; set; }
     public string ManufacturerName { get; set; } = null!;
+    public int? CapacityPerModuleGB { get; set; } 
 
     public int TotalCapacityGB { get; set; }
     public int ModulesCount { get; set; }

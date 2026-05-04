@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using PCBuilder.Service.BuilderServiceAPI.DTO;
+using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
+using PCBuilder.Web.ViewModels.Computer;
 
 namespace PCBuilder.Web.Controllers;
 
@@ -12,9 +15,12 @@ public class OrderController : Controller
 {
 
     private readonly IOrderService _orderService;
-    public OrderController(IOrderService orderService)
+    private readonly IComputerService _computerService;
+
+    public OrderController(IOrderService orderService, IComputerService computerService)
     {
         _orderService = orderService;
+        _computerService = computerService;
     }
 
     public async Task<IActionResult> OrderIndex()
@@ -90,4 +96,52 @@ public class OrderController : Controller
 
         return RedirectToAction(nameof(OrderIndex));
     }
+
+    public async Task<IActionResult> PriceSummaryIndex(int id)
+    {
+        var vm = new PriceSummaryVM();
+
+        var orderResponse = await _orderService.GetOrderByIdAsync(id);
+
+        if (orderResponse == null || !orderResponse.IsSuccess || orderResponse.Result == null)
+        {
+            TempData["error"] = orderResponse?.Message ?? "Order could not be found.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        vm.Order = JsonConvert.DeserializeObject<OrderDTO>(
+            JsonConvert.SerializeObject(orderResponse.Result));
+
+        if (vm.Order == null)
+        {
+            TempData["error"] = "Order data could not be loaded.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        if (!vm.Order.ComputerId.HasValue)
+        {
+            TempData["error"] = "This order does not have a computer connected.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        var computerResponse = await _computerService.GetComputerByIdAsync(vm.Order.ComputerId.Value);
+
+        if (computerResponse == null || !computerResponse.IsSuccess || computerResponse.Result == null)
+        {
+            TempData["error"] = computerResponse?.Message ?? "Computer could not be found.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        vm.Computer = JsonConvert.DeserializeObject<ComputerDTO>(
+            JsonConvert.SerializeObject(computerResponse.Result));
+
+        if (vm.Computer == null)
+        {
+            TempData["error"] = "Computer data could not be loaded.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        return View(vm);
+    }
+
 }

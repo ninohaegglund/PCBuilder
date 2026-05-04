@@ -399,28 +399,6 @@ public class ComputerController : Controller
 
         return orders?.FirstOrDefault(x => x.ComputerId == computerId);
     }
-    public async Task<IActionResult> PriceSummaryIndex(
-    int id,
-    int computerId)
-    {
-        var vm = new PriceSummaryVM();
-        var orderResponse = await _orderService.GetOrderByIdAsync(id);
-        if (orderResponse != null && orderResponse.IsSuccess)
-        {
-            vm.Order = JsonConvert.DeserializeObject<OrderDTO>(
-                JsonConvert.SerializeObject(orderResponse.Result));
-        }
 
-        var computerResponse = await _computerService.GetComputerByIdAsync(computerId);
-        if (computerResponse != null && computerResponse.IsSuccess)
-        {
-            vm.Computer = JsonConvert.DeserializeObject<ComputerDTO>(
-                JsonConvert.SerializeObject(computerResponse.Result));
-        }
-
-        vm.Computer.TotalPrice = vm.Computer.TotalPrice;
-
-        return View(vm);
-    }
 }
 
