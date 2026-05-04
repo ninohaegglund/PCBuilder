@@ -1,52 +1,144 @@
 ﻿@using PCBuilder.Service.BuilderServiceAPI.DTO
 @model List<ComputerDTO>
 
-<div class="container mt-4">
-    <div class="row g-4">
-        <h1 class="text-center">Computers</h1>
+@{
+    var computers = Model ?? new List<ComputerDTO>();
+    var totalComputers = computers.Count;
+    var averagePrice = computers.Any() ? computers.Average(c => c.TotalPrice) : 0;
+    var highestPrice = computers.Any() ? computers.Max(c => c.TotalPrice) : 0;
+}
 
-        @if (Model == null || !Model.Any())
-        {
-            <div class="col-12">
-                <div class="alert alert-info mb-0">No computers found.</div>
-            </div>
-        }
-        else
-        {
-            @foreach (var item in Model)
-            {
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-                    <div class="card card-hover border-light bg-light-subtle h-100 shadow-sm" style="max-width: 20rem;">
-                        <div class="card-header fw-bold bg-dark-subtle">
-                            @item.Name
-                        </div>
-                        <div class="card-body">
-                            <ul class="list-unstyled mb-4">
-                                <li>
-                                    <strong>CPU:</strong>
-                                    @(item.Cpu?.Name ?? "-")
-                                </li>
-                                <li>
-                                    <strong>GPU:</strong>
-                                    @(item.Gpu?.Name ?? "-")
-                                </li>
-                                <li>
-                                    <strong>Case:</strong>
-                                    @(item.Case?.Name ?? "-")
-                                   
-                                </li>
-                                <li>
-                                    <strong>Total price:</strong>
-                                    @item.TotalPrice kr
-                                </li>
-                            </ul>
-                            <div class="text-end">
-                                <a asp-controller="Computer" asp-action="ComponentsIndex" asp-route-id="@item.Id" class="btn btn-info me-2">Details</a>
-                            </div>
-                        </div>
+<div class="container mt-4 mb-5">
+    <div class="computers-page-shell">
+
+        <div class="computers-page-header text-center">
+            <span class="computers-badge">PC Inventory</span>
+            <h1 class="mb-2">Computers</h1>
+            <p class="mb-0 text-muted">
+                Browse saved PC builds, inspect core components, and open detailed build information.
+            </p>
+        </div>
+
+        <div class="computers-page-body">
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-4">
+                    <div class="computer-stat-card stat-total">
+                        <div class="computer-stat-number">@totalComputers</div>
+                        <div class="computer-stat-label">Total Builds</div>
                     </div>
                 </div>
+
+                <div class="col-6 col-lg-4">
+                    <div class="computer-stat-card stat-average">
+                        <div class="computer-stat-number">@averagePrice.ToString("N0") kr</div>
+                        <div class="computer-stat-label">Average Price</div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-lg-4">
+                    <div class="computer-stat-card stat-highest">
+                        <div class="computer-stat-number">@highestPrice.ToString("N0") kr</div>
+                        <div class="computer-stat-label">Highest Price</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!computers.Any())
+            {
+                <div class="empty-computers-state text-center">
+                    <i class="bi bi-pc-display display-4 d-block mb-3"></i>
+                    <h4>No computers found</h4>
+                    <p class="text-muted mb-0">There are currently no saved PC builds to display.</p>
+                </div>
             }
-        }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var item in computers)
+                    {
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="computer-card h-100">
+
+                                <div class="computer-card-top">
+                                    <div class="computer-icon-box">
+                                        <i class="bi bi-pc-display-horizontal"></i>
+                                    </div>
+
+                                    <div class="flex-grow-1">
+                                        <div class="computer-card-title">@item.Name</div>
+                                        <div class="computer-card-subtitle">Build ID #@item.Id</div>
+                                    </div>
+                                </div>
+
+                                <div class="computer-card-body">
+
+                                    <div class="computer-component-list">
+
+                                        <div class="computer-component-box">
+                                            <div class="computer-component-icon cpu-icon">
+                                                <i class="bi bi-cpu"></i>
+                                            </div>
+                                            <div>
+                                                <div class="computer-component-label">CPU</div>
+                                                <div class="computer-component-value">
+                                                    @(item.Cpu?.Name ?? "-")
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="computer-component-box">
+                                            <div class="computer-component-icon gpu-icon">
+                                                <i class="bi bi-gpu-card"></i>
+                                            </div>
+                                            <div>
+                                                <div class="computer-component-label">GPU</div>
+                                                <div class="computer-component-value">
+                                                    @(item.Gpu?.Name ?? "-")
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="computer-component-box">
+                                            <div class="computer-component-icon case-icon">
+                                                <i class="bi bi-pc"></i>
+                                            </div>
+                                            <div>
+                                                <div class="computer-component-label">Case</div>
+                                                <div class="computer-component-value">
+                                                    @(item.Case?.Name ?? "-")
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="computer-price-box">
+                                        <div>
+                                            <div class="computer-price-label">Total Price</div>
+                                            <div class="computer-price-value">@item.TotalPrice.ToString("N0") kr</div>
+                                        </div>
+
+                                        <i class="bi bi-cash-stack computer-price-icon"></i>
+                                    </div>
+
+                                </div>
+
+                                <div class="computer-card-footer">
+                                    <a asp-controller="Computer"
+                                       asp-action="ComponentsIndex"
+                                       asp-route-id="@item.Id"
+                                       class="btn computer-btn computer-btn-info">
+                                        <i class="bi bi-search me-2"></i>Details
+                                    </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+        </div>
     </div>
 </div>

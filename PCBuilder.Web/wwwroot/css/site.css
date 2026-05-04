@@ -1132,3 +1132,261 @@ select.playful-input[multiple] {
     box-shadow: 7px 7px 0 #111;
     padding: 2rem;
 }
+.computers-page-shell {
+    background: #f8ffe8;
+    border: 3px solid #171717;
+    border-radius: 18px;
+    box-shadow: 8px 8px 0 #171717;
+    overflow: hidden;
+}
+
+.computers-page-header {
+    padding: 2.5rem 1.5rem 2rem;
+    background: linear-gradient(135deg, #dcff5c, #eaffc6);
+    border-bottom: 3px solid #171717;
+}
+
+    .computers-page-header h1 {
+        font-weight: 900;
+        font-size: clamp(2rem, 4vw, 3.4rem);
+        color: #222;
+    }
+
+.computers-badge {
+    display: inline-block;
+    background: #ffd600;
+    border: 3px solid #171717;
+    border-radius: 9px;
+    box-shadow: 4px 4px 0 #171717;
+    padding: 0.35rem 1rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+}
+
+.computers-page-body {
+    padding: 1.5rem;
+}
+
+.computer-stat-card {
+    border: 3px solid #171717;
+    border-radius: 16px;
+    box-shadow: 6px 6px 0 #171717;
+    padding: 1.25rem;
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.stat-total {
+    background: #d6ff4f;
+}
+
+.stat-average {
+    background: #85e6c4;
+}
+
+.stat-highest {
+    background: #70d2ef;
+}
+
+.computer-stat-number {
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1.1;
+    color: #111;
+}
+
+.computer-stat-label {
+    font-weight: 800;
+    color: #222;
+    margin-top: 0.35rem;
+}
+
+.empty-computers-state {
+    background: #ffffff;
+    border: 3px solid #171717;
+    border-radius: 18px;
+    box-shadow: 6px 6px 0 #171717;
+    padding: 3rem 1rem;
+}
+
+.computer-card {
+    background: #ffffff;
+    border: 3px solid #171717;
+    border-radius: 18px;
+    box-shadow: 7px 7px 0 #171717;
+    overflow: hidden;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .computer-card:hover {
+        transform: translate(-3px, -3px);
+        box-shadow: 10px 10px 0 #171717;
+    }
+
+.computer-card-top {
+    background: #d6ff4f;
+    border-bottom: 3px solid #171717;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.computer-icon-box {
+    width: 54px;
+    height: 54px;
+    background: #ffffff;
+    border: 3px solid #171717;
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 #171717;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem;
+}
+
+.computer-card-title {
+    font-weight: 900;
+    font-size: 1.25rem;
+    color: #111;
+}
+
+.computer-card-subtitle {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #555;
+}
+
+.computer-card-body {
+    padding: 1rem;
+}
+
+.computer-component-list {
+    display: grid;
+    gap: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.computer-component-box {
+    background: #f7f7f7;
+    border: 2px solid #171717;
+    border-radius: 14px;
+    padding: 0.85rem;
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+}
+
+.computer-component-icon {
+    width: 42px;
+    height: 42px;
+    border: 2px solid #171717;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.cpu-icon {
+    background: #d6ff4f;
+}
+
+.gpu-icon {
+    background: #70d2ef;
+}
+
+.case-icon {
+    background: #85e6c4;
+}
+
+.computer-component-label {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #666;
+    letter-spacing: 0.04em;
+}
+
+.computer-component-value {
+    font-weight: 800;
+    color: #171717;
+    line-height: 1.25;
+}
+
+.computer-price-box {
+    background: #ffe173;
+    border: 3px solid #171717;
+    border-radius: 16px;
+    box-shadow: 4px 4px 0 #171717;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.computer-price-label {
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    color: #555;
+}
+
+.computer-price-value {
+    font-size: 1.45rem;
+    font-weight: 900;
+    color: #111;
+}
+
+.computer-price-icon {
+    font-size: 1.8rem;
+}
+
+.computer-card-footer {
+    padding: 1rem;
+    border-top: 3px solid #171717;
+    background: #f8ffe8;
+}
+
+.computer-btn {
+    border: 3px solid #171717;
+    border-radius: 12px;
+    box-shadow: 4px 4px 0 #171717;
+    font-weight: 900;
+    padding: 0.65rem 1rem;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .computer-btn:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 #171717;
+    }
+
+.computer-btn-info {
+    background: #36c9e6;
+    color: #111;
+}
+
+    .computer-btn-info:hover {
+        background: #21b7d5;
+        color: #111;
+    }
+
+@media (max-width: 576px) {
+    .computers-page-body {
+        padding: 1rem;
+    }
+
+    .computer-card-top {
+        align-items: flex-start;
+    }
+
+    .computer-price-box {
+        align-items: flex-start;
+        gap: 1rem;
+    }
+}
