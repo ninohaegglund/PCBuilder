@@ -61,6 +61,7 @@ namespace PCBuilder.Service.BuilderServiceAPI.DTO
         public OperatingSystemDto? OperatingSystem { get; set; }
 
         public decimal TotalPrice { get; set; }
+        public decimal SellPrice { get; set; }
         public int TotalWattage { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime? CompletedAt { get; set; }

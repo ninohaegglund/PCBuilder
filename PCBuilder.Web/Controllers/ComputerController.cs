@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
@@ -8,6 +9,7 @@ using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
+using PCBuilder.Web.ViewModels.Computer;
 using System.Text.Json;
 using NewtonsoftJson = Newtonsoft.Json;
 
@@ -396,6 +398,29 @@ public class ComputerController : Controller
             NewtonsoftJson.JsonConvert.SerializeObject(ordersResponse.Result));
 
         return orders?.FirstOrDefault(x => x.ComputerId == computerId);
+    }
+    public async Task<IActionResult> PriceSummaryIndex(
+    int id,
+    int computerId)
+    {
+        var vm = new PriceSummaryVM();
+        var orderResponse = await _orderService.GetOrderByIdAsync(id);
+        if (orderResponse != null && orderResponse.IsSuccess)
+        {
+            vm.Order = JsonConvert.DeserializeObject<OrderDTO>(
+                JsonConvert.SerializeObject(orderResponse.Result));
+        }
+
+        var computerResponse = await _computerService.GetComputerByIdAsync(computerId);
+        if (computerResponse != null && computerResponse.IsSuccess)
+        {
+            vm.Computer = JsonConvert.DeserializeObject<ComputerDTO>(
+                JsonConvert.SerializeObject(computerResponse.Result));
+        }
+
+        vm.Computer.TotalPrice = vm.Computer.TotalPrice;
+
+        return View(vm);
     }
 }
 
