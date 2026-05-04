@@ -4,7 +4,10 @@ public class CPUDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
-    public string? Manufacturer { get; set; }
+
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
+
     public int? CoreCount { get; set; }
     public decimal? CoreClock { get; set; }
     public decimal? BoostClock { get; set; }

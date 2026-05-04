@@ -4,8 +4,11 @@ public class CaseFanDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
+
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
+
     public int SizeMM { get; set; }
-    public string? Color { get; set; }
     public int? RpmMin { get; set; }
     public int? RpmMax { get; set; }
     public decimal? AirflowMin { get; set; }

@@ -4,8 +4,11 @@ public class CaseDto
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
+
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
+
     public string? Type { get; set; }
-    public string? Color { get; set; }
     public int? IncludedPowerSupplyWatts { get; set; }
     public string? SidePanel { get; set; }
     public decimal? ExternalVolumeLiters { get; set; }

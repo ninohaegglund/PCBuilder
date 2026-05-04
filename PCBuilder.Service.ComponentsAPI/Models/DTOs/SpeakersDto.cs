@@ -3,6 +3,8 @@
 public class SpeakersDto
 {
     public int Id { get; set; }
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
     public string Name { get; set; } = null!;
     public string? Configuration { get; set; }
     public decimal? Wattage { get; set; }
