@@ -4,26 +4,11 @@ using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 
 namespace PCBuilder.Service.ComponentsAPI.Models
 {
+
     public class Manufacturer
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-
-        public ICollection<Cpu> Cpus { get; set; } = new List<Cpu>();
-        public ICollection<VideoCard> VideoCards { get; set; } = new List<VideoCard>();
-        public ICollection<Motherboard> Motherboards { get; set; } = new List<Motherboard>();
-        public ICollection<MemoryKit> MemoryKits { get; set; } = new List<MemoryKit>();
-        public ICollection<Case> Cases { get; set; } = new List<Case>();
-        public ICollection<PowerSupply> PowerSupplies { get; set; } = new List<PowerSupply>();
-        public ICollection<CpuCooler> CpuCoolers { get; set; } = new List<CpuCooler>();
-        public ICollection<CaseFan> CaseFans { get; set; } = new List<CaseFan>();
-        public ICollection<FanController> FanControllers { get; set; } = new List<FanController>();
-        public ICollection<Monitor> Monitors { get; set; } = new List<Monitor>();
-        public ICollection<Mouse> Mice { get; set; } = new List<Mouse>();
-        public ICollection<Keyboard> Keyboards { get; set; } = new List<Keyboard>();
-        public ICollection<Headphones> Headphones { get; set; } = new List<Headphones>();
-        public ICollection<Speakers> Speakers { get; set; } = new List<Speakers>();
-        public ICollection<Webcam> Webcams { get; set; } = new List<Webcam>();
     }
 
     public class AllComponents
@@ -61,10 +46,11 @@ namespace PCBuilder.Service.ComponentsAPI.Models
 
     public class Cpu
     {
+
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int? ManufacturerId { get; set; }
-        public Manufacturer? Manufacturer { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
 
         public int? CoreCount { get; set; }
         public decimal? CoreClock { get; set; }    
@@ -79,8 +65,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int? ManufacturerId { get; set; }
-        public Manufacturer? Manufacturer { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
 
         public string? Chipset { get; set; }          
         public int? MemoryGB { get; set; }
@@ -96,6 +82,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
         public string Name { get; set; } = null!;
         public int TotalCapacityGB { get; set; }
 
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public int ModulesCount { get; set; }  // allow persistence / population
 
         public int? CapacityPerModuleGB =>
@@ -113,8 +101,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public int? ManufacturerId { get; set; }
-        public Manufacturer? Manufacturer { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
 
         public string Socket { get; set; } = null!;    
         public int? FormFactorId { get; set; }
@@ -129,7 +117,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     {
         public int Id { get; set; }
         public string Name { get; set; } = null!;
-        public string? Type { get; set; }                
+        public string? Type { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public int? IncludedPowerSupplyWatts { get; set; } 
         public string? SidePanel { get; set; }    
         public decimal? ExternalVolumeLiters { get; set; }
@@ -140,6 +130,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class PowerSupply
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public string? Type { get; set; }      
         public string? EfficiencyRating { get; set; }  
@@ -151,6 +143,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class CpuCooler
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public bool IsAio { get; set; } = false;       
         public int? RadiatorSize { get; set; }        
@@ -164,6 +158,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class CaseFan
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public int SizeMM { get; set; }              
         public int? RpmMin { get; set; }
@@ -179,6 +175,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class InternalHardDrive
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public long CapacityGB { get; set; }
         public string Type { get; set; } = null!;      
@@ -192,6 +190,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class CaseAccessory
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Type { get; set; }                
@@ -201,6 +201,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class FanController
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public int? Channels { get; set; }
@@ -212,6 +214,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class OperatingSystem
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Architecture { get; set; }   
@@ -221,6 +225,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class SoundCard
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Channels { get; set; }            
@@ -235,6 +241,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Speakers
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Configuration { get; set; }
@@ -246,6 +255,8 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Webcam
     {
         public int Id { get; set; }
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Resolutions { get; set; }     
@@ -258,6 +269,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class ExternalHardDrive
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Type { get; set; }               
@@ -269,6 +283,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Ups
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public int? CapacityWatts { get; set; }
@@ -278,6 +295,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Headphones
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Type { get; set; }           
@@ -291,6 +311,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Monitor
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public decimal ScreenSizeInches { get; set; }
@@ -305,6 +328,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Mouse
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? TrackingMethod { get; set; }       
@@ -316,6 +342,9 @@ namespace PCBuilder.Service.ComponentsAPI.Models
     public class Keyboard
     {
         public int Id { get; set; }
+
+        public int ManufacturerId { get; set; }
+        public Manufacturer Manufacturer { get; set; }
         public string Name { get; set; } = null!;
         public decimal? Price { get; set; }
         public string? Style { get; set; }              

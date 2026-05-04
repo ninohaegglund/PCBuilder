@@ -3,6 +3,8 @@
 public class FanControllerDto
 {
     public int Id { get; set; }
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
     public string Name { get; set; } = null!;
     public int? Channels { get; set; }
     public int? ChannelWattage { get; set; }

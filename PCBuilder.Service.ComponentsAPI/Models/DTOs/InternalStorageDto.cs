@@ -3,6 +3,8 @@
 public class InternalStorageDto
 {
     public int Id { get; set; }
+    public int ManufacturerId { get; set; }
+    public string ManufacturerName { get; set; } = null!;
     public string Name { get; set; } = null!;
     public long CapacityGB { get; set; }
     public string Type { get; set; } = null!;
