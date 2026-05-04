@@ -9,6 +9,7 @@ public class Order
     public int ReviewId { get; set; }
     public int? ComputerId { get; set; }
     public int Budget { get; set; }
+    public decimal SellingPrice { get; set; }
     public string Description { get; set; } = string.Empty;
     public string DetailedDescription { get; set; } = string.Empty;
     public OrderStatus Status { get; set; } = OrderStatus.Pending;

@@ -1,30 +1,229 @@
 ﻿@using PCBuilder.Services.CustomerAPI.DTO
-@model OrderDTO
+@using PCBuilder.Web.ViewModels.Computer
+@model PriceSummaryVM
 
-<div class="card shadow border-0 mt-4">
-    <div class="card-header border-dark-subtle bg-light bg-gradient ml-0 py-3">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h1 class="text-black">Order List</h1>
-            </div>
+@{
+    ViewData["Title"] = "Set Sale Price";
+
+    // Hämtas från datorns totalpris
+    decimal componentCost = Model.Computer.TotalPrice;
+
+    int defaultMarkup = 50;
+
+    // Första renderingen av sale price
+    decimal salePrice = componentCost * (1 + (defaultMarkup / 100m));
+}
+
+<div class="container mt-5">
+
+    <!-- PAGE TITLE -->
+    <div class="card shadow border-0 rounded-4 mb-4">
+        <div class="card-body text-center py-4">
+            <h1 class="fw-bold mb-0">
+                Set Sale Price
+            </h1>
         </div>
     </div>
 
-    <div class="card-body p-4">
-        <table class="table table-borderless align-middle">
-            <thead>
-                <tr class="table-dark">
-                    <th>Customer</th>
-                    <th>Budget</th>
-                    <th>Description</th>
-                    <th>Status</th>
-                    <th>Created</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                
-            </tbody>
-        </table>
+    <div class="row g-4">
+
+        <!-- LEFT SIDE -->
+        <div class="col-lg-9">
+
+            <!-- PRICE OVERVIEW -->
+            <div class="card shadow border-0 rounded-4 mb-4">
+                <div class="card-body p-4">
+
+                    <div class="row text-center align-items-center g-4">
+
+                        <!-- Component Cost -->
+                        <div class="col-md-4">
+                            <h4 class="fw-bold mb-3">
+                                Component Cost
+                            </h4>
+
+                            <div class="alert alert-warning rounded-4 shadow-sm mb-0">
+                                <h2 class="fw-bold mb-0">
+                                    <span id="componentCost">
+                                        @Model.Computer.TotalPrice.ToString("N0")
+                                    </span> kr
+                                </h2>
+                            </div>
+                        </div>
+
+                        <!-- Customer Budget -->
+                        <div class="col-md-4">
+                            <h4 class="fw-bold mb-3">
+                                Customer Budget
+                            </h4>
+
+                            <div class="alert alert-success rounded-4 shadow-sm mb-0">
+                                <h2 class="fw-bold mb-0">
+                                    @Model.Order.Budget.ToString("N0") kr
+                                </h2>
+                            </div>
+                        </div>
+
+                        <!-- Sale Price -->
+                        <div class="col-md-4">
+                            <h4 class="fw-bold mb-3 text-primary">
+                                Sale Price
+                            </h4>
+
+                            <div class="alert alert-primary rounded-4 shadow-sm mb-0">
+                                <h2 class="fw-bold mb-0">
+                                    <span id="salePrice">
+                                        @salePrice.ToString("N0")
+                                    </span> kr
+                                </h2>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- SET MARKUP -->
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h2 class="fw-bold mb-4">
+                        Set Markup
+                    </h2>
+
+                    <!-- MARKUP SLIDER -->
+                    <div class="mb-4">
+
+                        <label for="markupSlider" class="form-label fw-semibold fs-5">
+                            Markup:
+                            <span id="markupValue">@defaultMarkup</span>%
+                        </label>
+
+                        <input type="range"
+                               class="form-range"
+                               id="markupSlider"
+                               min="0"
+                               max="100"
+                               value="@defaultMarkup" />
+
+                    </div>
+
+                    <!-- LIVE RESULT -->
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <div class="alert alert-light border rounded-4 mb-0">
+                                <h4 class="mb-0">
+                                    Selected Markup:
+                                    <span id="markupPreview">
+                                        @defaultMarkup
+                                    </span>%
+                                </h4>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="alert alert-primary rounded-4 shadow-sm mb-0">
+                                <h2 class="fw-bold mb-0">
+                                    <span id="salePricePreview">
+                                        @salePrice.ToString("N0")
+                                    </span> kr
+                                </h2>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <hr class="my-4" />
+
+                    <!-- FINISH BUTTON -->
+                    <div class="text-center">
+                        <button class="btn btn-success btn-lg px-5 py-3 rounded-4 shadow">
+                            Finish Build
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="col-lg-3">
+
+            <div class="card shadow border-0 rounded-4">
+                <div class="card-body p-4 text-center">
+
+                    <h3 class="fw-bold text-start mb-4">
+                        Current Order
+                    </h3>
+
+                    <!-- tillfällig bild -->
+                    <img src="/images/customer-placeholder.png"
+                         class="rounded-circle mb-3"
+                         width="140"
+                         height="140"
+                         alt="Customer" />
+
+                    <h4 class="fw-bold">
+                        Order #@Model.Order.Id
+                    </h4>
+
+                    <p class="text-muted">
+                        @Model.Order.Description
+                    </p>
+
+                    <div class="alert alert-success rounded-4">
+                        <strong>Budget:</strong>
+                        @Model.Order.Budget.ToString("N0") kr
+                    </div>
+
+                    <hr />
+
+                    <h5 class="fw-bold text-start">
+                        Current Cost:
+                    </h5>
+
+                    <h1 class="text-success fw-bold">
+                        @Model.Computer.TotalPrice.ToString("N0") kr
+                    </h1>
+
+                </div>
+            </div>
+
+        </div>
+
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        const slider = document.getElementById("markupSlider");
+        const markupValue = document.getElementById("markupValue");
+        const markupPreview = document.getElementById("markupPreview");
+        const salePrice = document.getElementById("salePrice");
+        const salePricePreview = document.getElementById("salePricePreview");
+
+        const componentCost = @Model.Computer.TotalPrice;
+
+        slider.addEventListener("input", function () {
+
+            const markup = parseInt(this.value);
+
+            // Visa %
+            markupValue.innerText = markup;
+            markupPreview.innerText = markup;
+
+            // 50% markup = componentCost * 1.5
+            const calculatedPrice = componentCost * (1 + markup / 100);
+
+            const formattedPrice =
+                Math.round(calculatedPrice).toLocaleString("sv-SE");
+
+            // Uppdatera UI
+            salePrice.innerText = formattedPrice;
+            salePricePreview.innerText = formattedPrice;
+        });
+    </script>
+}

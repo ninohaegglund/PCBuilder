@@ -36,24 +36,6 @@ public class OrderController : Controller
         return View(list);
     }
 
-    public async Task<IActionResult> PriceSummaryIndex(int id)
-    {
-        OrderDTO? order = new();
-
-        ResponseDTO? response = await _orderService.GetOrderByIdAsync(id);
-        if (response != null && response.IsSuccess)
-        {
-            order = JsonConvert.DeserializeObject<OrderDTO>(
-                JsonConvert.SerializeObject(response.Result));
-        }
-        else
-        {
-            TempData["error"] = response?.Message;
-        }
-
-        return View(order);
-    }
-
     [HttpGet]
     [Route("order/accept/{orderId:int}", Name = "AcceptOrderWeb")]
     [Authorize(Roles = "Admin,User,Customer")]
