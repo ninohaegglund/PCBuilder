@@ -3,177 +3,362 @@
 
 @if (Model == null)
 {
-    <div class="container mt-4">
-        <div class="alert alert-warning">Computer not found.</div>
+    <div class="container mt-4 mb-5">
+        <div class="empty-components-state text-center">
+            <i class="bi bi-exclamation-triangle display-4 d-block mb-3"></i>
+            <h4>Computer not found</h4>
+            <p class="text-muted mb-0">The selected computer build could not be loaded.</p>
+        </div>
     </div>
 }
 else
 {
-    <div class="container mt-4">
-        <div class="card shadow border-0">
-            <div class="card-header bg-dark-subtle bg-gradient text-center py-3">
-                <h2 class="text-black">PC Components Overview</h2>
+    <div class="container mt-4 mb-5">
+        <div class="components-page-shell">
+
+            <div class="components-page-header">
+                <div>
+                    <span class="components-badge">PC Components Overview</span>
+                    <h1 class="mb-2">@Model.Name</h1>
+                    <p class="mb-0 text-muted">
+                        Full overview of selected components, peripherals, storage, and total build price.
+                    </p>
+                </div>
+
+                <div class="components-header-icon">
+                    <i class="bi bi-pc-display-horizontal"></i>
+                </div>
             </div>
-            <div class="card-body bg-light-subtle p-4">
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">PC Name:</div>
-                    <div class="col-md-8">@Model.Name</div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Operating System:</div>
-                    <div class="col-md-8">@Model.OperatingSystem?.Name (@(Model.OperatingSystemId?.ToString() ?? "-"))</div>
-                </div>
 
-                <hr />
+            <div class="components-page-body">
 
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">CPU:</div>
-                    <div class="col-md-8">
-                        @if (Model.Cpu != null)
-                        {
-                            <span>@Model.Cpu.Name</span>
-                            <span class="fw-bold">@Model.Cpu.Price?.ToString("N2") kr</span>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
+                <div class="row g-4 mb-4">
+                    <div class="col-12 col-lg-8">
+                        <div class="build-summary-card h-100">
+                            <div class="build-summary-top">
+                                <div>
+                                    <div class="summary-label">Build Name</div>
+                                    <div class="summary-title">@Model.Name</div>
+                                </div>
+
+                                <span class="summary-id-badge">Build ID #@Model.Id</span>
+                            </div>
+
+                            <div class="build-summary-grid">
+                                <div class="summary-info-box">
+                                    <i class="bi bi-windows"></i>
+                                    <div>
+                                        <div class="summary-label">Operating System</div>
+                                        <div class="summary-value">
+                                            @(Model.OperatingSystem?.Name ?? "-")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-info-box">
+                                    <i class="bi bi-motherboard"></i>
+                                    <div>
+                                        <div class="summary-label">Motherboard</div>
+                                        <div class="summary-value">
+                                            @(Model.Motherboard?.Name ?? "-")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-info-box">
+                                    <i class="bi bi-plug"></i>
+                                    <div>
+                                        <div class="summary-label">Power Supply</div>
+                                        <div class="summary-value">
+                                            @(Model.PowerSupply?.Name ?? "-")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="summary-info-box">
+                                    <i class="bi bi-fan"></i>
+                                    <div>
+                                        <div class="summary-label">CPU Cooler</div>
+                                        <div class="summary-value">
+                                            @(Model.CpuCooler?.Name ?? "-")
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Motherboard:</div>
-                    <div class="col-md-8">@Model.Motherboard?.Name (@(Model.MotherboardId?.ToString() ?? "-"))</div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">PSU:</div>
-                    <div class="col-md-8">@Model.PowerSupply?.Name (@(Model.PowerSupplyId?.ToString() ?? "-"))</div>
-                </div>
-                <div class="row mb-3">
 
-                 <div class="col-md-4 fw-bold">Case:
-                </div>
-                <div class="col-md-8">
-                    @if (Model.Case != null)
-                    {
-                        <span>@Model.Case.Name</span>
-                        <span class="fw-bold">@Model.Case.Price?.ToString("N2") kr</span>
-                    }
-                    else
-                    {
-                        <span>-</span>
-                    }
-                </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">CPU Cooler:</div>
-                    <div class="col-md-8">@Model.CpuCooler?.Name (@(Model.CpuCoolerId?.ToString() ?? "-"))</div>
-                </div>
-
-                <hr />
-
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Keyboard:</div>
-                    <div class="col-md-8">@Model.Keyboard?.Name (@(Model.KeyboardId?.ToString() ?? "-"))</div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Mouse:</div>
-                    <div class="col-md-8">@Model.Mouse?.Name (@(Model.MouseId?.ToString() ?? "-"))</div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Headset:</div>
-                    <div class="col-md-8">@Model.Headphones?.Name (@(Model.HeadphonesId?.ToString() ?? "-"))</div>
-                </div>
-
-                <hr />
-
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">GPU:</div>
-                    <div class="col-md-8">
-                        @if (Model.Gpu != null)
-                        {
-                            <span>@Model.Gpu.Name</span>
-                            <span class="fw-bold">@Model.Gpu.Price?.ToString("N2") kr</span>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">RAM:</div>
-                    <div class="col-md-8">
-                        @if (Model.Rams != null && Model.Rams.Any())
-                        {
-
-
-                            <div>
-                                @(Model.Rams != null && Model.Rams.Any()
-                                                        ? string.Join(", ", Model.Rams.Select(r => $"{r.Name} ({r.Price} kr)"))
-                                                        : "-")
-                    </div>
-                            <span class="fw-bold">Total RAM price: @Model.Rams.Sum(r => r.Price) kr</span>
-                        }
-                        else
-                        {
-                            <span>-</span>
-                        }
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">External Storage:</div>
-                    <div class="col-md-8">
-                        @(Model.ExternalStorages != null && Model.ExternalStorages.Any() ? string.Join(", ", Model.ExternalStorages.Select(s => s.Name)) : "-")
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Internal Storage:</div>
-                    <div class="col-md-8">
-                        @(Model.InternalStorages != null && Model.InternalStorages.Any() ? string.Join(", ", Model.InternalStorages.Select(s => s.Name)) : "-")
-                    </div>
-                </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Case Fans:</div>
-                    <div class="col-md-8">
-                        @(Model.CaseFans != null && Model.CaseFans.Any() ? string.Join(", ", Model.CaseFans.Select(s => s.Name)) : "-")
+                    <div class="col-12 col-lg-4">
+                        <div class="build-price-card h-100">
+                            <div class="price-card-label">Total Price</div>
+                            <div class="price-card-value">@Model.TotalPrice.ToString("N0") kr</div>
+                            <div class="price-card-text">
+                                Calculated from all selected components in this build.
+                            </div>
+                            <i class="bi bi-cash-stack price-card-icon"></i>
+                        </div>
                     </div>
                 </div>
 
-                <hr />
+                <div class="components-section">
+                    <div class="components-section-title">
+                        <i class="bi bi-cpu me-2"></i>Core Components
+                    </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Monitors:</div>
-                    <div class="col-md-8">
-                        @(Model.Monitors != null && Model.Monitors.Any() ? string.Join(", ", Model.Monitors.Select(s => s.Name)) : "-")
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="component-detail-card card-cpu">
+                                <div class="component-detail-icon">
+                                    <i class="bi bi-cpu"></i>
+                                </div>
+                                <div class="component-detail-label">CPU</div>
+                                <div class="component-detail-name">@(Model.Cpu?.Name ?? "-")</div>
+                                <div class="component-detail-price">
+                                    @(Model.Cpu?.Price != null ? $"{Model.Cpu.Price:N2} kr" : "-")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="component-detail-card card-gpu">
+                                <div class="component-detail-icon">
+                                    <i class="bi bi-gpu-card"></i>
+                                </div>
+                                <div class="component-detail-label">GPU</div>
+                                <div class="component-detail-name">@(Model.Gpu?.Name ?? "-")</div>
+                                <div class="component-detail-price">
+                                    @(Model.Gpu?.Price != null ? $"{Model.Gpu.Price:N2} kr" : "-")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="component-detail-card card-case">
+                                <div class="component-detail-icon">
+                                    <i class="bi bi-pc"></i>
+                                </div>
+                                <div class="component-detail-label">Case</div>
+                                <div class="component-detail-name">@(Model.Case?.Name ?? "-")</div>
+                                <div class="component-detail-price">
+                                    @(Model.Case?.Price != null ? $"{Model.Case.Price:N2} kr" : "-")
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="component-detail-card card-ram">
+                                <div class="component-detail-icon">
+                                    <i class="bi bi-memory"></i>
+                                </div>
+                                <div class="component-detail-label">RAM</div>
+                                <div class="component-detail-name">
+                                    @(Model.Rams != null && Model.Rams.Any()
+                                        ? string.Join(", ", Model.Rams.Select(r => r.Name))
+                                        : "-")
+                                </div>
+                                <div class="component-detail-price">
+                                    @(Model.Rams != null && Model.Rams.Any()
+                                        ? $"{Model.Rams.Sum(r => r.Price):N2} kr"
+                                        : "-")
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Speakers:</div>
-                    <div class="col-md-8">
-                        @(Model.Speakers != null && Model.Speakers.Any() ? string.Join(", ", Model.Speakers.Select(s => s.Name)) : "-")
+
+                <div class="components-section">
+                    <div class="components-section-title">
+                        <i class="bi bi-device-ssd me-2"></i>Storage & Cooling
+                    </div>
+
+                    <div class="row g-4">
+                        <div class="col-12 col-lg-4">
+                            <div class="component-list-card">
+                                <div class="component-list-header">
+                                    <i class="bi bi-hdd"></i>
+                                    <span>Internal Storage</span>
+                                </div>
+
+                                <div class="component-list-content">
+                                    @if (Model.InternalStorages != null && Model.InternalStorages.Any())
+                                    {
+                                        @foreach (var storage in Model.InternalStorages)
+                                        {
+                                            <div class="component-list-item">
+                                                <span>@storage.Name</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="component-list-empty">-</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="component-list-card">
+                                <div class="component-list-header">
+                                    <i class="bi bi-usb-drive"></i>
+                                    <span>External Storage</span>
+                                </div>
+
+                                <div class="component-list-content">
+                                    @if (Model.ExternalStorages != null && Model.ExternalStorages.Any())
+                                    {
+                                        @foreach (var storage in Model.ExternalStorages)
+                                        {
+                                            <div class="component-list-item">
+                                                <span>@storage.Name</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="component-list-empty">-</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-lg-4">
+                            <div class="component-list-card">
+                                <div class="component-list-header">
+                                    <i class="bi bi-fan"></i>
+                                    <span>Case Fans</span>
+                                </div>
+
+                                <div class="component-list-content">
+                                    @if (Model.CaseFans != null && Model.CaseFans.Any())
+                                    {
+                                        @foreach (var fan in Model.CaseFans)
+                                        {
+                                            <div class="component-list-item">
+                                                <span>@fan.Name</span>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <div class="component-list-empty">-</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
+                <div class="components-section">
+                    <div class="components-section-title">
+                        <i class="bi bi-keyboard me-2"></i>Peripherals
+                    </div>
 
+                    <div class="row g-4">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="peripheral-card">
+                                <i class="bi bi-keyboard"></i>
+                                <div>
+                                    <div class="peripheral-label">Keyboard</div>
+                                    <div class="peripheral-value">@(Model.Keyboard?.Name ?? "-")</div>
+                                </div>
+                            </div>
+                        </div>
 
-                <hr />
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="peripheral-card">
+                                <i class="bi bi-mouse"></i>
+                                <div>
+                                    <div class="peripheral-label">Mouse</div>
+                                    <div class="peripheral-value">@(Model.Mouse?.Name ?? "-")</div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="row mb-3">
-                    <div class="col-md-4 fw-bold">Total Price @Model.TotalPrice kr:</div>
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="peripheral-card">
+                                <i class="bi bi-headset"></i>
+                                <div>
+                                    <div class="peripheral-label">Headset</div>
+                                    <div class="peripheral-value">@(Model.Headphones?.Name ?? "-")</div>
+                                </div>
+                            </div>
+                        </div>
 
-                    <div class="col-md-8">
+                        <div class="col-12 col-md-6 col-xl-3">
+                            <div class="peripheral-card">
+                                <i class="bi bi-speaker"></i>
+                                <div>
+                                    <div class="peripheral-label">Speakers</div>
+                                    <div class="peripheral-value">
+                                        @(Model.Speakers != null && Model.Speakers.Any()
+                                            ? string.Join(", ", Model.Speakers.Select(s => s.Name))
+                                            : "-")
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="components-section mb-0">
+                    <div class="components-section-title">
+                        <i class="bi bi-display me-2"></i>Displays
+                    </div>
+
+                    <div class="component-list-card">
+                        <div class="component-list-header">
+                            <i class="bi bi-display"></i>
+                            <span>Monitors</span>
+                        </div>
+
+                        <div class="component-list-content">
+                            @if (Model.Monitors != null && Model.Monitors.Any())
+                            {
+                                @foreach (var monitor in Model.Monitors)
+                                {
+                                    <div class="component-list-item">
+                                        <span>@monitor.Name</span>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="component-list-empty">-</div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="components-action-bar">
+                    <div>
+                        <div class="components-action-title">Build actions</div>
+                        <div class="text-muted small">
+                            Delete is disabled when the build is linked to an active order.
+                        </div>
+                    </div>
+
+                    <div>
                         @if (ViewBag.IsLinkedToOrder == true)
                         {
-                            <button type="button" class="btn btn-danger" disabled>Delete</button>
-                            <span class="ms-2 text-muted">Linked to order #@ViewBag.LinkedOrderId</span>
+                            <button type="button" class="btn component-delete-btn" disabled>
+                                <i class="bi bi-lock me-2"></i>Delete
+                            </button>
+                            <span class="linked-order-text ms-2">
+                                Linked to order #@ViewBag.LinkedOrderId
+                            </span>
                         }
                         else
                         {
-                            <a asp-action="DeleteComputer" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+                            <a asp-action="DeleteComputer"
+                               asp-route-id="@Model.Id"
+                               class="btn component-delete-btn">
+                                <i class="bi bi-trash me-2"></i>Delete
+                            </a>
                         }
-
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
