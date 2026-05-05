@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using PCBuilder.Service.ComponentsAPI;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.IRepositories;
@@ -7,7 +8,6 @@ using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 using PCBuilder.Service.ComponentsAPI.Repositories;
 using PCBuilder.Service.ComponentsAPI.Services;
 using PCBuilder.Services.ComponentsAPI.Data;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +25,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(MappingProfile));
 var app = builder.Build();
 
+
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();   
@@ -40,7 +42,7 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<DataContext>();
-    db.SaveChanges();
+    DbSeeder.Seed(db);
 }
 
 app.Run();
