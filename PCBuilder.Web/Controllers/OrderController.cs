@@ -16,11 +16,13 @@ public class OrderController : Controller
 
     private readonly IOrderService _orderService;
     private readonly IComputerService _computerService;
+    private readonly ICustomerService _customerService;
 
-    public OrderController(IOrderService orderService, IComputerService computerService)
+    public OrderController(IOrderService orderService, IComputerService computerService, ICustomerService customerService)
     {
         _orderService = orderService;
         _computerService = computerService;
+        _customerService = customerService;
     }
 
     public async Task<IActionResult> OrderIndex()
@@ -116,6 +118,14 @@ public class OrderController : Controller
         {
             TempData["error"] = "Order data could not be loaded.";
             return RedirectToAction(nameof(OrderIndex));
+        }
+
+        var customerResponse = await _customerService.GetCustomerByIdAsync(vm.Order.CustomerId);
+
+        if (customerResponse != null && customerResponse.IsSuccess && customerResponse.Result != null)
+        {
+            vm.Customer = JsonConvert.DeserializeObject<CustomerDTO>(
+                JsonConvert.SerializeObject(customerResponse.Result));
         }
 
         if (!vm.Order.ComputerId.HasValue)
