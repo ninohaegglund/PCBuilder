@@ -7,4 +7,5 @@ public class PriceSummaryVM
 {
     public OrderDTO? Order { get; set; }
     public ComputerDTO? Computer { get; set; }
+    public CustomerDTO? Customer { get; set; }
 }

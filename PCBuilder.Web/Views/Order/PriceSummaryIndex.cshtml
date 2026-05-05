@@ -12,6 +12,14 @@
 
     // Första renderingen av sale price
     decimal salePrice = componentCost * (1 + (defaultMarkup / 100m));
+
+    var customerImageUrl = !string.IsNullOrWhiteSpace(Model.Customer?.ImageUrl)
+        ? Model.Customer.ImageUrl
+        : "/images/customer-placeholder.png";
+
+    var customerName = !string.IsNullOrWhiteSpace(Model.Customer?.Name)
+        ? Model.Customer.Name
+        : "Customer";
 }
 
 <div class="container mt-5">
@@ -159,12 +167,16 @@
                         Current Order
                     </h3>
 
-                    <!-- tillfällig bild -->
-                    <img src="/images/customer-placeholder.png"
+                    <img src="@customerImageUrl"
                          class="rounded-circle mb-3"
                          width="140"
                          height="140"
-                         alt="Customer" />
+                         style="object-fit: cover;"
+                         alt="@customerName" />
+
+                    <h5 class="fw-bold mb-1">
+                        @customerName
+                    </h5>
 
                     <h4 class="fw-bold">
                         Order #@Model.Order.Id
