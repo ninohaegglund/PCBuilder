@@ -5,7 +5,7 @@ using OperatingSystem = PCBuilder.Service.ComponentsAPI.Models.OperatingSystem;
 
 namespace PCBuilder.Services.ComponentsAPI.Data
 {
-    public class DataContext : DbContext  
+    public class DataContext : DbContext
     {
         public DataContext(DbContextOptions<DataContext> options)
             : base(options)
@@ -38,7 +38,6 @@ namespace PCBuilder.Services.ComponentsAPI.Data
         public DbSet<Manufacturer> Manufacturers { get; set; } = null!;
         public DbSet<FormFactor> FormFactors { get; set; } = null!;
 
-        // ────────────────── OnModelCreating ──────────────────
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -68,16 +67,161 @@ namespace PCBuilder.Services.ComponentsAPI.Data
             modelBuilder.Entity<Manufacturer>().ToTable("Manufacturers");
             modelBuilder.Entity<FormFactor>().ToTable("FormFactors");
 
-            modelBuilder.Entity<Cpu>(e => e.HasIndex(x => x.ManufacturerId));
-            modelBuilder.Entity<VideoCard>(e =>
-            {
-                e.HasIndex(x => x.ManufacturerId);
-            });
-            modelBuilder.Entity<Motherboard>(e =>
-            {
-                e.HasIndex(x => x.ManufacturerId);
-                e.HasIndex(x => x.Socket);
-            });
+            // Relationships
+            modelBuilder.Entity<Cpu>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<VideoCard>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<MemoryKit>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Motherboard>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Motherboard>()
+                .HasOne(x => x.FormFactor)
+                .WithMany()
+                .HasForeignKey(x => x.FormFactorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Case>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<PowerSupply>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CpuCooler>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CaseFan>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<InternalHardDrive>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<ExternalHardDrive>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Monitor>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Mouse>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Keyboard>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Headphones>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Speakers>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Webcam>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<FanController>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<SoundCard>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Ups>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<OperatingSystem>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<CaseAccessory>()
+                .HasOne(x => x.Manufacturer)
+                .WithMany()
+                .HasForeignKey(x => x.ManufacturerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Cpu>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<VideoCard>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<MemoryKit>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Motherboard>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Motherboard>().HasIndex(x => x.Socket);
+            modelBuilder.Entity<Case>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<PowerSupply>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<CpuCooler>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<CaseFan>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<InternalHardDrive>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<ExternalHardDrive>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Monitor>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Mouse>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Keyboard>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Headphones>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Speakers>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Webcam>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<FanController>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<SoundCard>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<Ups>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<OperatingSystem>().HasIndex(x => x.ManufacturerId);
+            modelBuilder.Entity<CaseAccessory>().HasIndex(x => x.ManufacturerId);
         }
     }
 }
