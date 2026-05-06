@@ -7,5 +7,6 @@ namespace PCBuilder.Services.CustomerAPI.IServices
     {
         Task<ResponseDTO> GetAllReviewsAsync();
         Task<ResponseDTO> GetReviewsByCustomerIdAsync(int id);
+        Task<ResponseDTO> GenerateReviewAsync(BuildReviewRequestDto info);
     }
 }
