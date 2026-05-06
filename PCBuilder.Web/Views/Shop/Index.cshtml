@@ -1,0 +1,103 @@
+﻿@using PCBuilder.Web.ViewModels.Shop
+@model PCBuilder.Web.ViewModels.Shop.ShopViewModel
+
+@{
+    var components = Model.Components;
+
+    var cpuCount = components?.Cpus?.Count ?? 0;
+    var gpuCount = components?.Gpus?.Count ?? 0;
+    var ramCount = components?.Rams?.Count ?? 0;
+    var motherboardCount = components?.Motherboards?.Count ?? 0;
+    var caseCount = components?.Cases?.Count ?? 0;
+    var psuCount = components?.Psus?.Count ?? 0;
+
+    var totalCount =
+        cpuCount +
+        gpuCount +
+        ramCount +
+        motherboardCount +
+        caseCount +
+        psuCount +
+        (components?.CpuCoolers?.Count ?? 0) +
+        (components?.CaseFans?.Count ?? 0) +
+        (components?.InternalStorages?.Count ?? 0) +
+        (components?.ExternalStorages?.Count ?? 0) +
+        (components?.Monitors?.Count ?? 0) +
+        (components?.Keyboards?.Count ?? 0) +
+        (components?.Mice?.Count ?? 0) +
+        (components?.Headphones?.Count ?? 0) +
+        (components?.Speakers?.Count ?? 0);
+}
+
+<div class="container mt-4 mb-5">
+    <div class="shop-page-shell">
+
+        <div class="shop-page-header text-center">
+            <span class="shop-badge">Component Shop</span>
+            <h1 class="mb-2">Browse Components</h1>
+            <p class="mb-0 text-muted">
+                Explore available PC components
+            </p>
+        </div>
+
+        <div class="shop-page-body">
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="shop-stat-card">
+                        <div class="shop-stat-number">@totalCount</div>
+                        <div class="shop-stat-label">Total Components</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="shop-stat-card">
+                        <div class="shop-stat-number">@cpuCount</div>
+                        <div class="shop-stat-label">CPUs</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="shop-stat-card">
+                        <div class="shop-stat-number">@gpuCount</div>
+                        <div class="shop-stat-label">GPUs</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg-3">
+                    <div class="shop-stat-card">
+                        <div class="shop-stat-number">@ramCount</div>
+                        <div class="shop-stat-label">RAM modules</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (components == null || totalCount == 0)
+            {
+                <div class="empty-shop-state text-center">
+                    <i class="bi bi-box-seam display-4 d-block mb-3"></i>
+                    <h4>No components found</h4>
+                    <p class="text-muted mb-0">There are currently no components available to display.</p>
+                </div>
+            }
+            else
+            {
+                <partial name="_ShopSection" model='new ShopSectionViewModel("CPUs", "bi-cpu", components.Cpus)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Video Cards", "bi-gpu-card", components.Gpus)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Memory Kits", "bi-memory", components.Rams)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Motherboards", "bi-motherboard", components.Motherboards)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Cases", "bi-pc", components.Cases)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Power Supplies", "bi-lightning-charge", components.Psus)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("CPU Coolers", "bi-fan", components.CpuCoolers)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Case Fans", "bi-fan", components.CaseFans)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Internal Storage", "bi-device-hdd", components.InternalStorages)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("External Storage", "bi-hdd", components.ExternalStorages)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Monitors", "bi-display", components.Monitors)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Keyboards", "bi-keyboard", components.Keyboards)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Mice", "bi-mouse", components.Mice)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Headphones", "bi-headphones", components.Headphones)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Speakers", "bi-speaker", components.Speakers)' />
+            }
+        </div>
+    </div>
+</div>
