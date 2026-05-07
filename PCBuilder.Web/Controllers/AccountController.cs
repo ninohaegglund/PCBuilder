@@ -50,6 +50,8 @@ public class AccountController : Controller
 
         if (!response.IsSuccessStatusCode)
         {
+            HttpContext.Session.Remove("AuthToken");
+            HttpContext.Session.Remove("CurrentUser");
             ModelState.AddModelError(string.Empty, await ExtractErrorMessageAsync(response));
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);
@@ -62,6 +64,8 @@ public class AccountController : Controller
 
         if (authResponse?.User == null || string.IsNullOrWhiteSpace(authResponse.Token))
         {
+            HttpContext.Session.Remove("AuthToken");
+            HttpContext.Session.Remove("CurrentUser");
             ModelState.AddModelError(string.Empty, "Login failed.");
             ViewData["ReturnUrl"] = returnUrl;
             return View(model);

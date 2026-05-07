@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
+using PCBuilder.Services.CustomerAPI.DTO;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 
@@ -48,5 +49,12 @@ public class OrderController : ControllerBase
     public async Task<ResponseDTO> CompleteOrder(int orderId)
     {
         return await _service.CompleteOrderAsync(orderId);
+    }
+
+    [HttpPut("{orderId:int}/selling-price")]
+    [Authorize(Roles = "Admin,User,Customer")]
+    public async Task<ResponseDTO> UpdateSellingPrice(int orderId, [FromBody] UpdateSellingPriceDTO dto)
+    {
+        return await _service.UpdateSellingPriceAsync(orderId, dto.SellingPrice);
     }
 }

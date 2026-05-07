@@ -2,7 +2,11 @@ using Newtonsoft.Json;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Response;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Net.Http.Headers;
+using System.Text;
+using System.Net;
 
 namespace PCBuilder.Web.Services;
 
@@ -25,8 +29,17 @@ public class OrderApiService : IOrderService
     public Task<ResponseDTO> RejectOrderAsync(int orderId) => SendAsync(HttpMethod.Put, $"api/orders/{orderId}/reject");
 
     public Task<ResponseDTO> CompleteOrderAsync(int orderId) => SendAsync(HttpMethod.Put, $"api/orders/{orderId}/complete");
+    public Task<ResponseDTO> UpdateSellingPriceAsync(int orderId, decimal sellingPrice)
+    {
+        var data = new
+        {
+            SellingPrice = sellingPrice
+        };
 
-    private async Task<ResponseDTO> SendAsync(HttpMethod method, string url)
+        return SendAsync(HttpMethod.Put, $"api/orders/{orderId}/selling-price", data);
+    }
+
+    private async Task<ResponseDTO> SendAsync(HttpMethod method, string url, object? data = null)
     {
         try
         {
@@ -39,7 +52,28 @@ public class OrderApiService : IOrderService
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 
+            if (data != null)
+            {
+                var json = JsonConvert.SerializeObject(data);
+                request.Content = new StringContent(json, Encoding.UTF8, "application/json");
+            }
+
             using var response = await client.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                _httpContextAccessor.HttpContext?.Session.Remove("AuthToken");
+                _httpContextAccessor.HttpContext?.Session.Remove("CurrentUser");
+                if (_httpContextAccessor.HttpContext != null)
+                {
+                    await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                }
+
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Session expired. Please log in again."
+                };
+            }
             var content = await response.Content.ReadAsStringAsync();
 
             if (!string.IsNullOrWhiteSpace(content))

@@ -19,13 +19,18 @@ using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Repositories;
 using PCBuilder.Services.CustomerAPI.Services;
 using PCBuilder.Web.Services;
+using PCBuilder.Web.Filters;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<RequireApiTokenFilter>();
+});
+builder.Services.AddScoped<RequireApiTokenFilter>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
