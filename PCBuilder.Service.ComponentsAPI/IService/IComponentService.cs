@@ -6,7 +6,7 @@ namespace PCBuilder.Service.ComponentsAPI.Interfaces
     {
         Task<AllComponentsDto> GetAllComponentsAsync();
 
-        Task<TDto?> GetByIdAsync<TDto>(int id);
+        Task<TDto?> GetByIdAsync<TDto>(int? id);
         Task<List<TDto>> GetAllAsync<TDto>();
 
         Task<List<ManufacturerDto>> GetAllManufacturersAsync();

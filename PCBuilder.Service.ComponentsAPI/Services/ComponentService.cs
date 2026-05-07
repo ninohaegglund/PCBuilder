@@ -53,11 +53,14 @@ namespace PCBuilder.Service.ComponentsAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<TDto?> GetByIdAsync<TDto>(int id)
+        public async Task<TDto?> GetByIdAsync<TDto>(int? id)
         {
+            if (!id.HasValue)
+                throw new ArgumentException("ID is required.", nameof(id));
+
             var dtoType = typeof(TDto);
             if (!_dtoToEntity.TryGetValue(dtoType, out var entityType))
-                throw new NotSupportedException($"DTO-typen {dtoType.Name} stöds inte.");
+                throw new NotSupportedException($"DTO-type {dtoType.Name} is not supported.");
 
             // Dynamiskt anropa generisk metod
             var method = typeof(IComponentRepository).GetMethod(nameof(IComponentRepository.GetByIdAsync))!

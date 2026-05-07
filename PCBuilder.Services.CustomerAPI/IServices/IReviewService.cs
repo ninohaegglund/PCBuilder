@@ -1,4 +1,4 @@
-﻿using PCBuilder.Services.CustomerAPI.DTO;
+﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Services.CustomerAPI.Response;
 
 namespace PCBuilder.Services.CustomerAPI.IServices

@@ -2,6 +2,7 @@
 using PCBuilder.Services.CustomerAPI.Response;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.DTO;
+using PCBuilder.Service.BuilderServiceAPI.DTO;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 
@@ -25,10 +26,9 @@ public class ReviewController : ControllerBase
         return await _service.GetReviewsByCustomerIdAsync(id);
     }
 
-    [HttpGet]
-    [Route("{id:int}")]
-    public async Task<ResponseDTO> CreateReviewForComputer(BuildReviewRequestDto info)
+    [HttpPost]
+    public async Task<ResponseDTO> CreateReviewForComputer([FromBody] BuildReviewRequestDto info)
     {
-        return await _service.(info);
+        return await _service.GenerateReviewAsync(info);
     }
 }

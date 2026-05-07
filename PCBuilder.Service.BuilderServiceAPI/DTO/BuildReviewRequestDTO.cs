@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Services.CustomerAPI.DTO;
+﻿namespace PCBuilder.Service.BuilderServiceAPI.DTO;
 
 public class BuildReviewRequestDto
 {
