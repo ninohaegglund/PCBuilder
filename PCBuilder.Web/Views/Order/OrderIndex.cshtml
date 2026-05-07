@@ -127,6 +127,13 @@
                                             @(!string.IsNullOrWhiteSpace(item.DetailedDescription) ? item.DetailedDescription : "-")
                                         </div>
                                     </div>
+
+                                    @if (item.Status == OrderStatus.Completed && item.SellingPrice > 0)
+                                    {
+                                        <div class="alert alert-success rounded-4 mt-3 mb-0">
+                                            <strong>Sold for:</strong> @item.SellingPrice.ToString("N0") kr
+                                        </div>
+                                    }
                                 </div>
 
                                 <div class="order-card-footer">
