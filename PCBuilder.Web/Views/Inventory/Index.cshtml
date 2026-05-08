@@ -1,0 +1,107 @@
+@model PCBuilder.Web.ViewModels.Inventory.InventoryViewModel
+
+@{
+    var items = Model.Items ?? new List<PCBuilder.Web.ViewModels.Inventory.InventoryItemViewModel>();
+    var totalTypes = items.Count;
+    var totalQuantity = items.Sum(x => x.Quantity);
+    var totalValue = items.Sum(x => x.PurchasePrice * x.Quantity);
+    var walletBalanceText = Model.WalletBalance.HasValue
+        ? $"{Model.WalletBalance.Value:N2} kr"
+        : "N/A";
+}
+
+<div class="container mt-4 mb-5">
+    <div class="orders-page-shell">
+
+        <div class="orders-page-header text-center">
+            <span class="orders-badge">Inventory</span>
+            <h1 class="mb-2">Inventory</h1>
+            <p class="mb-0 text-muted">
+                Components purchased from the shop and available for builds.
+            </p>
+        </div>
+
+        <div class="orders-page-body">
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-progress">
+                        <div class="order-stat-number">@totalTypes</div>
+                        <div class="order-stat-label">Item types</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-pending">
+                        <div class="order-stat-number">@totalQuantity</div>
+                        <div class="order-stat-label">Total quantity</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-completed">
+                        <div class="order-stat-number">@totalValue.ToString("N0") kr</div>
+                        <div class="order-stat-label">Inventory value</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-completed">
+                        <div class="order-stat-number">@walletBalanceText</div>
+                        <div class="order-stat-label">Wallet balance</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!items.Any())
+            {
+                <div class="empty-orders-state text-center">
+                    <i class="bi bi-box-seam display-4 d-block mb-3"></i>
+                    <h4>No inventory yet</h4>
+                    <p class="text-muted mb-0">Buy components from the shop to build your inventory.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var item in items)
+                    {
+                        <div class="col-12 col-md-6 col-xl-4">
+                            <div class="order-card h-100">
+                                <div class="order-card-top">
+                                    <div>
+                                        <div class="fw-bold fs-5">@item.DisplayName</div>
+                                        <div class="text-muted small">
+                                            Purchased @item.PurchasedAt.ToString("yyyy-MM-dd")
+                                        </div>
+                                    </div>
+                                    <span class="order-status-badge order-status-progress">@item.ComponentType</span>
+                                </div>
+
+                                <div class="order-card-body">
+                                    <div class="row g-3">
+                                        <div class="col-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Quantity</div>
+                                                <div class="order-info-value">@item.Quantity</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Price</div>
+                                                <div class="order-info-value">@item.PurchasePrice.ToString("N2") kr</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="order-card-footer">
+                                    <span class="order-no-actions">
+                                        <i class="bi bi-cart-check me-2"></i>Ready for builds
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
