@@ -5,6 +5,8 @@
 }
 
 <form asp-action="CreateComputerIndex" method="post">
+    <input asp-for="Id" type="hidden" />
+    <input asp-for="CustomerId" type="hidden" />
     @if (ViewBag.AcceptedOrderId != null)
     {
         <input type="hidden" name="orderId" value="@ViewBag.AcceptedOrderId" />

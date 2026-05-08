@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using PCBuilder.Services.CustomerAPI.IServices;
 using Contracts;
+using PCBuilder.Services.CustomerAPI.DTO;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 
