@@ -2,7 +2,7 @@
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
+using Contracts;
 
 namespace PCBuilder.Services.CustomerAPI.Services;
 

@@ -1,4 +1,4 @@
-﻿using PCBuilder.Services.CustomerAPI.Response;
+﻿using Contracts;
 
 namespace PCBuilder.Services.CustomerAPI.IServices;
 

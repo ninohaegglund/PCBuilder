@@ -27,7 +27,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\PCBuilder.Service.BuilderServiceAPI\PCBuilder.Service.BuilderServiceAPI.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ResponseDTO\" />
   </ItemGroup>
 
 </Project>

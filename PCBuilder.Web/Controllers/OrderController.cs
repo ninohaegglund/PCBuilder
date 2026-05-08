@@ -5,7 +5,7 @@ using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
+using Contracts;
 using PCBuilder.Web.ViewModels.Computer;
 
 namespace PCBuilder.Web.Controllers;

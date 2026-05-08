@@ -2,7 +2,7 @@
 using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
-using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using Contracts;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,7 +22,7 @@ public class InventoryItemService : IInventoryItemService
         var item = new InventoryItem
         {
             Id = inventoryItemDTO.Id,
-            Quantity = inventoryItemDTO.Quantity
+            Quantity = inventoryItemDTO.Quantity    
         };
         await _repository.AddAsync(item);
         return new ResponseDTO
