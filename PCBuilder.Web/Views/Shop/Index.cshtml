@@ -10,6 +10,9 @@
     var motherboardCount = components?.Motherboards?.Count ?? 0;
     var caseCount = components?.Cases?.Count ?? 0;
     var psuCount = components?.Psus?.Count ?? 0;
+    var walletBalanceText = Model.WalletBalance.HasValue
+        ? $"{Model.WalletBalance.Value:N2} kr"
+        : "N/A";
 
     var totalCount =
         cpuCount +
@@ -43,28 +46,35 @@
         <div class="shop-page-body">
 
             <div class="row g-3 mb-4">
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="shop-stat-card">
                         <div class="shop-stat-number">@totalCount</div>
                         <div class="shop-stat-label">Total Components</div>
                     </div>
                 </div>
 
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
+                    <div class="shop-stat-card">
+                        <div class="shop-stat-number">@walletBalanceText</div>
+                        <div class="shop-stat-label">Wallet balance</div>
+                    </div>
+                </div>
+
+                <div class="col-6 col-lg">
                     <div class="shop-stat-card">
                         <div class="shop-stat-number">@cpuCount</div>
                         <div class="shop-stat-label">CPUs</div>
                     </div>
                 </div>
 
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="shop-stat-card">
                         <div class="shop-stat-number">@gpuCount</div>
                         <div class="shop-stat-label">GPUs</div>
                     </div>
                 </div>
 
-                <div class="col-6 col-lg-3">
+                <div class="col-6 col-lg">
                     <div class="shop-stat-card">
                         <div class="shop-stat-number">@ramCount</div>
                         <div class="shop-stat-label">RAM modules</div>

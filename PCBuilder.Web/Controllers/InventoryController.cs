@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
+using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 using PCBuilder.Services.InventoryAPI.IServices;
 using PCBuilder.Web.ViewModels.Inventory;
 
@@ -9,11 +10,16 @@ public class InventoryController : Controller
 {
     private readonly IInventoryService _inventoryService;
     private readonly IComponentService _componentService;
+    private readonly IWalletService _walletService;
 
-    public InventoryController(IInventoryService inventoryService, IComponentService componentService)
+    public InventoryController(
+        IInventoryService inventoryService,
+        IComponentService componentService,
+        IWalletService walletService)
     {
         _inventoryService = inventoryService;
         _componentService = componentService;
+        _walletService = walletService;
     }
 
     [HttpGet]
@@ -28,10 +34,12 @@ public class InventoryController : Controller
         }
 
         var inventoryItems = await _inventoryService.GetInventoryAsync(userId);
+        var wallet = await _walletService.GetWalletAsync(userId);
         var components = await _componentService.GetAllComponentsAsync();
 
         var viewModel = new InventoryViewModel
         {
+            WalletBalance = wallet.Balance,
             Items = inventoryItems.Select(item => new InventoryItemViewModel
             {
                 Id = item.Id,
@@ -47,7 +55,7 @@ public class InventoryController : Controller
         return View(viewModel);
     }
 
-    private static string ResolveDisplayName(dynamic components, string componentType, int componentId)
+    private static string ResolveDisplayName(AllComponentsDto components, string componentType, int componentId)
     {
         return componentType switch
         {

@@ -5,6 +5,9 @@
     var totalTypes = items.Count;
     var totalQuantity = items.Sum(x => x.Quantity);
     var totalValue = items.Sum(x => x.PurchasePrice * x.Quantity);
+    var walletBalanceText = Model.WalletBalance.HasValue
+        ? $"{Model.WalletBalance.Value:N2} kr"
+        : "N/A";
 }
 
 <div class="container mt-4 mb-5">
@@ -21,22 +24,28 @@
         <div class="orders-page-body">
 
             <div class="row g-3 mb-4">
-                <div class="col-6 col-lg-4">
+                <div class="col-6 col-lg-3">
                     <div class="order-stat-card stat-progress">
                         <div class="order-stat-number">@totalTypes</div>
                         <div class="order-stat-label">Item types</div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-4">
+                <div class="col-6 col-lg-3">
                     <div class="order-stat-card stat-pending">
                         <div class="order-stat-number">@totalQuantity</div>
                         <div class="order-stat-label">Total quantity</div>
                     </div>
                 </div>
-                <div class="col-6 col-lg-4">
+                <div class="col-6 col-lg-3">
                     <div class="order-stat-card stat-completed">
                         <div class="order-stat-number">@totalValue.ToString("N0") kr</div>
                         <div class="order-stat-label">Inventory value</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-3">
+                    <div class="order-stat-card stat-completed">
+                        <div class="order-stat-number">@walletBalanceText</div>
+                        <div class="order-stat-label">Wallet balance</div>
                     </div>
                 </div>
             </div>

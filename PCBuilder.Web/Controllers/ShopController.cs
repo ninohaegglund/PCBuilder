@@ -10,21 +10,28 @@ public class ShopController : Controller
 {
     private readonly IComponentService _componentService;
     private readonly IInventoryService _inventoryService;
+    private readonly IWalletService _walletService;
 
-    public ShopController(IComponentService componentService, IInventoryService inventoryService)
+    public ShopController(
+        IComponentService componentService,
+        IInventoryService inventoryService,
+        IWalletService walletService)
     {
         _componentService = componentService;
         _inventoryService = inventoryService;
+        _walletService = walletService;
     }
 
     [HttpGet]
     public async Task<IActionResult> Index()
     {
         var components = await _componentService.GetAllComponentsAsync();
+        var walletBalance = await GetWalletBalanceAsync();
 
         var viewModel = new ShopViewModel
         {
-            Components = components
+            Components = components,
+            WalletBalance = walletBalance
         };
 
         return View(viewModel);
@@ -65,5 +72,18 @@ public class ShopController : Controller
         }
 
         return RedirectToAction(nameof(Index));
+    }
+
+    private async Task<decimal?> GetWalletBalanceAsync()
+    {
+        var userIdClaim = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return null;
+        }
+
+        var wallet = await _walletService.GetWalletAsync(userId);
+        return wallet.Balance;
     }
 }
