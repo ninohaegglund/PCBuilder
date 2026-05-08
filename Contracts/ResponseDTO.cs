@@ -1,4 +1,4 @@
-﻿namespace PCBuilder.Services.CustomerAPI.Response;
+﻿namespace Contracts;
 
 public class ResponseDTO
 {

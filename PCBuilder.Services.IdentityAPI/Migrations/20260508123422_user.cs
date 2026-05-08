@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Services.IdentityAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class AddBalanceToUser : Migration
+    public partial class user : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

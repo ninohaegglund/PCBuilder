@@ -4,7 +4,7 @@ using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IRepository;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using PCBuilder.Service.BuilderServiceAPI.Models;
-using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using Contracts;
 using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 
 namespace PCBuilder.Service.BuilderServiceAPI.Services;
@@ -188,7 +188,7 @@ public class ComputerService : IComputerService
         }
     }
 
-    public async Task<ResponseDTO> GetComputerByIdAsync(int id)
+    public async Task<ResponseDTO> GetComputerByIdAsync(int? id)
     {
         try
         {

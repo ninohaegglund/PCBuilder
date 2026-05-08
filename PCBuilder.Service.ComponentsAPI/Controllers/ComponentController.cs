@@ -216,11 +216,18 @@ namespace PCBuilder.Service.ComponentsAPI.Controllers
         public async Task<ActionResult<KeyboardDto>> GetKeyboardById(int id)
             => await GetByIdTyped<KeyboardDto>(id);
 
-        private async Task<ActionResult<TDto>> GetByIdTyped<TDto>(int id)
+        private async Task<ActionResult<TDto>> GetByIdTyped<TDto>(int? id)
         {
-            var item = await _componentService.GetByIdAsync<TDto>(id);
-            if (item == null) return NotFound();
-            return Ok(item);
+            try
+            {
+                var item = await _componentService.GetByIdAsync<TDto>(id);
+                if (item == null) return NotFound();
+                return Ok(item);
+            }
+            catch (ArgumentException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
-} 
+}

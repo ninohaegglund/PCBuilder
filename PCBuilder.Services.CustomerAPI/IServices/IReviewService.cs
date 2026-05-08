@@ -1,5 +1,5 @@
-﻿using PCBuilder.Services.CustomerAPI.DTO;
-using PCBuilder.Services.CustomerAPI.Response;
+﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
+using Contracts;
 
 namespace PCBuilder.Services.CustomerAPI.IServices
 {
@@ -7,5 +7,6 @@ namespace PCBuilder.Services.CustomerAPI.IServices
     {
         Task<ResponseDTO> GetAllReviewsAsync();
         Task<ResponseDTO> GetReviewsByCustomerIdAsync(int id);
+        Task<ResponseDTO> GenerateReviewAsync(int orderId);
     }
 }

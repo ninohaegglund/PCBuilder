@@ -1,5 +1,5 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
-using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using Contracts;
 
 namespace PCBuilder.Service.BuilderServiceAPI.IService
 {

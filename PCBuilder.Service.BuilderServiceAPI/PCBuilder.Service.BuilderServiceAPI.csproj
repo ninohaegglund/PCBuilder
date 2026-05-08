@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
     <ProjectReference Include="..\PCBuilder.Service.ComponentsAPI\PCBuilder.Service.ComponentsAPI.csproj" />
   </ItemGroup>
 

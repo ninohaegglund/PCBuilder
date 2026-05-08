@@ -6,7 +6,7 @@ public class OrderDTO
     public int CustomerId { get; set; }
     public Guid? UserId { get; set; }
     public int? ComputerId { get; set; }
-    public int Budget { get; set; }
+    public decimal Budget { get; set; }
     public decimal SellingPrice { get; set; }
     public string Description { get; set; } = string.Empty;
     public string DetailedDescription { get; set; } = string.Empty;

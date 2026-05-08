@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
+using Contracts;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
