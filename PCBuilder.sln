@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.Customer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.IdentityAPI", "PCBuilder.Services.IdentityAPI\PCBuilder.Services.IdentityAPI.csproj", "{903F222F-5C36-61CB-1B65-C6744935CAEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.InventoryAPI", "PCBuilder.Services.InventoryAPI\PCBuilder.Services.InventoryAPI.csproj", "{782215A4-BAD4-44E7-8072-BEF02F80C364}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782215A4-BAD4-44E7-8072-BEF02F80C364}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782215A4-BAD4-44E7-8072-BEF02F80C364}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782215A4-BAD4-44E7-8072-BEF02F80C364}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782215A4-BAD4-44E7-8072-BEF02F80C364}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +63,7 @@ Global
 		{4A2E22AF-980C-4148-A427-28F293359316} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 		{656B48BA-6950-4072-B094-0D084F584531} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 		{903F222F-5C36-61CB-1B65-C6744935CAEC} = {49B97C85-B683-4FB5-880C-65FF5158791D}
+		{782215A4-BAD4-44E7-8072-BEF02F80C364} = {49B97C85-B683-4FB5-880C-65FF5158791D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4686CC4A-22DE-4353-BD20-9D7730ED8B2E}
