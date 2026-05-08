@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.Customer
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PCBuilder.Services.IdentityAPI", "PCBuilder.Services.IdentityAPI\PCBuilder.Services.IdentityAPI.csproj", "{903F222F-5C36-61CB-1B65-C6744935CAEC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{5646781A-D65F-47C1-B476-B1999C4DCF05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{903F222F-5C36-61CB-1B65-C6744935CAEC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5646781A-D65F-47C1-B476-B1999C4DCF05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5646781A-D65F-47C1-B476-B1999C4DCF05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5646781A-D65F-47C1-B476-B1999C4DCF05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5646781A-D65F-47C1-B476-B1999C4DCF05}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

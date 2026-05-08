@@ -12,8 +12,8 @@ using PCBuilder.Services.CustomerAPI.Data;
 namespace PCBuilder.Services.CustomerAPI.Migrations
 {
     [DbContext(typeof(CustomerDbContext))]
-    [Migration("20260427181048_removeuserfromcustomerapi")]
-    partial class removeuserfromcustomerapi
+    [Migration("20260508123231_fixedbudettodecimal")]
+    partial class fixedbudettodecimal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,8 +54,8 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("Budget")
-                        .HasColumnType("int");
+                    b.Property<decimal>("Budget")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("ComputerId")
                         .HasColumnType("int");
@@ -77,6 +77,9 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
                     b.Property<int>("ReviewId")
                         .HasColumnType("int");
 
+                    b.Property<decimal>("SellingPrice")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -95,6 +98,9 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comment")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");

@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
-using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using Contracts;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.CustomerAPI.DTO;
@@ -34,7 +34,7 @@ public class ComputerController : Controller
 
         if (orderId.HasValue)
         {
-            PCBuilder.Services.CustomerAPI.Response.ResponseDTO? orderResponse = await _orderService.GetOrderByIdAsync(orderId.Value);
+            var orderResponse = await _orderService.GetOrderByIdAsync(orderId.Value);
 
             if (orderResponse != null && orderResponse.IsSuccess)
             {

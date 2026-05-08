@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PCBuilder.Services.CustomerAPI.Migrations
 {
     /// <inheritdoc />
-    public partial class removeuserfromcustomerapi : Migration
+    public partial class customers : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -36,6 +36,7 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
                     ReviewId = table.Column<int>(type: "int", nullable: false),
                     ComputerId = table.Column<int>(type: "int", nullable: true),
                     Budget = table.Column<int>(type: "int", nullable: false),
+                    SellingPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DetailedDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
@@ -53,6 +54,7 @@ namespace PCBuilder.Services.CustomerAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false)
                 },

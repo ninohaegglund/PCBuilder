@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
-using PCBuilder.Service.BuilderServiceAPI.Enums;
 using BuilderComputerCreateDTO = PCBuilder.Service.BuilderServiceAPI.DTO.Response.ComputerCreateDTO;
-using BuilderResponseDTO = PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response.ResponseDTO;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
-using System.Net.Http.Json;
+using Contracts;
 using System.Security.Claims;
 using System.Text.Json;
 
@@ -476,7 +473,7 @@ public class OrderService : IOrderService
                 };
             }
 
-            var builderResponse = JsonSerializer.Deserialize<BuilderResponseDTO>(
+            var builderResponse = JsonSerializer.Deserialize<ResponseDTO>(
                 responseContent,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 

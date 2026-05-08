@@ -36,4 +36,8 @@
     <Folder Include="Data\Database\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

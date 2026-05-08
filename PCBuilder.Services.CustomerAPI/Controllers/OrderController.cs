@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
-using PCBuilder.Services.CustomerAPI.DTO;
+using Contracts;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 

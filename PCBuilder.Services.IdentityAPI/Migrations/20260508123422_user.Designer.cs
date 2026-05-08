@@ -12,8 +12,8 @@ using PCBuilder.Services.IdentityAPI.Data;
 namespace PCBuilder.Services.IdentityAPI.Migrations
 {
     [DbContext(typeof(IdentityDbContext))]
-    [Migration("20260427180515_AddBalanceToUser")]
-    partial class AddBalanceToUser
+    [Migration("20260508123422_user")]
+    partial class user
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

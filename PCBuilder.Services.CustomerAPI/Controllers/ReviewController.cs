@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PCBuilder.Services.CustomerAPI.Response;
+using Contracts;
 using PCBuilder.Services.CustomerAPI.IServices;
+using PCBuilder.Services.CustomerAPI.DTO;
+using PCBuilder.Service.BuilderServiceAPI.DTO;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 
@@ -22,5 +24,11 @@ public class ReviewController : ControllerBase
     public async Task<ResponseDTO> GetReviewsByCustomerId(int id)
     {
         return await _service.GetReviewsByCustomerIdAsync(id);
+    }
+
+    [HttpPost]
+    public async Task<ResponseDTO> CreateReviewForComputer([FromBody] int orderId)
+    {
+        return await _service.GenerateReviewAsync(orderId);
     }
 }

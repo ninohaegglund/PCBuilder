@@ -1,6 +1,6 @@
 ﻿using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.Models;
-using PCBuilder.Service.BuilderServiceAPI.Models.DTO.Response;
+using Contracts;
 
 namespace PCBuilder.Service.BuilderServiceAPI.IService
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Services.CustomerAPI.Response;
+using Contracts;
 
 namespace PCBuilder.Services.CustomerAPI.Controllers;
 

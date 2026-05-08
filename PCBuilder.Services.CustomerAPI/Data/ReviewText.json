@@ -1,0 +1,44 @@
+{
+  "GpuDoesNotFitInCase": [
+    "My graphics card seems a bit too big for this case.",
+    "The computer feels like it was built a little too tightly around the GPU.",
+    "I think this graphics card may be too large for the case I got.",
+    "The GPU doesn't seem to fit as nicely as I expected.",
+    "I wish the case had a bit more room for the graphics card."
+  ],
+  "CoolingIsInsufficient": [
+    "The computer seems to get louder and warmer than I expected.",
+    "I can hear the fans working a lot harder than I would like.",
+    "The system doesn't feel as quiet as I hoped it would be.",
+    "The cooling seems a little weak, especially when the PC is under load.",
+    "I was expecting this build to stay quieter than this."
+  ],
+  "CoolingIsGood": [
+    "The computer stays pleasantly quiet, even when I use it a lot.",
+    "I like how silent this build feels.",
+    "The cooling seems to keep the system running quietly.",
+    "It’s nice that the PC doesn’t make much noise.",
+    "The machine stays calm and quiet, which I really appreciate."
+  ],
+  "PsuCannotPowerBuild": [
+    "The computer doesn't always feel as stable as I would like.",
+    "I get the impression that the power supply may be a bit too weak for this setup.",
+    "This build seems like it might be asking a little too much from the PSU.",
+    "The system doesn't feel fully comfortable with the current power setup.",
+    "I worry that the power supply may not be quite enough for everything in this PC."
+  ],
+  "EfficiencyIsPoor": [
+    "The PC seems to run a bit less smoothly than I expected.",
+    "This power setup doesn't feel especially impressive to me.",
+    "I get the feeling this build could be a little more efficient.",
+    "It doesn't seem like the most refined power solution.",
+    "The system could probably use a better quality power supply."
+  ],
+  "PriceIsOverBudget": [
+    "This build ended up costing more than I expected.",
+    "I feel like the price went a bit too far over my budget.",
+    "The computer is a little more expensive than I wanted.",
+    "I wish this build had stayed closer to the budget.",
+    "The final price feels a bit high for what I planned."
+  ]
+}
