@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.DTO.Response;
 using PCBuilder.Service.BuilderServiceAPI.IService;
 using Contracts;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
-using PCBuilder.Service.ComponentsAPI.Models;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
-using PCBuilder.Web.ViewModels.Computer;
 using System.Text.Json;
 using NewtonsoftJson = Newtonsoft.Json;
 
@@ -94,103 +91,13 @@ public class ComputerController : Controller
             }
         }
 
-        var allComponents = await _componentService.GetAllComponentsAsync();
-
-        ViewBag.CPUs = allComponents.Cpus.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = $"{c.Name} - {c.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.GPUs = allComponents.Gpus.Select(g => new SelectListItem
-        {
-            Value = g.Id.ToString(),
-            Text = $"{g.Name} - {g.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.RAMs = allComponents.Rams.Select(r => new SelectListItem
-        {
-            Value = r.Id.ToString(),
-            Text = $"{r.Name} - {r.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Motherboards = allComponents.Motherboards.Select(m => new SelectListItem
-        {
-            Value = m.Id.ToString(),
-            Text = $"{m.Name} - {m.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Cases = allComponents.Cases.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = $"{c.Name} - {c.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.PSUs = allComponents.Psus.Select(p => new SelectListItem
-        {
-            Value = p.Id.ToString(),
-            Text = $"{p.Name} - {p.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.CPUCoolers = allComponents.CpuCoolers.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = $"{c.Name} - {c.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.CaseFans = allComponents.CaseFans.Select(c => new SelectListItem
-        {
-            Value = c.Id.ToString(),
-            Text = $"{c.Name} - {c.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Monitors = allComponents.Monitors.Select(m => new SelectListItem
-        {
-            Value = m.Id.ToString(),
-            Text = $"{m.Name} - {m.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Keyboards = allComponents.Keyboards.Select(k => new SelectListItem
-        {
-            Value = k.Id.ToString(),
-            Text = $"{k.Name} - {k.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Mice = allComponents.Mice.Select(m => new SelectListItem
-        {
-            Value = m.Id.ToString(),
-            Text = $"{m.Name} - {m.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Headsets = allComponents.Headphones.Select(h => new SelectListItem
-        {
-            Value = h.Id.ToString(),
-            Text = $"{h.Name} - {h.Price:N2} kr"
-        }).ToList();
-
-        ViewBag.Speakers = allComponents.Speakers.Select(s => new SelectListItem
-        {
-            Value = s.Id.ToString(),
-            Text = $"{s.Name} - {s.Price:N2} kr"
-        }).ToList();
-        ViewBag.Storages = allComponents.InternalStorages
-        .Select(s => new SelectListItem
-        {
-            Value = s.Id.ToString(),
-            Text = $"{s.Name} - {s.Price:N2} kr"
-        })
-        .Concat(allComponents.ExternalStorages.Select(s => new SelectListItem
-        {
-            Value = s.Id.ToString(),
-            Text = $"{s.Name} - {s.Price:N2} kr"
-        }))
-        .ToList();
+        await PopulateComponentSelectListsAsync();
         return View(model);
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> CreateComputerIndex(ComputerCreateDTO computer, int? orderId)
+    public async Task<IActionResult> CreateComputerIndex(ComputerCreateDTO computer, int? orderId, string submitAction = "save")
     {
         if (orderId.HasValue)
         {
@@ -203,8 +110,10 @@ public class ComputerController : Controller
             {
                 ViewBag.AcceptedOrderId = order.Id;
                 ViewBag.AcceptedOrderDescription = order.Description;
+                ViewBag.AcceptedOrderDetailedDescription = order.DetailedDescription;
                 ViewBag.AcceptedOrderCustomerName = order.CustomerName;
                 ViewBag.AcceptedOrderCustomerImageUrl = order.CustomerImageUrl;
+                ViewBag.AcceptedOrderBudget = order.Budget;
 
                 computer.CustomerId = order.CustomerId;
                 if (order.ComputerId.HasValue && computer.Id <= 0)
@@ -216,96 +125,7 @@ public class ComputerController : Controller
 
         if (!ModelState.IsValid)
         {
-            var allComponentsInvalid = await _componentService.GetAllComponentsAsync();
-            ViewBag.CPUs = allComponentsInvalid.Cpus.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = $"{c.Name} - {c.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.GPUs = allComponentsInvalid.Gpus.Select(g => new SelectListItem
-            {
-                Value = g.Id.ToString(),
-                Text = $"{g.Name} - {g.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.RAMs = allComponentsInvalid.Rams.Select(r => new SelectListItem
-            {
-                Value = r.Id.ToString(),
-                Text = $"{r.Name} - {r.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Motherboards = allComponentsInvalid.Motherboards.Select(m => new SelectListItem
-            {
-                Value = m.Id.ToString(),
-                Text = $"{m.Name} - {m.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Cases = allComponentsInvalid.Cases.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = $"{c.Name} - {c.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.PSUs = allComponentsInvalid.Psus.Select(p => new SelectListItem
-            {
-                Value = p.Id.ToString(),
-                Text = $"{p.Name} - {p.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.CPUCoolers = allComponentsInvalid.CpuCoolers.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = $"{c.Name} - {c.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.CaseFans = allComponentsInvalid.CaseFans.Select(c => new SelectListItem
-            {
-                Value = c.Id.ToString(),
-                Text = $"{c.Name} - {c.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Monitors = allComponentsInvalid.Monitors.Select(m => new SelectListItem
-            {
-                Value = m.Id.ToString(),
-                Text = $"{m.Name} - {m.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Keyboards = allComponentsInvalid.Keyboards.Select(k => new SelectListItem
-            {
-                Value = k.Id.ToString(),
-                Text = $"{k.Name} - {k.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Mice = allComponentsInvalid.Mice.Select(m => new SelectListItem
-            {
-                Value = m.Id.ToString(),
-                Text = $"{m.Name} - {m.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Headsets = allComponentsInvalid.Headphones.Select(h => new SelectListItem
-            {
-                Value = h.Id.ToString(),
-                Text = $"{h.Name} - {h.Price:N2} kr"
-            }).ToList();
-
-            ViewBag.Speakers = allComponentsInvalid.Speakers.Select(s => new SelectListItem
-            {
-                Value = s.Id.ToString(),
-                Text = $"{s.Name} - {s.Price:N2} kr"
-            }).ToList();
-            ViewBag.Storages = allComponentsInvalid.InternalStorages
-            .Select(s => new SelectListItem
-            {
-                Value = s.Id.ToString(),
-                Text = $"{s.Name} - {s.Price:N2} kr"
-            })
-            .Concat(allComponentsInvalid.ExternalStorages.Select(s => new SelectListItem
-            {
-                Value = s.Id.ToString(),
-                Text = $"{s.Name} - {s.Price:N2} kr"
-            }))
-            .ToList();
+            await PopulateComponentSelectListsAsync();
             return View(computer);
         }
 
@@ -316,13 +136,25 @@ public class ComputerController : Controller
         if (response != null && response.IsSuccess)
         {
             TempData["success"] = computer.Id > 0 ? "Computer updated successfully" : "Computer created successfully";
+
+            if (string.Equals(submitAction, "finalize", StringComparison.OrdinalIgnoreCase))
+            {
+                if (orderId.HasValue)
+                {
+                    return RedirectToAction("PriceSummaryIndex", "Order", new { id = orderId.Value });
+                }
+
+                TempData["error"] = "Build saved, but no order was connected for price summary.";
+            }
+
             return RedirectToAction("ComputerIndex");
         }
         else
         {
-            TempData["error"] = response?.Result?.ToString() ?? "Unknown error";
+            TempData["error"] = response?.Message ?? response?.Result?.ToString() ?? "Unknown error";
         }
 
+        await PopulateComponentSelectListsAsync();
         return View(computer);
     }
 
@@ -350,7 +182,7 @@ public class ComputerController : Controller
     {
         ResponseDTO? response = await _computerService.GetComputerByIdAsync(id);
 
-        ComputerDTO computer = null;
+        ComputerDTO? computer = null;
         if (response != null && response.Result != null)
         {
             computer = response.Result as ComputerDTO;
@@ -398,6 +230,41 @@ public class ComputerController : Controller
             NewtonsoftJson.JsonConvert.SerializeObject(ordersResponse.Result));
 
         return orders?.FirstOrDefault(x => x.ComputerId == computerId);
+    }
+
+    private async Task PopulateComponentSelectListsAsync()
+    {
+        var allComponents = await _componentService.GetAllComponentsAsync();
+
+        ViewBag.CPUs = ToSelectList(allComponents.Cpus, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.GPUs = ToSelectList(allComponents.Gpus, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.RAMs = ToSelectList(allComponents.Rams, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Motherboards = ToSelectList(allComponents.Motherboards, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Cases = ToSelectList(allComponents.Cases, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.PSUs = ToSelectList(allComponents.Psus, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.CPUCoolers = ToSelectList(allComponents.CpuCoolers, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.CaseFans = ToSelectList(allComponents.CaseFans, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Monitors = ToSelectList(allComponents.Monitors, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Keyboards = ToSelectList(allComponents.Keyboards, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Mice = ToSelectList(allComponents.Mice, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Headsets = ToSelectList(allComponents.Headphones, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Speakers = ToSelectList(allComponents.Speakers, x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Storages = ToSelectList(allComponents.InternalStorages, x => x.Id, x => x.Name, x => x.Price)
+            .Concat(ToSelectList(allComponents.ExternalStorages, x => x.Id, x => x.Name, x => x.Price))
+            .ToList();
+    }
+
+    private static List<SelectListItem> ToSelectList<TComponent>(
+        IEnumerable<TComponent> components,
+        Func<TComponent, int> getId,
+        Func<TComponent, string> getName,
+        Func<TComponent, decimal?> getPrice)
+    {
+        return components.Select(component => new SelectListItem
+        {
+            Value = getId(component).ToString(),
+            Text = $"{getName(component)} - {getPrice(component):N2} kr"
+        }).ToList();
     }
 
 }

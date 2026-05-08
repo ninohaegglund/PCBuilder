@@ -1,5 +1,8 @@
 ﻿@using PCBuilder.Services.CustomerAPI.DTO
 @using PCBuilder.Web.ViewModels.Computer
+@using Contracts
+@using Newtonsoft.Json
+@using Newtonsoft.Json.Linq
 @model PriceSummaryVM
 
 @{
@@ -20,6 +23,45 @@
     var customerName = !string.IsNullOrWhiteSpace(Model.Customer?.Name)
         ? Model.Customer.Name
         : "Customer";
+
+    var showReview = TempData["ShowReview"] as bool? == true
+        && string.Equals(Context.Request.Query["review"], "true", StringComparison.OrdinalIgnoreCase);
+    ResponseDTO? reviewResponse = null;
+    JObject? reviewChecks = null;
+    string? reviewText = null;
+    var reviewJson = TempData["ReviewResponse"] as string;
+    var reviewLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+    {
+        ["GPUFit"] = "Graphics card fit",
+        ["Cooling"] = "Cooling and noise",
+        ["PSU"] = "Power supply",
+        ["Efficiency"] = "Power efficiency",
+        ["Budget"] = "Customer budget"
+    };
+
+    if (!string.IsNullOrWhiteSpace(reviewJson))
+    {
+        reviewResponse = JsonConvert.DeserializeObject<ResponseDTO>(reviewJson);
+        if (reviewResponse?.Result != null)
+        {
+            var resultString = reviewResponse.Result as string;
+            if (reviewResponse.IsSuccess && !string.IsNullOrWhiteSpace(resultString) && !resultString.TrimStart().StartsWith("{"))
+            {
+                reviewText = resultString;
+            }
+            else
+            {
+                reviewChecks = reviewResponse.Result switch
+                {
+                    JObject jObject => jObject,
+                    JToken token when token.Type == JTokenType.Object => (JObject)token,
+                    string jsonText when !string.IsNullOrWhiteSpace(jsonText) && jsonText.TrimStart().StartsWith("{")
+                        => JObject.Parse(jsonText),
+                    _ => JObject.Parse(JsonConvert.SerializeObject(reviewResponse.Result))
+                };
+            }
+        }
+    }
 }
 
 <div class="container mt-5">
@@ -225,6 +267,96 @@
     </div>
 </div>
 
+@if (showReview && reviewResponse != null)
+{
+    <div class="modal fade" id="customerReviewModal" tabindex="-1" aria-labelledby="customerReviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content rounded-4 border-0 shadow">
+                <div class="modal-header bg-primary text-white rounded-top-4">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="customerReviewModalLabel">
+                            Customer Review
+                        </h5>
+                        <div class="small opacity-75">
+                            @customerName reviewed order #@Model.Order.Id
+                        </div>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body p-4">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <img src="@customerImageUrl"
+                             class="rounded-circle"
+                             width="72"
+                             height="72"
+                             style="object-fit: cover;"
+                             alt="@customerName" />
+                        <div>
+                            <h4 class="fw-bold mb-1">@customerName</h4>
+                            <p class="mb-0 text-muted">
+                                @(reviewResponse.IsSuccess ? "The customer seems happy with the build." : "The customer had some feedback on the build.")
+                            </p>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrWhiteSpace(reviewText))
+                    {
+                        <div class="alert alert-light border rounded-4 mb-0">
+                            <h6 class="fw-bold mb-2">Customer says</h6>
+                            <p class="mb-0 fs-5">@reviewText</p>
+                        </div>
+                    }
+                    else if (reviewChecks != null)
+                    {
+                        <div class="list-group list-group-flush">
+                            @foreach (var check in reviewChecks.Properties())
+                            {
+                                var checkBody = check.Value as JObject;
+                                var passed = checkBody?["isSuccess"]?.Value<bool>()
+                                    ?? checkBody?["IsSuccess"]?.Value<bool>()
+                                    ?? false;
+                                var message = checkBody?["message"]?.Value<string>()
+                                    ?? checkBody?["Message"]?.Value<string>()
+                                    ?? string.Empty;
+
+                                <div class="list-group-item px-0 py-3">
+                                    <div class="d-flex justify-content-between align-items-start gap-3">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">@(reviewLabels.TryGetValue(check.Name, out var label) ? label : check.Name)</h6>
+                                            <p class="mb-0 text-muted">
+                                                @(string.IsNullOrWhiteSpace(message) ? "No complaints from the customer." : message)
+                                            </p>
+                                        </div>
+                                        <span class="badge rounded-pill @(passed ? "bg-success" : "bg-warning text-dark")">
+                                            @(passed ? "Passed" : "Feedback")
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning rounded-4 mb-0">
+                            @reviewResponse.Message
+                        </div>
+                    }
+                </div>
+
+                <div class="modal-footer">
+                    <a asp-controller="Order" asp-action="OrderIndex" class="btn btn-primary rounded-4 px-4">
+                        Back to Orders
+                    </a>
+                    <button type="button" class="btn btn-outline-secondary rounded-4 px-4" data-bs-dismiss="modal">
+                        Stay Here
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
 @section Scripts {
     <script>
         const slider = document.getElementById("markupSlider");
@@ -256,6 +388,12 @@
         slider.addEventListener("input", updateSellingPrice);
 
         updateSellingPrice();
+
+        const reviewModalElement = document.getElementById("customerReviewModal");
+        if (reviewModalElement) {
+            const reviewModal = new bootstrap.Modal(reviewModalElement);
+            reviewModal.show();
+        }
     </script>
 
 

@@ -2,15 +2,16 @@
 using Contracts;
 using PCBuilder.Service.BuilderServiceAPI.DTO;
 using PCBuilder.Service.BuilderServiceAPI.IService;
-using PCBuilder.Service.BuilderServiceAPI.Models;
 using PCBuilder.Service.CustomerAPI.IServices;
+using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Models;
+using Newtonsoft.Json;
 
 namespace PCBuilder.Services.CustomerAPI.Services;
 
-public class ReviewService
+public class ReviewService : IReviewService
 {
     private readonly IMapper _mapper;
     private readonly IReviewRepository _reviewRepository;
@@ -83,7 +84,29 @@ public class ReviewService
                 return orderResult;
             }
 
-            if (orderResult.Result is not Order order)
+            var orderDto = ToTypedResult<OrderDTO>(orderResult.Result);
+            if (orderDto == null)
+            {
+                var orderList = ToTypedResult<OrderListDTO>(orderResult.Result);
+                if (orderList != null)
+                {
+                    orderDto = new OrderDTO
+                    {
+                        Id = orderList.Id,
+                        CustomerId = orderList.CustomerId,
+                        UserId = orderList.UserId,
+                        ComputerId = orderList.ComputerId,
+                        Budget = orderList.Budget,
+                        SellingPrice = orderList.SellingPrice,
+                        Description = orderList.Description,
+                        DetailedDescription = orderList.DetailedDescription,
+                        Status = orderList.Status,
+                        CreatedAt = orderList.CreatedAt
+                    };
+                }
+            }
+
+            if (orderDto == null)
             {
                 return new ResponseDTO
                 {
@@ -93,14 +116,39 @@ public class ReviewService
                 };
             }
 
-            var computerResult = await _computerService.GetComputerByIdAsync(order.ComputerId);
+            if (!orderDto.ComputerId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Order does not have a connected computer.",
+                    Result = null
+                };
+            }
+
+            var order = new Order
+            {
+                Id = orderDto.Id,
+                CustomerId = orderDto.CustomerId,
+                UserId = orderDto.UserId,
+                ComputerId = orderDto.ComputerId,
+                Budget = orderDto.Budget,
+                SellingPrice = orderDto.SellingPrice,
+                Description = orderDto.Description,
+                DetailedDescription = orderDto.DetailedDescription,
+                Status = (Models.OrderStatus)orderDto.Status,
+                CreatedAt = orderDto.CreatedAt
+            };
+
+            var computerResult = await _computerService.GetComputerByIdAsync(orderDto.ComputerId.Value);
 
             if (!computerResult.IsSuccess)
             {
                 return computerResult;
             }
 
-            if (computerResult.Result is not ComputerDTO computer)
+            var computer = ToTypedResult<ComputerDTO>(computerResult.Result);
+            if (computer == null)
             {
                 return new ResponseDTO
                 {
@@ -147,5 +195,20 @@ public class ReviewService
                 Result = null
             };
         }
+    }
+
+    private static T? ToTypedResult<T>(object? result)
+    {
+        if (result is T typed)
+        {
+            return typed;
+        }
+
+        if (result == null)
+        {
+            return default;
+        }
+
+        return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(result));
     }
 }

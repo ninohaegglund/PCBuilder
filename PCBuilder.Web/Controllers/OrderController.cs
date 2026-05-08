@@ -7,6 +7,9 @@ using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
 using Contracts;
 using PCBuilder.Web.ViewModels.Computer;
+using System.Net;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace PCBuilder.Web.Controllers;
 
@@ -17,12 +20,21 @@ public class OrderController : Controller
     private readonly IOrderService _orderService;
     private readonly IComputerService _computerService;
     private readonly ICustomerService _customerService;
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderController(IOrderService orderService, IComputerService computerService, ICustomerService customerService)
+    public OrderController(
+        IOrderService orderService,
+        IComputerService computerService,
+        ICustomerService customerService,
+        IHttpClientFactory httpClientFactory,
+        IHttpContextAccessor httpContextAccessor)
     {
         _orderService = orderService;
         _computerService = computerService;
         _customerService = customerService;
+        _httpClientFactory = httpClientFactory;
+        _httpContextAccessor = httpContextAccessor;
     }
 
     public async Task<IActionResult> OrderIndex()
@@ -161,12 +173,61 @@ public class OrderController : Controller
 
         if (response != null && response.IsSuccess)
         {
+            var reviewResponse = await GenerateReviewAsync(orderId);
+
             TempData["success"] = "Build finished and selling price saved.";
-            return RedirectToAction(nameof(OrderIndex));
+            TempData["ShowReview"] = true;
+            TempData["ReviewResponse"] = JsonConvert.SerializeObject(reviewResponse);
+
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId, review = true });
         }
 
         TempData["error"] = response?.Message ?? "Failed to save selling price.";
         return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+    }
+
+    private async Task<ResponseDTO> GenerateReviewAsync(int orderId)
+    {
+        try
+        {
+            var client = _httpClientFactory.CreateClient("CustomerAPI");
+            using var request = new HttpRequestMessage(HttpMethod.Post, "api/reviews");
+
+            var token = _httpContextAccessor.HttpContext?.Session.GetString("AuthToken");
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            request.Content = new StringContent(JsonConvert.SerializeObject(orderId), Encoding.UTF8, "application/json");
+
+            using var response = await client.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Session expired before the customer review could be generated."
+                };
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var dto = JsonConvert.DeserializeObject<ResponseDTO>(content);
+
+            return dto ?? new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = "Customer review could not be read."
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
     }
 
 }
