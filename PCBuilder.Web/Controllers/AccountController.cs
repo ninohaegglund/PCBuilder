@@ -147,7 +147,6 @@ public class AccountController : Controller
     private async Task SignInUserAsync(AuthApiResponse authResponse)
     {
         HttpContext.Session.SetString("AuthToken", authResponse.Token);
-        var testToken = HttpContext.Session.GetString("AuthToken");
 
         var currentUser = new CurrentUserViewModel
         {

@@ -26,10 +26,7 @@ public class ComputerValidationService : IComputerValidationService
 
     public async Task<ResponseDTO> CheckIfGpuFitsInCaseAsync(Order order, ComputerDTO computer)
     {
-        var gpus = await _componentsService.GetGpusAsync(computer.GpuIds);
-        var caseDto = await _componentService.GetByIdAsync<CaseDto>(computer.CaseId);
-
-        if (gpus == null || !gpus.Any())
+        if (computer.GpuIds == null || !computer.GpuIds.Any())
         {
             return new ResponseDTO
             {
@@ -38,12 +35,24 @@ public class ComputerValidationService : IComputerValidationService
             };
         }
 
+        if (!computer.CaseId.HasValue)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = _reviewTextService.GetRandomText("GpuDoesNotFitInCase")
+            };
+        }
+
+        var gpus = await _componentsService.GetGpusAsync(computer.GpuIds);
+        var caseDto = await _componentService.GetByIdAsync<CaseDto>(computer.CaseId);
+
         if (caseDto == null)
         {
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "The case could not be found."
+                Message = _reviewTextService.GetRandomText("GpuDoesNotFitInCase")
             };
         }
 
@@ -70,6 +79,15 @@ public class ComputerValidationService : IComputerValidationService
 
     public async Task<ResponseDTO> CheckCoolingIsSufficientAsync(Order order, ComputerDTO computer)
     {
+        if (!computer.CpuId.HasValue || !computer.CpuCoolerId.HasValue)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = _reviewTextService.GetRandomText("CoolingIsInsufficient")
+            };
+        }
+
         var cpu = await _componentService.GetByIdAsync<CPUDto>(computer.CpuId);
         var cooler = await _componentService.GetByIdAsync<CPUCoolerDto>(computer.CpuCoolerId);
 
@@ -78,7 +96,7 @@ public class ComputerValidationService : IComputerValidationService
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "Cooling components could not be found."
+                Message = _reviewTextService.GetRandomText("CoolingIsInsufficient")
             };
         }
 
@@ -87,7 +105,7 @@ public class ComputerValidationService : IComputerValidationService
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "Cooling information is incomplete."
+                Message = _reviewTextService.GetRandomText("CoolingIsInsufficient")
             };
         }
 
@@ -109,6 +127,15 @@ public class ComputerValidationService : IComputerValidationService
 
     public async Task<ResponseDTO> CheckPsuCanPowerAsync(Order order, ComputerDTO computer)
     {
+        if (!computer.PowerSupplyId.HasValue)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = _reviewTextService.GetRandomText("PsuCannotPowerBuild")
+            };
+        }
+
         var psu = await _componentService.GetByIdAsync<PSUDto>(computer.PowerSupplyId);
 
         if (psu == null)
@@ -116,26 +143,32 @@ public class ComputerValidationService : IComputerValidationService
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "The power supply could not be found."
+                Message = _reviewTextService.GetRandomText("PsuCannotPowerBuild")
             };
         }
 
         var estimatedPowerDraw = 0;
 
-        var cpu = await _componentService.GetByIdAsync<CPUDto>(computer.CpuId);
-        if (cpu?.Tdp.HasValue == true)
+        if (computer.CpuId.HasValue)
         {
-            estimatedPowerDraw += cpu.Tdp.Value;
+            var cpu = await _componentService.GetByIdAsync<CPUDto>(computer.CpuId);
+            if (cpu?.Tdp.HasValue == true)
+            {
+                estimatedPowerDraw += cpu.Tdp.Value;
+            }
         }
 
-        var gpus = await _componentsService.GetGpusAsync(computer.GpuIds);
-        if (gpus != null)
+        if (computer.GpuIds != null && computer.GpuIds.Any())
         {
-            foreach (var gpu in gpus)
+            var gpus = await _componentsService.GetGpusAsync(computer.GpuIds);
+            if (gpus != null)
             {
-                if (gpu.Tdp.HasValue)
+                foreach (var gpu in gpus)
                 {
-                    estimatedPowerDraw += gpu.Tdp.Value;
+                    if (gpu.Tdp.HasValue)
+                    {
+                        estimatedPowerDraw += gpu.Tdp.Value;
+                    }
                 }
             }
         }
@@ -158,6 +191,15 @@ public class ComputerValidationService : IComputerValidationService
 
     public async Task<ResponseDTO> CheckEfficiencyIsGoodAsync(Order order, ComputerDTO computer)
     {
+        if (!computer.PowerSupplyId.HasValue)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = _reviewTextService.GetRandomText("EfficiencyIsPoor")
+            };
+        }
+
         var psu = await _componentService.GetByIdAsync<PSUDto>(computer.PowerSupplyId);
 
         if (psu == null)
@@ -165,7 +207,7 @@ public class ComputerValidationService : IComputerValidationService
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "The power supply could not be found."
+                Message = _reviewTextService.GetRandomText("EfficiencyIsPoor")
             };
         }
 
@@ -174,7 +216,7 @@ public class ComputerValidationService : IComputerValidationService
             return new ResponseDTO
             {
                 IsSuccess = false,
-                Message = "The power supply efficiency rating is missing."
+                Message = _reviewTextService.GetRandomText("EfficiencyIsPoor")
             };
         }
 

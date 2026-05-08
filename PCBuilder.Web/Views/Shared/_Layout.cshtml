@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 </head>
 <body class="bg-primary-subtle">
+    <audio id="bgMusic" loop>
+        <source src="~/Music/Flyers Crusade.mp3" type="audio/mpeg">
+    </audio>
 
     <header class="py-3">
         <nav class="navbar navbar-expand-lg playful-navbar">
@@ -201,6 +204,51 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const bgMusic = document.getElementById("bgMusic");
+        const savedMusicTime = sessionStorage.getItem("bgMusicTime");
+        const musicWasEnabled = sessionStorage.getItem("bgMusicEnabled") === "true";
+
+        if (bgMusic && savedMusicTime) {
+            bgMusic.currentTime = Number(savedMusicTime) || 0;
+        }
+
+        function saveMusicState() {
+            if (bgMusic) {
+                sessionStorage.setItem("bgMusicTime", bgMusic.currentTime.toString());
+            }
+        }
+
+        function playBackgroundMusic() {
+            if (!bgMusic || !bgMusic.paused) {
+                return;
+            }
+
+            bgMusic.volume = 0.15;
+            bgMusic.play()
+                .then(function () {
+                    sessionStorage.setItem("bgMusicEnabled", "true");
+                })
+                .catch(function () {
+                });
+        }
+
+        if (musicWasEnabled) {
+            playBackgroundMusic();
+        }
+
+        document.addEventListener("click", function () {
+            playBackgroundMusic();
+        }, { once: true });
+
+        if (bgMusic) {
+            bgMusic.addEventListener("timeupdate", saveMusicState);
+        }
+
+        window.addEventListener("beforeunload", function () {
+            saveMusicState();
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

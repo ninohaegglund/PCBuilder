@@ -12,8 +12,12 @@ public class ReviewController : ControllerBase
 {
     private readonly IReviewService _service;
 
+    public ReviewController(IReviewService service)
+    {
+        _service = service;
+    }
+
     [HttpGet]
-    [Route("{id:int}")]
     public async Task<ResponseDTO> GetAllReviews()
     {
         return await _service.GetAllReviewsAsync();
