@@ -131,6 +131,7 @@ public class OrderService : IOrderService
                 CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
                 ComputerId = order.ComputerId,
                 Budget = order.Budget,
+                SellingPrice = order.SellingPrice,
                 Description = order.Description,
                 DetailedDescription = order.DetailedDescription,
                 Status = (OrderStatus)order.Status,
@@ -360,6 +361,81 @@ public class OrderService : IOrderService
             {
                 IsSuccess = true,
                 Message = "Order completed successfully.",
+                Result = order
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResponseDTO
+            {
+                IsSuccess = false,
+                Message = ex.Message
+            };
+        }
+    }
+    public async Task<ResponseDTO> UpdateSellingPriceAsync(int orderId, decimal sellingPrice)
+    {
+        try
+        {
+            var userId = GetCurrentUserId();
+
+            if (!userId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "User is not authenticated."
+                };
+            }
+
+            var order = await _orderRepository.GetOrderById(orderId);
+
+            if (order == null)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"Order with id {orderId} not found."
+                };
+            }
+
+            if (!IsCurrentUserAdmin() && order.UserId != userId)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "You can only update your own assigned orders."
+                };
+            }
+
+            if (order.Status == Models.OrderStatus.Rejected)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Rejected orders cannot be updated."
+                };
+            }
+
+            if (!order.ComputerId.HasValue)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Cannot finish an order without a connected computer."
+                };
+            }
+
+            order.SellingPrice = sellingPrice;
+            order.Status = Models.OrderStatus.Completed;
+            order.UserId ??= userId;
+
+            await _orderRepository.UpdateOrder(order);
+
+            return new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = "Selling price updated successfully.",
                 Result = order
             };
         }

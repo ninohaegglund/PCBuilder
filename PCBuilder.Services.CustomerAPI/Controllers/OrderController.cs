@@ -49,4 +49,11 @@ public class OrderController : ControllerBase
     {
         return await _service.CompleteOrderAsync(orderId);
     }
+
+    [HttpPut("{orderId:int}/selling-price")]
+    [Authorize(Roles = "Admin,User,Customer")]
+    public async Task<ResponseDTO> UpdateSellingPrice(int orderId, [FromBody] UpdateSellingPriceDTO dto)
+    {
+        return await _service.UpdateSellingPriceAsync(orderId, dto.SellingPrice);
+    }
 }

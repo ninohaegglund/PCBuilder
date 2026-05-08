@@ -9,4 +9,5 @@ public interface IOrderService
     Task<ResponseDTO> AcceptOrderAsync(int orderId);
     public Task<ResponseDTO> RejectOrderAsync(int orderId);
     public Task<ResponseDTO> CompleteOrderAsync(int orderId);
+    Task<ResponseDTO> UpdateSellingPriceAsync(int orderId, decimal sellingPrice);
 }

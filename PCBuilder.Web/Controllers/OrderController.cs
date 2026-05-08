@@ -153,5 +153,20 @@ public class OrderController : Controller
 
         return View(vm);
     }
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> FinishBuild(int orderId, decimal sellingPrice)
+    {
+        var response = await _orderService.UpdateSellingPriceAsync(orderId, sellingPrice);
+
+        if (response != null && response.IsSuccess)
+        {
+            TempData["success"] = "Build finished and selling price saved.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        TempData["error"] = response?.Message ?? "Failed to save selling price.";
+        return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+    }
 
 }
