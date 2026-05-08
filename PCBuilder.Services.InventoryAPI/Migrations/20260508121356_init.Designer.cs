@@ -12,7 +12,7 @@ using PCBuilder.Services.InventoryAPI.Data;
 namespace PCBuilder.Services.InventoryAPI.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    [Migration("20260508102909_init")]
+    [Migration("20260508121356_init")]
     partial class init
     {
         /// <inheritdoc />

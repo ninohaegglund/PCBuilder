@@ -18,6 +18,11 @@ using PCBuilder.Services.CustomerAPI.IRepository;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Repositories;
 using PCBuilder.Services.CustomerAPI.Services;
+using PCBuilder.Services.InventoryAPI.Data;
+using PCBuilder.Services.InventoryAPI.IRepository;
+using PCBuilder.Services.InventoryAPI.IServices;
+using PCBuilder.Services.InventoryAPI.Repositories;
+using PCBuilder.Services.InventoryAPI.Services;
 using PCBuilder.Web.Services;
 using PCBuilder.Web.Filters;
 
@@ -81,6 +86,9 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddDbContext<CustomerDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryDb")));
 
+builder.Services.AddDbContext<InventoryDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("InventoryDb")));
+
 
 builder.Services.AddScoped<IComputerService, ComputerService>();
 builder.Services.AddScoped<IComponentService, ComponentService>();
@@ -94,6 +102,10 @@ builder.Services.AddScoped<ICustomerService, CustomerService>();
 builder.Services.AddScoped<IOrderService, OrderApiService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<IWalletRepository, WalletRepository>();
+builder.Services.AddScoped<IWalletService, WalletService>();
 
 
 
