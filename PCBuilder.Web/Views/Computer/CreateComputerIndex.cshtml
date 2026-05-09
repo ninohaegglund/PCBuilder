@@ -1,7 +1,23 @@
 ﻿@model PCBuilder.Service.BuilderServiceAPI.DTO.Response.ComputerCreateDTO
 
+@using Microsoft.AspNetCore.Mvc.Rendering
+
 @{
     ViewData["Title"] = "Build Computer";
+    var inventoryItems = ViewBag.InventoryItems as List<PCBuilder.Web.ViewModels.Inventory.InventoryItemViewModel>
+        ?? new List<PCBuilder.Web.ViewModels.Inventory.InventoryItemViewModel>();
+    var gpuItems = ViewBag.GPUs as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var ramItems = ViewBag.RAMs as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var storageItems = ViewBag.Storages as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var caseFanItems = ViewBag.CaseFans as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var monitorItems = ViewBag.Monitors as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var speakerItems = ViewBag.Speakers as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+    var selectedGpuIds = Model?.GPUIds ?? new List<int>();
+    var selectedRamIds = Model?.RAMIds ?? new List<int>();
+    var selectedStorageIds = Model?.StorageIds ?? new List<int>();
+    var selectedCaseFanIds = Model?.CaseFanIds ?? new List<int>();
+    var selectedMonitorIds = Model?.MonitorIds ?? new List<int>();
+    var selectedSpeakerIds = Model?.SpeakerIds ?? new List<int>();
 }
 
 <form asp-action="CreateComputerIndex" method="post">
@@ -20,6 +36,13 @@
                 <p class="mb-0 text-muted">
                     Choose parts, peripherals, and accessories for your custom setup.
                 </p>
+                <button class="btn btn-outline-primary mt-3"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#buildInventoryPanel"
+                        aria-controls="buildInventoryPanel">
+                    <i class="bi bi-box-seam me-2"></i>Show Inventory
+                </button>
             </div>
 
             <div class="builder-body">
@@ -105,29 +128,61 @@
 
                         <div class="col-md-6">
                             <label asp-for="GPUIds" class="form-label fw-bold">GPU <i class="bi bi-nvidia"></i></label>
-                            <select asp-for="GPUIds" asp-items="ViewBag.GPUs" class="form-select playful-input" multiple size="4"></select>
-                            <span class="form-hint">Hold Ctrl / Cmd to select multiple GPUs.</span>
+                            <div class="multi-pick-list">
+                                @foreach (var item in gpuItems)
+                                {
+                                    var id = $"gpu-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="GPUIds" value="@item.Value" checked="@selectedGpuIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="GPUIds" class="text-danger d-block"></span>
                         </div>
 
                         <div class="col-md-6">
                             <label asp-for="RAMIds" class="form-label fw-bold">RAM <i class="bi bi-memory"></i></label>
-                            <select asp-for="RAMIds" asp-items="ViewBag.RAMs" class="form-select playful-input" multiple size="4"></select>
-                            <span class="form-hint">Select one or more RAM kits.</span>
+                            <div class="multi-pick-list">
+                                @foreach (var item in ramItems)
+                                {
+                                    var id = $"ram-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="RAMIds" value="@item.Value" checked="@selectedRamIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="RAMIds" class="text-danger d-block"></span>
                         </div>
 
                         <div class="col-md-6">
                             <label asp-for="StorageIds" class="form-label fw-bold">Storage <i class="bi bi-device-ssd"></i></label>
-                            <select asp-for="StorageIds" asp-items="ViewBag.Storages" class="form-select playful-input" multiple size="4"></select>
-                            <span class="form-hint">Select one or more drives.</span>
+                            <div class="multi-pick-list">
+                                @foreach (var item in storageItems)
+                                {
+                                    var id = $"storage-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="StorageIds" value="@item.Value" checked="@selectedStorageIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="StorageIds" class="text-danger d-block"></span>
                         </div>
 
                         <div class="col-md-6">
                             <label asp-for="CaseFanIds" class="form-label fw-bold">Case Fans <i class="bi bi-fan"></i></label>
-                            <select asp-for="CaseFanIds" asp-items="ViewBag.CaseFans" class="form-select playful-input" multiple size="4"></select>
-                            <span class="form-hint">Select one or more case fans.</span>
+                            <div class="multi-pick-list">
+                                @foreach (var item in caseFanItems)
+                                {
+                                    var id = $"casefan-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="CaseFanIds" value="@item.Value" checked="@selectedCaseFanIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="CaseFanIds" class="text-danger d-block"></span>
                         </div>
                     </div>
@@ -159,13 +214,31 @@
 
                         <div class="col-md-6">
                             <label asp-for="MonitorIds" class="form-label fw-bold">Monitor <i class="bi bi-display"></i></label>
-                            <select asp-for="MonitorIds" asp-items="ViewBag.Monitors" class="form-select playful-input" multiple size="4"></select>
+                            <div class="multi-pick-list">
+                                @foreach (var item in monitorItems)
+                                {
+                                    var id = $"monitor-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="MonitorIds" value="@item.Value" checked="@selectedMonitorIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="MonitorIds" class="text-danger d-block"></span>
                         </div>
 
                         <div class="col-md-6">
                             <label asp-for="SpeakerIds" class="form-label fw-bold">Speakers <i class="bi bi-speaker"></i></label>
-                            <select asp-for="SpeakerIds" asp-items="ViewBag.Speakers" class="form-select playful-input" multiple size="4"></select>
+                            <div class="multi-pick-list">
+                                @foreach (var item in speakerItems)
+                                {
+                                    var id = $"speaker-{item.Value}";
+                                    <div class="multi-pick-option">
+                                        <input id="@id" type="checkbox" name="SpeakerIds" value="@item.Value" checked="@selectedSpeakerIds.Contains(int.Parse(item.Value))" />
+                                        <label for="@id">@item.Text</label>
+                                    </div>
+                                }
+                            </div>
                             <span asp-validation-for="SpeakerIds" class="text-danger d-block"></span>
                         </div>
                     </div>
@@ -194,6 +267,51 @@
         </div>
     </div>
 </form>
+
+<div class="offcanvas offcanvas-end build-inventory-panel" tabindex="-1" id="buildInventoryPanel" aria-labelledby="buildInventoryPanelLabel">
+    <div class="offcanvas-header">
+        <div>
+            <h5 class="offcanvas-title fw-bold" id="buildInventoryPanelLabel">
+                <i class="bi bi-box-seam me-2"></i>Your Inventory
+            </h5>
+            <small class="text-muted">Available components for this build</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        @if (!inventoryItems.Any())
+        {
+            <div class="alert alert-warning rounded-4">
+                Your inventory is empty. Buy components from the shop before finishing a customer build.
+            </div>
+            <a asp-controller="Shop" asp-action="Index" class="btn btn-primary w-100">
+                <i class="bi bi-cart-plus me-2"></i>Go to Shop
+            </a>
+        }
+        else
+        {
+            <div class="inventory-panel-list">
+                @foreach (var group in inventoryItems.GroupBy(x => x.ComponentType))
+                {
+                    <div class="inventory-panel-group">
+                        <h6 class="fw-bold text-uppercase text-muted">@group.Key</h6>
+                        @foreach (var item in group)
+                        {
+                            <div class="inventory-panel-item">
+                                <div>
+                                    <div class="fw-semibold">@item.DisplayName</div>
+                                    <small class="text-muted">@item.PurchasePrice.ToString("N0") kr each</small>
+                                </div>
+                                <span class="badge bg-primary rounded-pill">@item.Quantity</span>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -5,6 +5,8 @@ using PCBuilder.Services.InventoryAPI.IServices;
 
 namespace PCBuilder.Services.InventoryAPI.Controllers;
 
+[ApiController]
+[Route("api/wallet")]
 public class WalletController : ControllerBase
 {
     private readonly IWalletService _walletService;

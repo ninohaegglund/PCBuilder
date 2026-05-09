@@ -36,22 +36,22 @@
 
                 <div class="row g-3 mt-4">
                     <div class="col-6 col-md-4">
-                        <div class="mini-stat">
+                        <a asp-controller="Inventory" asp-action="Index" class="mini-stat text-decoration-none">
                             <i class="bi bi-cpu-fill"></i>
                             <span>Components</span>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4">
-                        <div class="mini-stat">
+                        <a asp-controller="Computer" asp-action="ComputerIndex" class="mini-stat text-decoration-none">
                             <i class="bi bi-tools"></i>
                             <span>Custom Builds</span>
-                        </div>
+                        </a>
                     </div>
                     <div class="col-6 col-md-4">
-                        <div class="mini-stat">
+                        <a asp-controller="Shop" asp-action="Index" class="mini-stat text-decoration-none">
                             <i class="bi bi-cart-check-fill"></i>
                             <span>Shop Ready</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -108,11 +108,11 @@
     <section class="mb-5">
         <div class="row g-4">
             <div class="col-6 col-lg-3">
-                <a asp-controller="Shop" asp-action="Index" class="text-decoration-none">
+                <a asp-controller="Inventory" asp-action="Index" class="text-decoration-none">
                     <div class="feature-tile h-100">
-                        <i class="bi bi-cpu-fill display-6 mb-3"></i>
-                        <h5 class="fw-bold">Components</h5>
-                        <p class="mb-0 text-muted">Browse processors, GPUs, memory, storage, and more.</p>
+                        <i class="bi bi-box-seam-fill display-6 mb-3"></i>
+                        <h5 class="fw-bold">Inventory</h5>
+                        <p class="mb-0 text-muted">See the parts you own and what is ready for customer builds.</p>
                     </div>
                 </a>
             </div>

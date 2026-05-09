@@ -57,4 +57,22 @@ public class InventoryController : ControllerBase
             return BadRequest(ex.Message);
         }
     }
+
+    [HttpPost("{userId:guid}/use-many")]
+    public async Task<IActionResult> UseInventoryItems(Guid userId, List<UseInventoryItemDto> dto)
+    {
+        try
+        {
+            await _inventoryService.UseInventoryItemsAsync(userId, dto);
+            return Ok();
+        }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
 }

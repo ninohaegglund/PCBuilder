@@ -6,7 +6,8 @@
 @model PriceSummaryVM
 
 @{
-    ViewData["Title"] = "Set Sale Price";
+    var isCompleted = Model.Order.Status == OrderStatus.Completed;
+    ViewData["Title"] = isCompleted ? "Order Result" : "Set Sale Price";
 
     // Hämtas från datorns totalpris
     decimal componentCost = Model.Computer.TotalPrice;
@@ -14,7 +15,15 @@
     int defaultMarkup = 50;
 
     // Första renderingen av sale price
-    decimal salePrice = componentCost * (1 + (defaultMarkup / 100m));
+    decimal salePrice = isCompleted && Model.Order.SellingPrice > 0
+        ? Model.Order.SellingPrice
+        : componentCost * (1 + (defaultMarkup / 100m));
+
+    decimal profit = salePrice - componentCost;
+    decimal actualMarkup = componentCost > 0
+        ? ((salePrice / componentCost) - 1) * 100
+        : 0;
+    var summaryColumnClass = isCompleted ? "col-md-3" : "col-md-4";
 
     var customerImageUrl = !string.IsNullOrWhiteSpace(Model.Customer?.ImageUrl)
         ? Model.Customer.ImageUrl
@@ -30,6 +39,10 @@
     JObject? reviewChecks = null;
     string? reviewText = null;
     var reviewJson = TempData["ReviewResponse"] as string;
+    if (string.IsNullOrWhiteSpace(reviewJson) && Model.ReviewResponse != null)
+    {
+        reviewJson = JsonConvert.SerializeObject(Model.ReviewResponse);
+    }
     var reviewLabels = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
     {
         ["GPUFit"] = "Graphics card fit",
@@ -65,25 +78,28 @@
 }
 
 <div class="container mt-5">
-    <form id="finishBuildForm"
-          asp-controller="Order"
-          asp-action="FinishBuild"
-          method="post">
-        @Html.AntiForgeryToken()
+    @if (!isCompleted)
+    {
+        <form id="finishBuildForm"
+              asp-controller="Order"
+              asp-action="FinishBuild"
+              method="post">
+            @Html.AntiForgeryToken()
 
-        <input type="hidden" name="orderId" value="@Model.Order.Id" />
+            <input type="hidden" name="orderId" value="@Model.Order.Id" />
 
-        <input type="hidden"
-               id="sellingPriceInput"
-               name="sellingPrice"
-               value="@salePrice.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
-    </form>
+            <input type="hidden"
+                   id="sellingPriceInput"
+                   name="sellingPrice"
+                   value="@salePrice.ToString(System.Globalization.CultureInfo.InvariantCulture)" />
+        </form>
+    }
 
     <!-- PAGE TITLE -->
     <div class="card shadow border-0 rounded-4 mb-4">
         <div class="card-body text-center py-4">
             <h1 class="fw-bold mb-0">
-                Set Sale Price
+                @(isCompleted ? "Order Result" : "Set Sale Price")
             </h1>
         </div>
     </div>
@@ -101,7 +117,7 @@
                     <div class="row text-center align-items-center g-4">
 
                         <!-- Component Cost -->
-                        <div class="col-md-4">
+                        <div class="@summaryColumnClass">
                             <h4 class="fw-bold mb-3">
                                 Component Cost
                             </h4>
@@ -116,7 +132,7 @@
                         </div>
 
                         <!-- Customer Budget -->
-                        <div class="col-md-4">
+                        <div class="@summaryColumnClass">
                             <h4 class="fw-bold mb-3">
                                 Customer Budget
                             </h4>
@@ -129,9 +145,9 @@
                         </div>
 
                         <!-- Sale Price -->
-                        <div class="col-md-4">
+                        <div class="@summaryColumnClass">
                             <h4 class="fw-bold mb-3 text-primary">
-                                Sale Price
+                                @(isCompleted ? "Final Sale Price" : "Sale Price")
                             </h4>
 
                             <div class="alert alert-primary rounded-4 shadow-sm mb-0">
@@ -143,14 +159,31 @@
                             </div>
                         </div>
 
+                        @if (isCompleted)
+                        {
+                            <div class="@summaryColumnClass">
+                                <h4 class="fw-bold mb-3 text-success">
+                                    Profit
+                                </h4>
+
+                                <div class="alert @(profit >= 0 ? "alert-success" : "alert-danger") rounded-4 shadow-sm mb-0">
+                                    <h2 class="fw-bold mb-0">
+                                        @profit.ToString("N0") kr
+                                    </h2>
+                                </div>
+                            </div>
+                        }
+
                     </div>
 
                 </div>
             </div>
 
-            <!-- SET MARKUP -->
-            <div class="card shadow border-0 rounded-4">
-                <div class="card-body p-4">
+            @if (!isCompleted)
+            {
+                <!-- SET MARKUP -->
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4">
 
                     <h2 class="fw-bold mb-4">
                         Set Markup
@@ -210,8 +243,90 @@
                         </button>
                     </div>
 
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                            <div>
+                                <h2 class="fw-bold mb-1">Sale Summary</h2>
+                                <p class="text-muted mb-0">Order #@Model.Order.Id is completed.</p>
+                            </div>
+                            <a asp-controller="Order" asp-action="OrderIndex" class="btn btn-outline-primary rounded-4 align-self-md-start">
+                                Back to Orders
+                            </a>
+                        </div>
+
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-4">
+                                <div class="alert alert-light border rounded-4 mb-0">
+                                    <h6 class="fw-bold mb-1">Markup Used</h6>
+                                    <h3 class="fw-bold mb-0">@actualMarkup.ToString("N0")%</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-light border rounded-4 mb-0">
+                                    <h6 class="fw-bold mb-1">Money Spent</h6>
+                                    <h3 class="fw-bold mb-0">@componentCost.ToString("N0") kr</h3>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="alert alert-light border rounded-4 mb-0">
+                                    <h6 class="fw-bold mb-1">Money Earned</h6>
+                                    <h3 class="fw-bold mb-0">@salePrice.ToString("N0") kr</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h3 class="fw-bold mb-3">Customer Review</h3>
+                        @if (!string.IsNullOrWhiteSpace(reviewText))
+                        {
+                            <div class="alert alert-light border rounded-4 mb-0">
+                                <h6 class="fw-bold mb-2">@customerName says</h6>
+                                <p class="mb-0 fs-5">@reviewText</p>
+                            </div>
+                        }
+                        else if (reviewChecks != null)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var check in reviewChecks.Properties())
+                                {
+                                    var checkBody = check.Value as JObject;
+                                    var passed = checkBody?["isSuccess"]?.Value<bool>()
+                                        ?? checkBody?["IsSuccess"]?.Value<bool>()
+                                        ?? false;
+                                    var message = checkBody?["message"]?.Value<string>()
+                                        ?? checkBody?["Message"]?.Value<string>()
+                                        ?? string.Empty;
+
+                                    <div class="list-group-item px-0 py-3">
+                                        <div class="d-flex justify-content-between align-items-start gap-3">
+                                            <div>
+                                                <h6 class="fw-bold mb-1">@(reviewLabels.TryGetValue(check.Name, out var label) ? label : check.Name)</h6>
+                                                <p class="mb-0 text-muted">
+                                                    @(string.IsNullOrWhiteSpace(message) ? "No complaints from the customer." : message)
+                                                </p>
+                                            </div>
+                                            <span class="badge rounded-pill @(passed ? "bg-success" : "bg-warning text-dark")">
+                                                @(passed ? "Passed" : "Feedback")
+                                            </span>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="alert alert-warning rounded-4 mb-0">
+                                No customer review could be loaded for this order.
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
 
         </div>
 
@@ -360,34 +475,36 @@
 @section Scripts {
     <script>
         const slider = document.getElementById("markupSlider");
-        const markupValue = document.getElementById("markupValue");
-        const markupPreview = document.getElementById("markupPreview");
-        const salePrice = document.getElementById("salePrice");
-        const salePricePreview = document.getElementById("salePricePreview");
-        const sellingPriceInput = document.getElementById("sellingPriceInput");
 
-        const componentCost = Number("@Model.Computer.TotalPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)");
+        if (slider) {
+            const markupValue = document.getElementById("markupValue");
+            const markupPreview = document.getElementById("markupPreview");
+            const salePrice = document.getElementById("salePrice");
+            const salePricePreview = document.getElementById("salePricePreview");
+            const sellingPriceInput = document.getElementById("sellingPriceInput");
 
-        function updateSellingPrice() {
-            const markup = parseInt(slider.value);
+            const componentCost = Number("@Model.Computer.TotalPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)");
 
-            markupValue.innerText = markup;
-            markupPreview.innerText = markup;
+            function updateSellingPrice() {
+                const markup = parseInt(slider.value);
 
-            const calculatedPrice = componentCost * (1 + markup / 100);
-            const roundedPrice = Math.round(calculatedPrice);
+                markupValue.innerText = markup;
+                markupPreview.innerText = markup;
 
-            const formattedPrice = roundedPrice.toLocaleString("sv-SE");
+                const calculatedPrice = componentCost * (1 + markup / 100);
+                const roundedPrice = Math.round(calculatedPrice);
 
-            salePrice.innerText = formattedPrice;
-            salePricePreview.innerText = formattedPrice;
+                const formattedPrice = roundedPrice.toLocaleString("sv-SE");
 
-            sellingPriceInput.value = roundedPrice.toString();
+                salePrice.innerText = formattedPrice;
+                salePricePreview.innerText = formattedPrice;
+
+                sellingPriceInput.value = roundedPrice.toString();
+            }
+
+            slider.addEventListener("input", updateSellingPrice);
+            updateSellingPrice();
         }
-
-        slider.addEventListener("input", updateSellingPrice);
-
-        updateSellingPrice();
 
         const reviewModalElement = document.getElementById("customerReviewModal");
         if (reviewModalElement) {
