@@ -70,6 +70,7 @@
                     JToken token when token.Type == JTokenType.Object => (JObject)token,
                     string jsonText when !string.IsNullOrWhiteSpace(jsonText) && jsonText.TrimStart().StartsWith("{")
                         => JObject.Parse(jsonText),
+                    string errorText => new JObject { ["message"] = errorText },
                     _ => JObject.Parse(JsonConvert.SerializeObject(reviewResponse.Result))
                 };
             }
