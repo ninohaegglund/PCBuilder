@@ -7,6 +7,10 @@ using Contracts;
 using PCBuilder.Service.ComponentsAPI.Interfaces;
 using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
+using PCBuilder.Services.InventoryAPI.IServices;
+using PCBuilder.Web.ViewModels.Inventory;
+using PCBuilder.Service.ComponentsAPI.Models.DTOs;
+using System.Security.Claims;
 using System.Text.Json;
 using NewtonsoftJson = Newtonsoft.Json;
 
@@ -17,11 +21,17 @@ public class ComputerController : Controller
     private readonly IComputerService _computerService;
     private readonly IComponentService _componentService;
     private readonly IOrderService _orderService;
-    public ComputerController(IComputerService computerService, IComponentService componentService, IOrderService orderService)
+    private readonly IInventoryService _inventoryService;
+    public ComputerController(
+        IComputerService computerService,
+        IComponentService componentService,
+        IOrderService orderService,
+        IInventoryService inventoryService)
     {
         _computerService = computerService;
         _componentService = componentService;
         _orderService = orderService;
+        _inventoryService = inventoryService;
     }
 
     [HttpGet]
@@ -91,7 +101,10 @@ public class ComputerController : Controller
             }
         }
 
-        await PopulateComponentSelectListsAsync();
+        var components = await _componentService.GetAllComponentsAsync();
+        var inventoryItems = await GetCurrentInventoryAsync();
+        PopulateComponentSelectLists(components, inventoryItems);
+        PopulateInventory(components, inventoryItems);
         return View(model);
     }
 
@@ -125,7 +138,10 @@ public class ComputerController : Controller
 
         if (!ModelState.IsValid)
         {
-            await PopulateComponentSelectListsAsync();
+            var components = await _componentService.GetAllComponentsAsync();
+            var inventoryItems = await GetCurrentInventoryAsync();
+            PopulateComponentSelectLists(components, inventoryItems);
+            PopulateInventory(components, inventoryItems);
             return View(computer);
         }
 
@@ -154,7 +170,10 @@ public class ComputerController : Controller
             TempData["error"] = response?.Message ?? response?.Result?.ToString() ?? "Unknown error";
         }
 
-        await PopulateComponentSelectListsAsync();
+        var componentLists = await _componentService.GetAllComponentsAsync();
+        var inventory = await GetCurrentInventoryAsync();
+        PopulateComponentSelectLists(componentLists, inventory);
+        PopulateInventory(componentLists, inventory);
         return View(computer);
     }
 
@@ -232,25 +251,23 @@ public class ComputerController : Controller
         return orders?.FirstOrDefault(x => x.ComputerId == computerId);
     }
 
-    private async Task PopulateComponentSelectListsAsync()
+    private void PopulateComponentSelectLists(AllComponentsDto allComponents, List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems)
     {
-        var allComponents = await _componentService.GetAllComponentsAsync();
-
-        ViewBag.CPUs = ToSelectList(allComponents.Cpus, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.GPUs = ToSelectList(allComponents.Gpus, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.RAMs = ToSelectList(allComponents.Rams, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Motherboards = ToSelectList(allComponents.Motherboards, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Cases = ToSelectList(allComponents.Cases, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.PSUs = ToSelectList(allComponents.Psus, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.CPUCoolers = ToSelectList(allComponents.CpuCoolers, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.CaseFans = ToSelectList(allComponents.CaseFans, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Monitors = ToSelectList(allComponents.Monitors, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Keyboards = ToSelectList(allComponents.Keyboards, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Mice = ToSelectList(allComponents.Mice, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Headsets = ToSelectList(allComponents.Headphones, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Speakers = ToSelectList(allComponents.Speakers, x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Storages = ToSelectList(allComponents.InternalStorages, x => x.Id, x => x.Name, x => x.Price)
-            .Concat(ToSelectList(allComponents.ExternalStorages, x => x.Id, x => x.Name, x => x.Price))
+        ViewBag.CPUs = ToSelectList(Owned(allComponents.Cpus, inventoryItems, "CPU"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.GPUs = ToSelectList(Owned(allComponents.Gpus, inventoryItems, "GPU"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.RAMs = ToSelectList(Owned(allComponents.Rams, inventoryItems, "RAM"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Motherboards = ToSelectList(Owned(allComponents.Motherboards, inventoryItems, "Motherboard"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Cases = ToSelectList(Owned(allComponents.Cases, inventoryItems, "Case"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.PSUs = ToSelectList(Owned(allComponents.Psus, inventoryItems, "PSU"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.CPUCoolers = ToSelectList(Owned(allComponents.CpuCoolers, inventoryItems, "CPUCooler"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.CaseFans = ToSelectList(Owned(allComponents.CaseFans, inventoryItems, "CaseFan"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Monitors = ToSelectList(Owned(allComponents.Monitors, inventoryItems, "Monitor"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Keyboards = ToSelectList(Owned(allComponents.Keyboards, inventoryItems, "Keyboard"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Mice = ToSelectList(Owned(allComponents.Mice, inventoryItems, "Mouse"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Headsets = ToSelectList(Owned(allComponents.Headphones, inventoryItems, "Headphones"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Speakers = ToSelectList(Owned(allComponents.Speakers, inventoryItems, "Speakers"), x => x.Id, x => x.Name, x => x.Price);
+        ViewBag.Storages = ToSelectList(Owned(allComponents.InternalStorages, inventoryItems, "InternalStorage"), x => x.Id, x => x.Name, x => x.Price)
+            .Concat(ToSelectList(Owned(allComponents.ExternalStorages, inventoryItems, "ExternalStorage"), x => x.Id, x => x.Name, x => x.Price))
             .ToList();
     }
 
@@ -265,6 +282,76 @@ public class ComputerController : Controller
             Value = getId(component).ToString(),
             Text = $"{getName(component)} - {getPrice(component):N2} kr"
         }).ToList();
+    }
+
+    private async Task<List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto>> GetCurrentInventoryAsync()
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return new List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto>();
+        }
+
+        return await _inventoryService.GetInventoryAsync(userId);
+    }
+
+    private void PopulateInventory(AllComponentsDto components, List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems)
+    {
+        ViewBag.InventoryItems = inventoryItems
+            .Where(x => x.Quantity > 0)
+            .Select(item => new InventoryItemViewModel
+            {
+                Id = item.Id,
+                ComponentType = item.ComponentType,
+                ComponentId = item.ComponentId,
+                DisplayName = ResolveDisplayName(components, item.ComponentType, item.ComponentId),
+                Quantity = item.Quantity,
+                PurchasePrice = item.PurchasePrice,
+                PurchasedAt = item.PurchasedAt
+            })
+            .OrderBy(x => x.ComponentType)
+            .ThenBy(x => x.DisplayName)
+            .ToList();
+    }
+
+    private static IEnumerable<TComponent> Owned<TComponent>(
+        IEnumerable<TComponent> components,
+        IEnumerable<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems,
+        string componentType)
+    {
+        var ownedIds = inventoryItems
+            .Where(x => x.Quantity > 0 && string.Equals(x.ComponentType, componentType, StringComparison.OrdinalIgnoreCase))
+            .Select(x => x.ComponentId)
+            .ToHashSet();
+
+        return components.Where(component =>
+        {
+            var idProperty = component?.GetType().GetProperty("Id");
+            return idProperty?.GetValue(component) is int id && ownedIds.Contains(id);
+        });
+    }
+
+    private static string ResolveDisplayName(AllComponentsDto components, string componentType, int componentId)
+    {
+        return componentType switch
+        {
+            "CPU" => components.Cpus.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "GPU" => components.Gpus.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "RAM" => components.Rams.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Motherboard" => components.Motherboards.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Case" => components.Cases.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "PSU" => components.Psus.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "CPUCooler" => components.CpuCoolers.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "CaseFan" => components.CaseFans.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "InternalStorage" => components.InternalStorages.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "ExternalStorage" => components.ExternalStorages.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Monitor" => components.Monitors.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Keyboard" => components.Keyboards.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Mouse" => components.Mice.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Headphones" => components.Headphones.FirstOrDefault(x => x.Id == componentId)?.Name,
+            "Speakers" => components.Speakers.FirstOrDefault(x => x.Id == componentId)?.Name,
+            _ => null
+        } ?? $"{componentType} #{componentId}";
     }
 
 }

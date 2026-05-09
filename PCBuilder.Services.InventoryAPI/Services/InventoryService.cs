@@ -108,6 +108,67 @@ public class InventoryService : IInventoryService
         await _inventoryRepository.SaveChangesAsync();
     }
 
+    public async Task UseInventoryItemsAsync(Guid userId, IEnumerable<UseInventoryItemDto> items)
+    {
+        var requestedItems = NormalizeItems(items);
+        await EnsureInventoryItemsAsync(userId, requestedItems);
+
+        foreach (var requestedItem in requestedItems)
+        {
+            var inventoryItem = await _inventoryRepository.GetByComponentAsync(
+                userId,
+                requestedItem.ComponentType,
+                requestedItem.ComponentId);
+
+            if (inventoryItem == null)
+            {
+                continue;
+            }
+
+            inventoryItem.Quantity -= requestedItem.Quantity;
+            await _inventoryRepository.UpdateAsync(inventoryItem);
+        }
+
+        await _inventoryRepository.SaveChangesAsync();
+    }
+
+    public async Task EnsureInventoryItemsAsync(Guid userId, IEnumerable<UseInventoryItemDto> items)
+    {
+        var requestedItems = NormalizeItems(items);
+
+        foreach (var requestedItem in requestedItems)
+        {
+            var inventoryItem = await _inventoryRepository.GetByComponentAsync(
+                userId,
+                requestedItem.ComponentType,
+                requestedItem.ComponentId);
+
+            if (inventoryItem == null)
+            {
+                throw new InvalidOperationException($"{requestedItem.ComponentType} #{requestedItem.ComponentId} is missing from inventory.");
+            }
+
+            if (inventoryItem.Quantity < requestedItem.Quantity)
+            {
+                throw new InvalidOperationException($"Not enough {requestedItem.ComponentType} #{requestedItem.ComponentId} in inventory.");
+            }
+        }
+    }
+
+    private static List<UseInventoryItemDto> NormalizeItems(IEnumerable<UseInventoryItemDto> items)
+    {
+        return items
+            .Where(x => x.Quantity > 0 && !string.IsNullOrWhiteSpace(x.ComponentType))
+            .GroupBy(x => new { x.ComponentType, x.ComponentId })
+            .Select(x => new UseInventoryItemDto
+            {
+                ComponentType = x.Key.ComponentType,
+                ComponentId = x.Key.ComponentId,
+                Quantity = x.Sum(item => item.Quantity)
+            })
+            .ToList();
+    }
+
     private static InventoryItemDto MapToDto(InventoryItem item)
     {
         return new InventoryItemDto

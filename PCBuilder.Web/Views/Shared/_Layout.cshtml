@@ -1,4 +1,25 @@
 ﻿<!DOCTYPE html>
+@using System.Security.Claims
+@using PCBuilder.Services.InventoryAPI.IServices
+@inject IWalletService WalletService
+@{
+    decimal? navbarWalletBalance = null;
+    if (User.Identity?.IsAuthenticated == true)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        if (Guid.TryParse(userIdClaim, out var navbarUserId))
+        {
+            try
+            {
+                navbarWalletBalance = (await WalletService.GetWalletAsync(navbarUserId)).Balance;
+            }
+            catch
+            {
+                navbarWalletBalance = null;
+            }
+        }
+    }
+}
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -51,6 +72,16 @@
                                 <i class="bi bi-ticket-perforated-fill me-1"></i>Orders
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link playful-nav-link" asp-controller="Inventory" asp-action="Index">
+                                <i class="bi bi-box-seam-fill me-1"></i>Inventory
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link playful-nav-link" asp-controller="Shop" asp-action="Index">
+                                <i class="bi bi-cart-fill me-1"></i>Shop
+                            </a>
+                        </li>
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle playful-nav-link" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">
@@ -69,6 +100,16 @@
                     <div class="navbar-actions d-flex align-items-center">
                         @if (User.Identity?.IsAuthenticated == true)
                         {
+                            <a asp-controller="Inventory"
+                               asp-action="Index"
+                               class="wallet-pill text-decoration-none me-2"
+                               data-wallet-balance="@(navbarWalletBalance?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "")">
+                                <i class="bi bi-coin"></i>
+                                <span class="wallet-pill-amount">
+                                    @(navbarWalletBalance.HasValue ? $"{navbarWalletBalance.Value:N0} kr" : "Wallet")
+                                </span>
+                            </a>
+
                             <div class="dropdown">
                                 <button class="btn playful-user-trigger dropdown-toggle"
                                         type="button"
@@ -248,6 +289,23 @@
         window.addEventListener("beforeunload", function () {
             saveMusicState();
         });
+
+        const walletPill = document.querySelector(".wallet-pill");
+        if (walletPill) {
+            const currentBalance = Number(walletPill.dataset.walletBalance);
+            const previousBalance = Number(sessionStorage.getItem("walletBalance"));
+
+            if (!Number.isNaN(currentBalance)) {
+                if (!Number.isNaN(previousBalance) && currentBalance > previousBalance) {
+                    walletPill.classList.add("wallet-pill-boost");
+                    setTimeout(function () {
+                        walletPill.classList.remove("wallet-pill-boost");
+                    }, 1400);
+                }
+
+                sessionStorage.setItem("walletBalance", currentBalance.toString());
+            }
+        }
     </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>

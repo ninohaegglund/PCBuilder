@@ -7,8 +7,11 @@ using PCBuilder.Services.CustomerAPI.DTO;
 using PCBuilder.Services.CustomerAPI.IServices;
 using Contracts;
 using PCBuilder.Web.ViewModels.Computer;
+using PCBuilder.Services.InventoryAPI.DTO;
+using PCBuilder.Services.InventoryAPI.IServices;
 using System.Net;
 using System.Net.Http.Headers;
+using System.Security.Claims;
 using System.Text;
 
 namespace PCBuilder.Web.Controllers;
@@ -22,19 +25,25 @@ public class OrderController : Controller
     private readonly ICustomerService _customerService;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IInventoryService _inventoryService;
+    private readonly IWalletService _walletService;
 
     public OrderController(
         IOrderService orderService,
         IComputerService computerService,
         ICustomerService customerService,
         IHttpClientFactory httpClientFactory,
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        IInventoryService inventoryService,
+        IWalletService walletService)
     {
         _orderService = orderService;
         _computerService = computerService;
         _customerService = customerService;
         _httpClientFactory = httpClientFactory;
         _httpContextAccessor = httpContextAccessor;
+        _inventoryService = inventoryService;
+        _walletService = walletService;
     }
 
     public async Task<IActionResult> OrderIndex()
@@ -163,16 +172,80 @@ public class OrderController : Controller
             return RedirectToAction(nameof(OrderIndex));
         }
 
+        if (vm.Order.Status == OrderStatus.Completed && !TempData.ContainsKey("ReviewResponse"))
+        {
+            vm.ReviewResponse = await GenerateReviewAsync(id);
+        }
+
         return View(vm);
     }
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> FinishBuild(int orderId, decimal sellingPrice)
     {
+        if (!TryGetCurrentUserId(out var userId))
+        {
+            TempData["error"] = "You must be logged in to finish a build.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
+        var orderResponse = await _orderService.GetOrderByIdAsync(orderId);
+        var order = orderResponse != null && orderResponse.IsSuccess && orderResponse.Result != null
+            ? JsonConvert.DeserializeObject<OrderDTO>(JsonConvert.SerializeObject(orderResponse.Result))
+            : null;
+
+        if (order == null)
+        {
+            TempData["error"] = orderResponse?.Message ?? "Order could not be found.";
+            return RedirectToAction(nameof(OrderIndex));
+        }
+
+        if (order.Status == OrderStatus.Completed)
+        {
+            TempData["error"] = "This order is already completed.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
+        if (!order.ComputerId.HasValue)
+        {
+            TempData["error"] = "Cannot finish an order without a connected computer.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
+        var computerResponse = await _computerService.GetComputerByIdAsync(order.ComputerId.Value);
+        var computer = computerResponse != null && computerResponse.IsSuccess && computerResponse.Result != null
+            ? JsonConvert.DeserializeObject<ComputerDTO>(JsonConvert.SerializeObject(computerResponse.Result))
+            : null;
+
+        if (computer == null)
+        {
+            TempData["error"] = computerResponse?.Message ?? "Computer could not be loaded.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
+        var usedItems = GetUsedInventoryItems(computer);
+
+        try
+        {
+            await _inventoryService.EnsureInventoryItemsAsync(userId, usedItems);
+        }
+        catch (InvalidOperationException ex)
+        {
+            TempData["error"] = $"Inventory is missing parts for this build: {ex.Message}";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+        catch (ArgumentException ex)
+        {
+            TempData["error"] = ex.Message;
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
         var response = await _orderService.UpdateSellingPriceAsync(orderId, sellingPrice);
 
         if (response != null && response.IsSuccess)
         {
+            await _inventoryService.UseInventoryItemsAsync(userId, usedItems);
+            await _walletService.AddFundsAsync(userId, new AddFundsDto { Amount = sellingPrice });
             var reviewResponse = await GenerateReviewAsync(orderId);
 
             TempData["success"] = "Build finished and selling price saved.";
@@ -184,6 +257,75 @@ public class OrderController : Controller
 
         TempData["error"] = response?.Message ?? "Failed to save selling price.";
         return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(userIdClaim, out userId);
+    }
+
+    private static List<UseInventoryItemDto> GetUsedInventoryItems(ComputerDTO computer)
+    {
+        var items = new List<UseInventoryItemDto>();
+
+        AddSingle(items, "CPU", computer.CpuId);
+        AddSingle(items, "Motherboard", computer.MotherboardId);
+        AddSingle(items, "Case", computer.CaseId);
+        AddSingle(items, "PSU", computer.PowerSupplyId);
+        AddSingle(items, "CPUCooler", computer.CpuCoolerId);
+        AddSingle(items, "Keyboard", computer.KeyboardId);
+        AddSingle(items, "Mouse", computer.MouseId);
+        AddSingle(items, "Headphones", computer.HeadphonesId);
+
+        AddMany(items, "GPU", computer.GpuIds);
+        AddMany(items, "RAM", computer.RamIds);
+        AddMany(items, "InternalStorage", computer.InternalStorages?.Select(x => x.Id));
+        AddMany(items, "ExternalStorage", computer.ExternalStorages?.Select(x => x.Id));
+        AddMany(items, "CaseFan", computer.CaseFanIds);
+        AddMany(items, "Monitor", computer.MonitorIds);
+        AddMany(items, "Speakers", computer.SpeakerIds);
+
+        return items
+            .GroupBy(x => new { x.ComponentType, x.ComponentId })
+            .Select(x => new UseInventoryItemDto
+            {
+                ComponentType = x.Key.ComponentType,
+                ComponentId = x.Key.ComponentId,
+                Quantity = x.Sum(item => item.Quantity)
+            })
+            .ToList();
+    }
+
+    private static void AddSingle(List<UseInventoryItemDto> items, string componentType, int? componentId)
+    {
+        if (componentId.HasValue)
+        {
+            items.Add(new UseInventoryItemDto
+            {
+                ComponentType = componentType,
+                ComponentId = componentId.Value,
+                Quantity = 1
+            });
+        }
+    }
+
+    private static void AddMany(List<UseInventoryItemDto> items, string componentType, IEnumerable<int>? componentIds)
+    {
+        if (componentIds == null)
+        {
+            return;
+        }
+
+        foreach (var componentId in componentIds)
+        {
+            items.Add(new UseInventoryItemDto
+            {
+                ComponentType = componentType,
+                ComponentId = componentId,
+                Quantity = 1
+            });
+        }
     }
 
     private async Task<ResponseDTO> GenerateReviewAsync(int orderId)
