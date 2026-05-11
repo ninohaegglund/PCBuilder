@@ -19,6 +19,7 @@ namespace PCBuilder.Web.Controllers;
 [Authorize]
 public class OrderController : Controller
 {
+    private const decimal CustomerRefusalBudgetMultiplier = 1.15m;
 
     private readonly IOrderService _orderService;
     private readonly IComputerService _computerService;
@@ -27,6 +28,7 @@ public class OrderController : Controller
     private readonly IHttpContextAccessor _httpContextAccessor;
     private readonly IInventoryService _inventoryService;
     private readonly IWalletService _walletService;
+    private string? _lastOrderMessage;
 
     public OrderController(
         IOrderService orderService,
@@ -48,21 +50,31 @@ public class OrderController : Controller
 
     public async Task<IActionResult> OrderIndex()
     {
-        List<OrderListDTO>? list = new();
+        var orders = await LoadOrdersAsync();
+        var historyOrders = orders
+            .Where(IsHistoryOrder)
+            .ToList();
 
-        ResponseDTO? response = await _orderService.GetAllOrdersAsync();
+        ViewBag.HistoryCount = historyOrders.Count;
+        ViewBag.CompletedCount = historyOrders.Count(x => x.Status == OrderStatus.Completed);
+        ViewBag.RejectedCount = historyOrders.Count(x => x.Status == OrderStatus.Rejected);
+        ViewBag.IsGameOver = string.Equals(_lastOrderMessage, "GAME_OVER", StringComparison.OrdinalIgnoreCase);
 
-        if (response != null && response.IsSuccess)
-        {
-            list = JsonConvert.DeserializeObject<List<OrderListDTO>>(
-                JsonConvert.SerializeObject(response.Result));
-        }
-        else
-        {
-            TempData["error"] = response?.Message;
-        }
+        return View(orders
+            .Where(x => !IsHistoryOrder(x))
+            .OrderBy(x => x.Status == OrderStatus.InProgress ? 0 : x.Status == OrderStatus.Pending ? 1 : 2)
+            .ThenBy(x => x.Status == OrderStatus.InProgress ? 0 : x.Budget)
+            .ThenByDescending(x => x.CreatedAt)
+            .ToList());
+    }
 
-        return View(list);
+    public async Task<IActionResult> OrderHistory()
+    {
+        var orders = await LoadOrdersAsync();
+        return View(orders
+            .Where(IsHistoryOrder)
+            .OrderByDescending(x => x.CreatedAt)
+            .ToList());
     }
 
     [HttpGet]
@@ -206,6 +218,19 @@ public class OrderController : Controller
             return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
         }
 
+        if (sellingPrice <= 0)
+        {
+            TempData["error"] = "Sale price must be greater than 0 kr.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
+        var refusalLimit = order.Budget * CustomerRefusalBudgetMultiplier;
+        if (order.Budget > 0 && sellingPrice > refusalLimit)
+        {
+            TempData["error"] = $"The customer refuses to pay {sellingPrice:N0} kr. Their absolute limit is about {refusalLimit:N0} kr.";
+            return RedirectToAction(nameof(PriceSummaryIndex), new { id = orderId });
+        }
+
         if (!order.ComputerId.HasValue)
         {
             TempData["error"] = "Cannot finish an order without a connected computer.";
@@ -265,6 +290,26 @@ public class OrderController : Controller
         return Guid.TryParse(userIdClaim, out userId);
     }
 
+    private async Task<List<OrderListDTO>> LoadOrdersAsync()
+    {
+        ResponseDTO? response = await _orderService.GetAllOrdersAsync();
+        _lastOrderMessage = response?.Message;
+
+        if (response != null && response.IsSuccess)
+        {
+            return JsonConvert.DeserializeObject<List<OrderListDTO>>(
+                JsonConvert.SerializeObject(response.Result)) ?? new List<OrderListDTO>();
+        }
+
+        TempData["error"] = response?.Message;
+        return new List<OrderListDTO>();
+    }
+
+    private static bool IsHistoryOrder(OrderListDTO order)
+    {
+        return order.Status is OrderStatus.Completed or OrderStatus.Rejected;
+    }
+
     private static List<UseInventoryItemDto> GetUsedInventoryItems(ComputerDTO computer)
     {
         var items = new List<UseInventoryItemDto>();
@@ -280,8 +325,8 @@ public class OrderController : Controller
 
         AddMany(items, "GPU", computer.GpuIds);
         AddMany(items, "RAM", computer.RamIds);
-        AddMany(items, "InternalStorage", computer.InternalStorages?.Select(x => x.Id));
-        AddMany(items, "ExternalStorage", computer.ExternalStorages?.Select(x => x.Id));
+        AddMany(items, "InternalStorage", computer.InternalStorageIds ?? computer.InternalStorages?.Select(x => x.Id));
+        AddMany(items, "ExternalStorage", computer.ExternalStorageIds ?? computer.ExternalStorages?.Select(x => x.Id));
         AddMany(items, "CaseFan", computer.CaseFanIds);
         AddMany(items, "Monitor", computer.MonitorIds);
         AddMany(items, "Speakers", computer.SpeakerIds);

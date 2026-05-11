@@ -5,6 +5,7 @@ public class OrderDTO
     public int Id { get; set; }
     public int CustomerId { get; set; }
     public Guid? UserId { get; set; }
+    public int ReviewId { get; set; }
     public int? ComputerId { get; set; }
     public decimal Budget { get; set; }
     public decimal SellingPrice { get; set; }

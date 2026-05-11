@@ -1,0 +1,152 @@
+[
+  {
+    "description": "Starter esports PC",
+    "detailedDescription": "I mostly play lighter competitive games like Valorant, CS, and Fortnite. I do not need anything fancy, but I want stable FPS at 1080p and I need the final price to stay friendly because this is my first real gaming PC.",
+    "budget": 10500
+  },
+  {
+    "description": "School and everyday desktop",
+    "detailedDescription": "I need a reliable computer for schoolwork, browsing, video calls, and some very light games. I care more about value and stability than RGB or extreme performance. Please keep the build practical and affordable.",
+    "budget": 9500
+  },
+  {
+    "description": "Budget family gaming PC",
+    "detailedDescription": "This PC is for a younger gamer who wants Minecraft, Roblox, Sims, and some esports titles to run smoothly. The budget is not huge, so I would rather have a sensible balanced build than expensive parts.",
+    "budget": 11500
+  },
+  {
+    "description": "Quiet home office PC",
+    "detailedDescription": "I work from home and want the computer to feel calm, quiet, and dependable. It does not need a powerful graphics card, but it should not feel cheap or noisy during meetings.",
+    "budget": 12000
+  },
+  {
+    "description": "First streaming setup",
+    "detailedDescription": "I want to start streaming smaller games and school projects. I know the budget is tight, so I am fine with a starter setup as long as it has enough CPU, memory, and cooling to avoid feeling unstable.",
+    "budget": 13000
+  },
+  {
+    "description": "Compact starter build",
+    "detailedDescription": "I have a small desk and want a neat PC that can still handle 1080p gaming. Please pay attention to the case size so the graphics card actually fits without making the build feel cramped.",
+    "budget": 12500
+  },
+  {
+    "description": "Balanced 1080p gaming PC",
+    "detailedDescription": "I play a mix of story games and competitive games at 1080p. I want stronger performance than a basic starter PC, but I still care about getting good value for the money.",
+    "budget": 16500
+  },
+  {
+    "description": "Student creator PC",
+    "detailedDescription": "I edit short videos, make thumbnails, and game a little after school. I need a balanced machine with enough RAM and storage so projects do not feel slow, but the budget still matters.",
+    "budget": 17500
+  },
+  {
+    "description": "Quiet productivity build",
+    "detailedDescription": "I use many browser tabs, office apps, and occasional photo editing. I want a quiet PC with a quality power supply and cooling that will not become annoying during long workdays.",
+    "budget": 19000
+  },
+  {
+    "description": "Mid-range gaming upgrade",
+    "detailedDescription": "I am upgrading from an old PC and want newer games to run well at high 1080p or entry 1440p settings. I care about the GPU, but please do not ignore the PSU and airflow.",
+    "budget": 22000
+  },
+  {
+    "description": "Dual-monitor study setup",
+    "detailedDescription": "I need a PC for studying, programming, video calls, and a dual-monitor desk. It should feel responsive and tidy without spending like a hardcore gaming rig.",
+    "budget": 20500
+  },
+  {
+    "description": "Small business workstation",
+    "detailedDescription": "This PC will handle accounting software, large spreadsheets, video meetings, and light design work. Reliability matters a lot, so I would like enough RAM, storage, and a decent PSU.",
+    "budget": 21500
+  },
+  {
+    "description": "1440p gaming PC",
+    "detailedDescription": "I want a strong 1440p gaming build that feels like a real upgrade. I care about smooth performance, but I also want the case, cooling, and power supply to match the GPU properly.",
+    "budget": 28500
+  },
+  {
+    "description": "Video editing workstation",
+    "detailedDescription": "I edit longer videos and keep a lot of project files around. I need good CPU performance, plenty of RAM, fast storage, and cooling that will not fall apart under longer renders.",
+    "budget": 31000
+  },
+  {
+    "description": "Premium quiet gaming PC",
+    "detailedDescription": "I want a clean, quiet gaming PC that can handle modern games without sounding loud. I care about quality parts, good airflow, and a GPU that fits comfortably in the case.",
+    "budget": 33500
+  },
+  {
+    "description": "Streaming and gaming build",
+    "detailedDescription": "I want to play and stream at the same time. The PC should have enough CPU headroom, a capable GPU, and a power supply that leaves some breathing room for upgrades.",
+    "budget": 34000
+  },
+  {
+    "description": "4K creator desk",
+    "detailedDescription": "I work with high-resolution photos, video, and a larger monitor. I want the build to feel premium and fast, especially when exporting projects or multitasking.",
+    "budget": 42000
+  },
+  {
+    "description": "High-end gaming showcase",
+    "detailedDescription": "I want a high-end gaming PC that looks clean and performs brilliantly. Please avoid squeezing an oversized GPU into a case that is too small, and make sure the PSU can handle the build.",
+    "budget": 48000
+  },
+  {
+    "description": "Heavy workstation build",
+    "detailedDescription": "I run demanding software, multitask heavily, and want a powerful machine for serious work. I am willing to pay more for performance, cooling, and long-term stability.",
+    "budget": 54000
+  },
+  {
+    "description": "Dream gaming and streaming rig",
+    "detailedDescription": "I want a top-tier PC for gaming, streaming, and content creation. The budget is high, but I still expect the build to make sense rather than just picking expensive parts randomly.",
+    "budget": 60000
+  },
+  {
+    "description": "Starter school desk bundle",
+    "detailedDescription": "I need a simple desktop for school, browsing, and video calls. Please include a keyboard and mouse so it is ready to use right away, but keep the price friendly.",
+    "budget": 10800
+  },
+  {
+    "description": "Budget gaming headset build",
+    "detailedDescription": "I play esports games with friends and need a starter gaming PC with a headset included. Performance matters, but the headset should be part of the order too.",
+    "budget": 12600
+  },
+  {
+    "description": "Family desktop with speakers",
+    "detailedDescription": "This will be a shared family computer for homework, browsing, light games, and music. Please include speakers so it works well in the living room.",
+    "budget": 12800
+  },
+  {
+    "description": "Complete starter desk package",
+    "detailedDescription": "I do not have any accessories yet, so I need a complete setup with keyboard, mouse, headset, and speakers. It can be modest, but it should feel complete.",
+    "budget": 15000
+  },
+  {
+    "description": "Dorm room compact setup",
+    "detailedDescription": "I have a small dorm desk and want a compact gaming PC with a keyboard, mouse, and headset. Please avoid parts that make the build too cramped or too loud.",
+    "budget": 17000
+  },
+  {
+    "description": "Music and homework desktop",
+    "detailedDescription": "I mostly need schoolwork, browsing, and music, so the PC should be quiet and dependable. Please include speakers, and do not overspend on gaming parts.",
+    "budget": 18000
+  },
+  {
+    "description": "Office reception bundle",
+    "detailedDescription": "This computer is for a reception desk with office apps, video calls, and occasional presentations. Please include a keyboard, mouse, and speakers.",
+    "budget": 23500
+  },
+  {
+    "description": "Streamer desk kit",
+    "detailedDescription": "I want to stream lighter games and need the PC plus a keyboard, mouse, and headset. The build should have enough CPU headroom and not cut corners on cooling.",
+    "budget": 24500
+  },
+  {
+    "description": "Creator desk package",
+    "detailedDescription": "I edit short videos, listen to music while working, and need a full desk package with keyboard, mouse, headset, and speakers. Storage and RAM matter a lot.",
+    "budget": 32000
+  },
+  {
+    "description": "Premium gaming full setup",
+    "detailedDescription": "I want a strong gaming PC and a complete setup with keyboard, mouse, headset, and speakers. The accessories should not feel like an afterthought.",
+    "budget": 39000
+  }
+]

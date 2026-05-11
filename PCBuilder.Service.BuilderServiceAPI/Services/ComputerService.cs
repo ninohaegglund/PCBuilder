@@ -115,18 +115,38 @@ public class ComputerService : IComputerService
 
         if (computer.StorageIds is { Count: > 0 })
         {
-            var internalTask = _componentsService.GetInternalStoragesAsync(computer.StorageIds);
-            var externalTask = _componentsService.GetExternalStoragesAsync(computer.StorageIds);
-            await Task.WhenAll(internalTask, externalTask);
+            var positiveStorageIds = computer.StorageIds
+                .Where(id => id > 0)
+                .Distinct()
+                .ToList();
+            var encodedExternalStorageIds = computer.StorageIds
+                .Where(id => id < 0)
+                .Select(Math.Abs)
+                .Distinct()
+                .ToList();
 
-            var internalStorages = await internalTask;
-            var externalStorages = await externalTask;
+            var internalStorages = positiveStorageIds.Any()
+                ? await _componentsService.GetInternalStoragesAsync(positiveStorageIds)
+                : new List<PCBuilder.Service.ComponentsAPI.Models.InternalHardDrive>();
+
+            var resolvedInternalIds = internalStorages
+                .Select(storage => storage.Id)
+                .ToHashSet();
+            var legacyExternalIds = positiveStorageIds
+                .Where(id => !resolvedInternalIds.Contains(id));
+            var externalStorageIds = encodedExternalStorageIds
+                .Concat(legacyExternalIds)
+                .Distinct()
+                .ToList();
+            var externalStorages = externalStorageIds.Any()
+                ? await _componentsService.GetExternalStoragesAsync(externalStorageIds)
+                : new List<PCBuilder.Service.ComponentsAPI.Models.ExternalHardDrive>();
 
             dto.InternalStorages = _mapper.Map<List<InternalStorageDto>>(internalStorages);
             dto.ExternalStorages = _mapper.Map<List<ExternalStorageDto>>(externalStorages);
 
-            dto.InternalStorageIds = computer.StorageIds.ToList();
-            dto.ExternalStorageIds = computer.StorageIds.ToList();
+            dto.InternalStorageIds = internalStorages.Select(storage => storage.Id).ToList();
+            dto.ExternalStorageIds = externalStorages.Select(storage => storage.Id).ToList();
         }
 
         if (computer.CaseFanIds is { Count: > 0 })

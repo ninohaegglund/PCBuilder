@@ -13,4 +13,5 @@ public interface IComputerValidationService
     Task<ResponseDTO> CheckCoolingIsSufficientAsync(Order order, ComputerDTO computer);
     Task<ResponseDTO> CheckEfficiencyIsGoodAsync(Order order, ComputerDTO computer);
     Task<ResponseDTO> CheckPriceIsWithinBudgetAsync(Order order, ComputerDTO computer);
+    Task<ResponseDTO> CheckRequestedPeripheralsAsync(Order order, ComputerDTO computer);
 }

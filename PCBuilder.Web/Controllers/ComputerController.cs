@@ -84,7 +84,9 @@ public class ComputerController : Controller
                                     HeadsetId = existingComputer.HeadphonesId,
                                     GPUIds = existingComputer.GpuIds ?? new List<int>(),
                                     RAMIds = existingComputer.RamIds ?? new List<int>(),
-                                    StorageIds = existingComputer.InternalStorageIds ?? existingComputer.ExternalStorageIds ?? new List<int>(),
+                                    StorageIds = (existingComputer.InternalStorageIds ?? new List<int>())
+                                        .Concat((existingComputer.ExternalStorageIds ?? new List<int>()).Select(id => -id))
+                                        .ToList(),
                                     CaseFanIds = existingComputer.CaseFanIds ?? new List<int>(),
                                     MonitorIds = existingComputer.MonitorIds ?? new List<int>(),
                                     SpeakerIds = existingComputer.SpeakerIds ?? new List<int>(),
@@ -103,8 +105,7 @@ public class ComputerController : Controller
 
         var components = await _componentService.GetAllComponentsAsync();
         var inventoryItems = await GetCurrentInventoryAsync();
-        PopulateComponentSelectLists(components, inventoryItems);
-        PopulateInventory(components, inventoryItems);
+        PopulateBuildPageData(components, inventoryItems);
         return View(model);
     }
 
@@ -140,8 +141,7 @@ public class ComputerController : Controller
         {
             var components = await _componentService.GetAllComponentsAsync();
             var inventoryItems = await GetCurrentInventoryAsync();
-            PopulateComponentSelectLists(components, inventoryItems);
-            PopulateInventory(components, inventoryItems);
+            PopulateBuildPageData(components, inventoryItems);
             return View(computer);
         }
 
@@ -172,8 +172,7 @@ public class ComputerController : Controller
 
         var componentLists = await _componentService.GetAllComponentsAsync();
         var inventory = await GetCurrentInventoryAsync();
-        PopulateComponentSelectLists(componentLists, inventory);
-        PopulateInventory(componentLists, inventory);
+        PopulateBuildPageData(componentLists, inventory);
         return View(computer);
     }
 
@@ -266,9 +265,17 @@ public class ComputerController : Controller
         ViewBag.Mice = ToSelectList(Owned(allComponents.Mice, inventoryItems, "Mouse"), x => x.Id, x => x.Name, x => x.Price);
         ViewBag.Headsets = ToSelectList(Owned(allComponents.Headphones, inventoryItems, "Headphones"), x => x.Id, x => x.Name, x => x.Price);
         ViewBag.Speakers = ToSelectList(Owned(allComponents.Speakers, inventoryItems, "Speakers"), x => x.Id, x => x.Name, x => x.Price);
-        ViewBag.Storages = ToSelectList(Owned(allComponents.InternalStorages, inventoryItems, "InternalStorage"), x => x.Id, x => x.Name, x => x.Price)
-            .Concat(ToSelectList(Owned(allComponents.ExternalStorages, inventoryItems, "ExternalStorage"), x => x.Id, x => x.Name, x => x.Price))
+        ViewBag.Storages = ToSelectList(Owned(allComponents.InternalStorages, inventoryItems, "InternalStorage"), x => x.Id, x => $"{x.Name} (Internal)", x => x.Price)
+            .Concat(ToSelectList(Owned(allComponents.ExternalStorages, inventoryItems, "ExternalStorage"), x => -x.Id, x => $"{x.Name} (External)", x => x.Price))
             .ToList();
+    }
+
+    private void PopulateBuildPageData(AllComponentsDto components, List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems)
+    {
+        PopulateComponentSelectLists(components, inventoryItems);
+        PopulateInventory(components, inventoryItems);
+        PopulateBuildCompatibilityData(components, inventoryItems);
+        ViewBag.ShopComponents = components;
     }
 
     private static List<SelectListItem> ToSelectList<TComponent>(
@@ -312,6 +319,115 @@ public class ComputerController : Controller
             .OrderBy(x => x.ComponentType)
             .ThenBy(x => x.DisplayName)
             .ToList();
+    }
+
+    private void PopulateBuildCompatibilityData(AllComponentsDto components, List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems)
+    {
+        var data = new
+        {
+            cpus = Owned(components.Cpus, inventoryItems, "CPU").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                tdp = x.Tdp ?? 0,
+                price = x.Price ?? 0m
+            }),
+            gpus = Owned(components.Gpus, inventoryItems, "GPU").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                tdp = x.Tdp ?? 0,
+                lengthMm = x.LengthMM ?? 0,
+                price = x.Price ?? 0m
+            }),
+            rams = Owned(components.Rams, inventoryItems, "RAM").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                capacityGb = x.TotalCapacityGB,
+                price = x.Price ?? 0m
+            }),
+            motherboards = Owned(components.Motherboards, inventoryItems, "Motherboard").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            cases = Owned(components.Cases, inventoryItems, "Case").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                maxGpuLengthMm = x.MaxGpuLengthMm ?? 0,
+                maxCpuCoolerHeightMm = x.MaxCpuCoolerHeightMm ?? 0,
+                fanMountCount = x.FanMountCount ?? 0,
+                price = x.Price ?? 0m
+            }),
+            psus = Owned(components.Psus, inventoryItems, "PSU").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                wattage = x.Wattage,
+                efficiencyRating = x.EfficiencyRating ?? string.Empty,
+                price = x.Price ?? 0m
+            }),
+            cpuCoolers = Owned(components.CpuCoolers, inventoryItems, "CPUCooler").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                maxTdpWatts = x.MaxTdpWatts ?? 0,
+                heightMm = x.HeightMm ?? 0,
+                price = x.Price ?? 0m
+            }),
+            caseFans = Owned(components.CaseFans, inventoryItems, "CaseFan").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            storages = Owned(components.InternalStorages, inventoryItems, "InternalStorage").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }).Concat(Owned(components.ExternalStorages, inventoryItems, "ExternalStorage").Select(x => new
+            {
+                id = -x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            })),
+            monitors = Owned(components.Monitors, inventoryItems, "Monitor").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            keyboards = Owned(components.Keyboards, inventoryItems, "Keyboard").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            mice = Owned(components.Mice, inventoryItems, "Mouse").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            headsets = Owned(components.Headphones, inventoryItems, "Headphones").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            }),
+            speakers = Owned(components.Speakers, inventoryItems, "Speakers").Select(x => new
+            {
+                id = x.Id,
+                name = x.Name,
+                price = x.Price ?? 0m
+            })
+        };
+
+        ViewBag.BuildCompatibilityDataJson = JsonSerializer.Serialize(data);
     }
 
     private static IEnumerable<TComponent> Owned<TComponent>(

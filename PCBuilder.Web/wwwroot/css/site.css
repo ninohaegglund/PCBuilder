@@ -471,6 +471,12 @@ form .form-control {
     }
 
 /* Reviews */
+.review-stars {
+    color: #ffc107;
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+
 .review-card {
     padding: 1.4rem;
     background: #fff;
@@ -2089,6 +2095,98 @@ select.playful-input[multiple] {
     border: 1px solid rgba(15, 23, 42, 0.1);
     border-radius: 0.85rem;
     background: #ffffff;
+}
+
+.build-shop-modal .modal-content {
+    border: 3px solid #111;
+    border-radius: 1rem;
+    box-shadow: 8px 8px 0 #111;
+}
+
+.build-shop-modal .modal-header {
+    background: #d9ff70;
+    border-bottom: 3px solid #111;
+}
+
+.build-shop-filters,
+.build-shop-cart {
+    border: 2px solid #111;
+    border-radius: 0.85rem;
+    background: #fffdf7;
+    padding: 1rem;
+}
+
+.build-shop-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.build-shop-section {
+    display: grid;
+    gap: 0.65rem;
+}
+
+.build-shop-section-title {
+    font-weight: 800;
+    color: #111;
+}
+
+.build-shop-item {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.build-shop-item-icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 2px solid #111;
+    border-radius: 0.65rem;
+    background: #7fdfff;
+    color: #111;
+    font-size: 1.25rem;
+}
+
+.build-shop-item-body {
+    min-width: 0;
+}
+
+.build-shop-item-action {
+    display: grid;
+    justify-items: end;
+    gap: 0.35rem;
+}
+
+.build-shop-cart {
+    position: sticky;
+    top: 1rem;
+}
+
+.build-shop-cart-row {
+    padding: 0.75rem;
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+@media (max-width: 575.98px) {
+    .build-shop-item {
+        grid-template-columns: auto minmax(0, 1fr);
+    }
+
+    .build-shop-item-action {
+        grid-column: 1 / -1;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        justify-items: stretch;
+    }
 }
 
 .shop-filter-price,

@@ -15,13 +15,22 @@ public class ReviewService : IReviewService
 {
     private readonly IMapper _mapper;
     private readonly IReviewRepository _reviewRepository;
+    private readonly IOrderRepository _orderRepository;
     private readonly IComputerValidationService _computerValidationService;
     private readonly IOrderService _orderService;
     private readonly IComputerService _computerService;
-    public ReviewService(IMapper mapper, IReviewRepository reviewRepository, IComputerValidationService computerValidationService, IOrderService orderService, IComputerService computerService)
+
+    public ReviewService(
+        IMapper mapper,
+        IReviewRepository reviewRepository,
+        IOrderRepository orderRepository,
+        IComputerValidationService computerValidationService,
+        IOrderService orderService,
+        IComputerService computerService)
     {
         _mapper = mapper;
         _reviewRepository = reviewRepository;
+        _orderRepository = orderRepository;
         _computerValidationService = computerValidationService;
         _orderService = orderService;
         _computerService = computerService;
@@ -95,6 +104,7 @@ public class ReviewService : IReviewService
                         Id = orderList.Id,
                         CustomerId = orderList.CustomerId,
                         UserId = orderList.UserId,
+                        ReviewId = orderList.ReviewId,
                         ComputerId = orderList.ComputerId,
                         Budget = orderList.Budget,
                         SellingPrice = orderList.SellingPrice,
@@ -116,6 +126,28 @@ public class ReviewService : IReviewService
                 };
             }
 
+            Review? existingBrokenReview = null;
+            if (orderDto.ReviewId > 0)
+            {
+                var existingReview = await _reviewRepository.GetReviewById(orderDto.ReviewId);
+                if (existingReview != null)
+                {
+                    if (IsTechnicalReviewText(existingReview.Comment) || IsTechnicalReviewText(existingReview.Title))
+                    {
+                        existingBrokenReview = existingReview;
+                    }
+                    else
+                    {
+                        return new ResponseDTO
+                        {
+                            IsSuccess = existingReview.Rating >= 4,
+                            Message = "Review already completed.",
+                            Result = existingReview.Comment ?? existingReview.Title
+                        };
+                    }
+                }
+            }
+
             if (!orderDto.ComputerId.HasValue)
             {
                 return new ResponseDTO
@@ -131,6 +163,7 @@ public class ReviewService : IReviewService
                 Id = orderDto.Id,
                 CustomerId = orderDto.CustomerId,
                 UserId = orderDto.UserId,
+                ReviewId = orderDto.ReviewId,
                 ComputerId = orderDto.ComputerId,
                 Budget = orderDto.Budget,
                 SellingPrice = orderDto.SellingPrice,
@@ -144,7 +177,12 @@ public class ReviewService : IReviewService
 
             if (!computerResult.IsSuccess)
             {
-                return computerResult;
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = computerResult.Message ?? "The customer review could not inspect the finished computer.",
+                    Result = null
+                };
             }
 
             var computer = ToTypedResult<ComputerDTO>(computerResult.Result);
@@ -163,12 +201,59 @@ public class ReviewService : IReviewService
             var psuResult = await _computerValidationService.CheckPsuCanPowerAsync(order, computer);
             var efficiencyResult = await _computerValidationService.CheckEfficiencyIsGoodAsync(order, computer);
             var priceResult = await _computerValidationService.CheckPriceIsWithinBudgetAsync(order, computer);
+            var peripheralsResult = await _computerValidationService.CheckRequestedPeripheralsAsync(order, computer);
 
-            var allPassed = gpuFitsResult.IsSuccess &&       
-                            coolingResult.IsSuccess &&
-                            psuResult.IsSuccess &&
-                            efficiencyResult.IsSuccess &&
-                            priceResult.IsSuccess;
+            var checks = new[]
+            {
+                gpuFitsResult,
+                coolingResult,
+                psuResult,
+                efficiencyResult,
+                priceResult,
+                peripheralsResult
+            };
+            var allPassed = checks.All(x => x.IsSuccess);
+            var failedChecks = checks.Count(x => !x.IsSuccess);
+            var rating = Math.Clamp(5 - failedChecks, 1, 5);
+            var budgetOverRatio = order.Budget > 0
+                ? (order.SellingPrice - order.Budget) / order.Budget
+                : 0m;
+
+            if (budgetOverRatio > 0.15m)
+            {
+                rating = Math.Min(rating, 2);
+            }
+            else if (budgetOverRatio > 0.05m)
+            {
+                rating = Math.Min(rating, 3);
+            }
+
+            var reviewComment = allPassed
+                ? "The customer is very happy with the build and would recommend your workshop."
+                : checks.FirstOrDefault(x => !x.IsSuccess && !string.IsNullOrWhiteSpace(x.Message))?.Message
+                    ?? "The customer had some concerns about the finished build.";
+
+            var savedReview = existingBrokenReview ?? new Review();
+            savedReview.Title = $"{rating}-star customer review";
+            savedReview.Comment = reviewComment;
+            savedReview.CreatedDate = DateTime.UtcNow;
+            savedReview.Rating = rating;
+
+            if (existingBrokenReview != null)
+            {
+                await _reviewRepository.UpdateReview(savedReview);
+            }
+            else
+            {
+                await _reviewRepository.AddReview(savedReview);
+            }
+
+            var storedOrder = await _orderRepository.GetOrderById(orderDto.Id);
+            if (storedOrder != null && storedOrder.ReviewId == 0)
+            {
+                storedOrder.ReviewId = savedReview.Id;
+                await _orderRepository.UpdateOrder(storedOrder);
+            }
 
             return new ResponseDTO
             {
@@ -178,11 +263,13 @@ public class ReviewService : IReviewService
                     : "One or more checks failed.",
                 Result = new
                 {
+                    Rating = rating,
                     GPUFit = new { gpuFitsResult.IsSuccess, gpuFitsResult.Message },
                     Cooling = new { coolingResult.IsSuccess, coolingResult.Message },
                     PSU = new { psuResult.IsSuccess, psuResult.Message },
                     Efficiency = new { efficiencyResult.IsSuccess, efficiencyResult.Message },
-                    Budget = new { priceResult.IsSuccess, priceResult.Message }
+                    Budget = new { priceResult.IsSuccess, priceResult.Message },
+                    PeripheralRequirements = new { peripheralsResult.IsSuccess, peripheralsResult.Message }
                 }
             };
         }
@@ -210,5 +297,18 @@ public class ReviewService : IReviewService
         }
 
         return JsonConvert.DeserializeObject<T>(JsonConvert.SerializeObject(result));
+    }
+
+    private static bool IsTechnicalReviewText(string? text)
+    {
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            return false;
+        }
+
+        return text.Contains("Error mapping types", StringComparison.OrdinalIgnoreCase) ||
+               text.Contains("Missing type map configuration", StringComparison.OrdinalIgnoreCase) ||
+               text.Contains("Object serialized", StringComparison.OrdinalIgnoreCase) ||
+               text.Contains("Exception", StringComparison.OrdinalIgnoreCase);
     }
 }

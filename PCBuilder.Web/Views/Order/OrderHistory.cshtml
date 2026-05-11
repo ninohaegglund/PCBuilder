@@ -1,0 +1,165 @@
+@using PCBuilder.Services.CustomerAPI.DTO
+@model IEnumerable<OrderListDTO>
+
+@{
+    ViewData["Title"] = "Order History";
+    var orders = Model?.ToList() ?? new List<OrderListDTO>();
+    var completedCount = orders.Count(o => o.Status == OrderStatus.Completed);
+    var rejectedCount = orders.Count(o => o.Status == OrderStatus.Rejected);
+    var totalRevenue = orders
+        .Where(o => o.Status == OrderStatus.Completed)
+        .Sum(o => o.SellingPrice);
+}
+
+<div class="container mt-4 mb-5">
+    <div class="orders-page-shell">
+
+        <div class="orders-page-header text-center">
+            <span class="orders-badge">Order History</span>
+            <h1 class="mb-2">History</h1>
+            <p class="mb-0 text-muted">
+                Completed and rejected orders.
+            </p>
+        </div>
+
+        <div class="orders-page-body">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3">
+                <a asp-controller="Order"
+                   asp-action="OrderIndex"
+                   class="btn btn-outline-primary rounded-4">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Orders
+                </a>
+            </div>
+
+            <div class="row g-3 mb-4">
+                <div class="col-6 col-lg-4">
+                    <div class="order-stat-card stat-completed">
+                        <div class="order-stat-number">@completedCount</div>
+                        <div class="order-stat-label">Completed</div>
+                    </div>
+                </div>
+                <div class="col-6 col-lg-4">
+                    <div class="order-stat-card stat-rejected">
+                        <div class="order-stat-number">@rejectedCount</div>
+                        <div class="order-stat-label">Rejected</div>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-4">
+                    <div class="order-stat-card stat-progress">
+                        <div class="order-stat-number">@totalRevenue.ToString("N0") kr</div>
+                        <div class="order-stat-label">Total sold</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (!orders.Any())
+            {
+                <div class="empty-orders-state text-center">
+                    <i class="bi bi-clock-history display-4 d-block mb-3"></i>
+                    <h4>No history yet</h4>
+                    <p class="text-muted mb-0">Finished orders will appear here.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var item in orders)
+                    {
+                        var statusClass = item.Status switch
+                        {
+                            OrderStatus.Completed => "order-status-completed",
+                            OrderStatus.Rejected => "order-status-rejected",
+                            _ => "order-status-default"
+                        };
+
+                        <div class="col-12 col-xl-6">
+                            <div class="order-card h-100">
+
+                                <div class="order-card-top">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <img src="@item.CustomerImageUrl"
+                                             alt="@item.CustomerName"
+                                             class="order-customer-avatar" />
+
+                                        <div>
+                                            <div class="fw-bold fs-5">@item.CustomerName</div>
+                                            <div class="text-muted small">
+                                                Created @item.CreatedAt.ToString("yyyy-MM-dd")
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <span class="order-status-badge @statusClass">
+                                        @item.Status
+                                    </span>
+                                </div>
+
+                                <div class="order-card-body">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-sm-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Budget</div>
+                                                <div class="order-info-value">@item.Budget.ToString("N0") kr</div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="order-info-box">
+                                                <div class="order-info-label">Order ID</div>
+                                                <div class="order-info-value">#@item.Id</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    @if (item.Status == OrderStatus.Completed && item.SellingPrice > 0)
+                                    {
+                                        <div class="alert alert-success rounded-4 mb-3">
+                                            <strong>Sold for:</strong> @item.SellingPrice.ToString("N0") kr
+                                        </div>
+                                    }
+
+                                    <div class="mb-3">
+                                        <div class="order-section-label">
+                                            <i class="bi bi-card-text me-2"></i>Description
+                                        </div>
+                                        <div class="order-text-block">
+                                            @(!string.IsNullOrWhiteSpace(item.Description) ? item.Description : "-")
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-0">
+                                        <div class="order-section-label">
+                                            <i class="bi bi-file-earmark-text me-2"></i>Detailed Description
+                                        </div>
+                                        <div class="order-text-block order-text-block-detailed">
+                                            @(!string.IsNullOrWhiteSpace(item.DetailedDescription) ? item.DetailedDescription : "-")
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="order-card-footer">
+                                    @if (item.Status == OrderStatus.Completed && item.ComputerId.HasValue)
+                                    {
+                                        <a asp-controller="Order"
+                                           asp-action="PriceSummaryIndex"
+                                           asp-route-id="@item.Id"
+                                           class="btn order-btn order-btn-primary">
+                                            <i class="bi bi-receipt-cutoff me-2"></i>View Details
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="order-no-actions">
+                                            <i class="bi bi-clock-history me-2"></i>Saved in history
+                                        </span>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

@@ -274,6 +274,119 @@ public static class DbSeeder
             new CaseAccessory { Name = "ARGB Lighting Strip", ManufacturerId = manufacturers["Corsair"].Id, Type = "Lighting", FormFactor = "Internal", Price = 299m },
             new CaseAccessory { Name = "Dust Filter Kit", ManufacturerId = manufacturers["Fractal Design"].Id, Type = "Filter", FormFactor = "Case", Price = 149m }
         });
+
+        SeedStarterComponents(context, manufacturers, formFactors);
+        BalanceStarterPrices(context);
+    }
+
+    private static void SeedStarterComponents(
+        DataContext context,
+        Dictionary<string, Manufacturer> manufacturers,
+        Dictionary<string, FormFactor> formFactors)
+    {
+        AddMissingByName(context.Cpus, new[]
+        {
+            new Cpu { Name = "Pentium Gold G7400", ManufacturerId = manufacturers["Intel"].Id, CoreCount = 2, CoreClock = 3.7m, BoostClock = 3.7m, Microarchitecture = "Alder Lake", Tdp = 46, IntegratedGraphics = "UHD 710", Price = 549m },
+            new Cpu { Name = "Core i3-10105F", ManufacturerId = manufacturers["Intel"].Id, CoreCount = 4, CoreClock = 3.7m, BoostClock = 4.4m, Microarchitecture = "Comet Lake", Tdp = 65, IntegratedGraphics = "No", Price = 699m },
+            new Cpu { Name = "Ryzen 3 4100", ManufacturerId = manufacturers["AMD"].Id, CoreCount = 4, CoreClock = 3.8m, BoostClock = 4.0m, Microarchitecture = "Zen 2", Tdp = 65, IntegratedGraphics = "No", Price = 649m },
+            new Cpu { Name = "Ryzen 5 4500", ManufacturerId = manufacturers["AMD"].Id, CoreCount = 6, CoreClock = 3.6m, BoostClock = 4.1m, Microarchitecture = "Zen 2", Tdp = 65, IntegratedGraphics = "No", Price = 899m }
+        }, x => x.Name);
+
+        AddMissingByName(context.VideoCards, new[]
+        {
+            new VideoCard { Name = "GeForce GTX 1050 Ti", ManufacturerId = manufacturers["NVIDIA"].Id, Tdp = 75, Chipset = "GP107", MemoryGB = 4, CoreClock = 1290, BoostClock = 1392, LengthMM = 145, Price = 999m },
+            new VideoCard { Name = "GeForce GTX 1650", ManufacturerId = manufacturers["NVIDIA"].Id, Tdp = 75, Chipset = "TU117", MemoryGB = 4, CoreClock = 1485, BoostClock = 1665, LengthMM = 170, Price = 1499m },
+            new VideoCard { Name = "Radeon RX 6400", ManufacturerId = manufacturers["AMD"].Id, Tdp = 53, Chipset = "Navi 24", MemoryGB = 4, CoreClock = 1923, BoostClock = 2321, LengthMM = 170, Price = 1199m },
+            new VideoCard { Name = "Radeon RX 6500 XT", ManufacturerId = manufacturers["AMD"].Id, Tdp = 107, Chipset = "Navi 24", MemoryGB = 4, CoreClock = 2310, BoostClock = 2815, LengthMM = 190, Price = 1599m },
+            new VideoCard { Name = "Arc A380", ManufacturerId = manufacturers["Intel"].Id, Tdp = 75, Chipset = "Alchemist", MemoryGB = 6, CoreClock = 2000, BoostClock = 2450, LengthMM = 190, Price = 1399m }
+        }, x => x.Name);
+
+        AddMissingByName(context.MemoryKits, new[]
+        {
+            new MemoryKit { Name = "ValueRAM 8GB", TotalCapacityGB = 8, ManufacturerId = manufacturers["Kingston"].Id, ModulesCount = 1, SpeedMTs = 2666, CasLatency = 19, FirstWordLatency = 14.2m, Price = 299m },
+            new MemoryKit { Name = "ValueRAM 16GB", TotalCapacityGB = 16, ManufacturerId = manufacturers["Kingston"].Id, ModulesCount = 2, SpeedMTs = 3200, CasLatency = 22, FirstWordLatency = 13.8m, Price = 449m },
+            new MemoryKit { Name = "TeamGroup Elite 16GB", TotalCapacityGB = 16, ManufacturerId = manufacturers["TeamGroup"].Id, ModulesCount = 2, SpeedMTs = 3200, CasLatency = 22, FirstWordLatency = 13.8m, Price = 429m }
+        }, x => x.Name);
+
+        AddMissingByName(context.Motherboards, new[]
+        {
+            new Motherboard { Name = "PRIME H610M-K", ManufacturerId = manufacturers["ASUS"].Id, Socket = "LGA1700", FormFactorId = formFactors["Micro-ATX"].Id, MaxMemoryGB = 64, MemorySlots = 2, HasWiFi = false, Price = 899m },
+            new Motherboard { Name = "A520M-A PRO", ManufacturerId = manufacturers["MSI"].Id, Socket = "AM4", FormFactorId = formFactors["Micro-ATX"].Id, MaxMemoryGB = 64, MemorySlots = 2, HasWiFi = false, Price = 799m },
+            new Motherboard { Name = "B450M DS3H", ManufacturerId = manufacturers["Gigabyte"].Id, Socket = "AM4", FormFactorId = formFactors["Micro-ATX"].Id, MaxMemoryGB = 128, MemorySlots = 4, HasWiFi = false, Price = 849m }
+        }, x => x.Name);
+
+        AddMissingByName(context.Cases, new[]
+        {
+            new Case { Name = "Versa H18", ManufacturerId = manufacturers["Thermaltake"].Id, Type = "Micro Tower", MaxGpuLengthMm = 350, MaxCpuCoolerHeightMm = 155, FanMountCount = 4, SidePanel = "Acrylic", ExternalVolumeLiters = 32.0m, Internal35Bays = 2, Price = 499m },
+            new Case { Name = "Matrexx 40", ManufacturerId = manufacturers["DeepCool"].Id, Type = "Micro Tower", MaxGpuLengthMm = 320, MaxCpuCoolerHeightMm = 165, FanMountCount = 5, SidePanel = "Tempered Glass", ExternalVolumeLiters = 36.0m, Internal35Bays = 2, Price = 599m },
+            new Case { Name = "Focus G Mini", ManufacturerId = manufacturers["Fractal Design"].Id, Type = "Mini Tower", MaxGpuLengthMm = 380, MaxCpuCoolerHeightMm = 165, FanMountCount = 6, SidePanel = "Acrylic", ExternalVolumeLiters = 38.0m, Internal35Bays = 2, Price = 649m }
+        }, x => x.Name);
+
+        AddMissingByName(context.PowerSupplies, new[]
+        {
+            new PowerSupply { Name = "System Power 10 450W", ManufacturerId = manufacturers["be quiet!"].Id, Type = "ATX", EfficiencyRating = "80+ Bronze", Wattage = 450, Modular = "No", Price = 399m },
+            new PowerSupply { Name = "CV450", ManufacturerId = manufacturers["Corsair"].Id, Type = "ATX", EfficiencyRating = "80+ Bronze", Wattage = 450, Modular = "No", Price = 449m },
+            new PowerSupply { Name = "MWE 500 Bronze", ManufacturerId = manufacturers["Cooler Master"].Id, Type = "ATX", EfficiencyRating = "80+ Bronze", Wattage = 500, Modular = "No", Price = 499m }
+        }, x => x.Name);
+
+        AddMissingByName(context.CpuCoolers, new[]
+        {
+            new CpuCooler { Name = "A30 Compact", ManufacturerId = manufacturers["Arctic"].Id, IsAio = false, MaxTdpWatts = 95, HeightMm = 137, RpmMin = 600, RpmMax = 2000, Price = 199m },
+            new CpuCooler { Name = "AG200", ManufacturerId = manufacturers["DeepCool"].Id, IsAio = false, MaxTdpWatts = 100, HeightMm = 133, RpmMin = 500, RpmMax = 2400, Price = 249m }
+        }, x => x.Name);
+
+        AddMissingByName(context.InternalHardDrives, new[]
+        {
+            new InternalHardDrive { Name = "A400 480GB", ManufacturerId = manufacturers["Kingston"].Id, CapacityGB = 480, Type = "SSD", FormFactor = "2.5", Interface = "SATA", Price = 349m },
+            new InternalHardDrive { Name = "NV2 500GB", ManufacturerId = manufacturers["Kingston"].Id, CapacityGB = 500, Type = "SSD", FormFactor = "M.2", Interface = "NVMe", Price = 449m },
+            new InternalHardDrive { Name = "BX500 500GB", ManufacturerId = manufacturers["Crucial"].Id, CapacityGB = 500, Type = "SSD", FormFactor = "2.5", Interface = "SATA", Price = 329m }
+        }, x => x.Name);
+
+        AddMissingByName(context.CaseFans, new[]
+        {
+            new CaseFan { Name = "F12 Silent", ManufacturerId = manufacturers["Arctic"].Id, SizeMM = 120, RpmMin = 400, RpmMax = 1350, Pwm = false, Price = 79m }
+        }, x => x.Name);
+
+        AddMissingByName(context.Monitors, new[]
+        {
+            new Monitor { Name = "V24i G5", ManufacturerId = manufacturers["HP"].Id, ScreenSizeInches = 24, ResolutionWidth = 1920, ResolutionHeight = 1080, RefreshRateHz = 75, ResponseTimeMs = 5, PanelType = "IPS", AspectRatio = "16:9", Price = 1199m }
+        }, x => x.Name);
+
+        AddMissingByName(context.Keyboards, new[]
+        {
+            new Keyboard { Name = "K120", ManufacturerId = manufacturers["Logitech"].Id, Style = "Office", Switches = "Membrane", Backlit = "No", Tenkeyless = false, Connection = "USB", Price = 149m }
+        }, x => x.Name);
+
+        AddMissingByName(context.Mice, new[]
+        {
+            new Mouse { Name = "M90", ManufacturerId = manufacturers["Logitech"].Id, TrackingMethod = "Optical", Connection = "USB", MaxDpi = 1000, HandOrientation = "Ambidextrous", Price = 99m }
+        }, x => x.Name);
+
+        context.SaveChanges();
+    }
+
+    private static void BalanceStarterPrices(DataContext context)
+    {
+        SetPrice(context.Cpus, "Core i3-12100F", 799m);
+        SetPrice(context.Cpus, "Ryzen 5 5600", 1099m);
+        SetPrice(context.Cpus, "Core i3-14100F", 999m);
+        SetPrice(context.VideoCards, "GeForce GTX 1660 Super", 1799m);
+        SetPrice(context.VideoCards, "Radeon RX 6600", 1999m);
+        SetPrice(context.VideoCards, "Radeon RX 6650 XT", 2399m);
+        SetPrice(context.MemoryKits, "FURY Beast 16GB", 499m);
+        SetPrice(context.MemoryKits, "Vengeance LPX 16GB", 549m);
+        SetPrice(context.Motherboards, "B550 AORUS ELITE V2", 1199m);
+        SetPrice(context.Motherboards, "TUF GAMING B550-PLUS", 1299m);
+        SetPrice(context.Cases, "H510 Flow", 799m);
+        SetPrice(context.Cases, "Pop Mini Air", 899m);
+        SetPrice(context.PowerSupplies, "CV550", 549m);
+        SetPrice(context.PowerSupplies, "CX650M", 699m);
+        SetPrice(context.CpuCoolers, "Hyper 212 Black", 349m);
+        SetPrice(context.CpuCoolers, "Peerless Assassin 120 SE", 399m);
+        SetPrice(context.InternalHardDrives, "970 EVO Plus 1TB", 699m);
+        SetPrice(context.InternalHardDrives, "WD Blue 2TB", 649m);
+        SetPrice(context.CaseFans, "P12 PWM", 79m);
+        context.SaveChanges();
     }
 
     private static void SeedLookups(DataContext context)
@@ -318,5 +431,41 @@ public static class DbSeeder
 
         dbSet.AddRange(entities);
         context.SaveChanges();
+    }
+
+    private static void AddMissingByName<TEntity>(DbSet<TEntity> dbSet, IEnumerable<TEntity> entities, Func<TEntity, string> getName)
+        where TEntity : class
+    {
+        var existingNames = dbSet
+            .AsEnumerable()
+            .Select(getName)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var missing = entities
+            .Where(entity => !existingNames.Contains(getName(entity)))
+            .ToList();
+
+        if (missing.Any())
+        {
+            dbSet.AddRange(missing);
+        }
+    }
+
+    private static void SetPrice<TEntity>(DbSet<TEntity> dbSet, string name, decimal price)
+        where TEntity : class
+    {
+        var entity = dbSet.FirstOrDefault(x => EF.Property<string>(x, "Name") == name);
+        if (entity == null)
+        {
+            return;
+        }
+
+        var priceProperty = typeof(TEntity).GetProperty("Price");
+        if (priceProperty == null)
+        {
+            return;
+        }
+
+        priceProperty.SetValue(entity, price);
     }
 }

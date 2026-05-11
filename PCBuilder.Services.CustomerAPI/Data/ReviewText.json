@@ -40,5 +40,12 @@
     "The computer is a little more expensive than I wanted.",
     "I wish this build had stayed closer to the budget.",
     "The final price feels a bit high for what I planned."
+  ],
+  "PeripheralsMissing": [
+    "I thought the requested accessories would be included with this order.",
+    "The PC itself is here, but part of the setup I asked for seems to be missing.",
+    "I expected the full desk setup from my request to be included.",
+    "This does not quite match the accessories I asked for.",
+    "I am missing some of the extra gear I requested with the build."
   ]
 }

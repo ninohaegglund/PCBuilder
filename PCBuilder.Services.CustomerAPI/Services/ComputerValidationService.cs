@@ -5,6 +5,7 @@ using PCBuilder.Service.ComponentsAPI.Models.DTOs;
 using PCBuilder.Service.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.IServices;
 using PCBuilder.Services.CustomerAPI.Models;
+using System.Text.RegularExpressions;
 
 namespace PCBuilder.Service.CustomerAPI.Services;
 
@@ -240,7 +241,9 @@ public class ComputerValidationService : IComputerValidationService
 
     public async Task<ResponseDTO> CheckPriceIsWithinBudgetAsync(Order order, ComputerDTO computer)
     {
-        if (order.SellingPrice <= order.Budget)
+        var softLimit = order.Budget * 1.05m;
+
+        if (order.SellingPrice <= softLimit)
         {
             return new ResponseDTO
             {
@@ -249,10 +252,108 @@ public class ComputerValidationService : IComputerValidationService
             };
         }
 
+        var overBudget = order.SellingPrice - order.Budget;
+        var overBudgetPercent = order.Budget > 0
+            ? overBudget / order.Budget
+            : 1m;
+
         return new ResponseDTO
         {
             IsSuccess = false,
-            Message = _reviewTextService.GetRandomText("PriceIsOverBudget")
+            Message = overBudgetPercent >= 0.15m
+                ? $"{_reviewTextService.GetRandomText("PriceIsOverBudget")} This is much farther over budget than I expected."
+                : _reviewTextService.GetRandomText("PriceIsOverBudget")
         };
+    }
+
+    public Task<ResponseDTO> CheckRequestedPeripheralsAsync(Order order, ComputerDTO computer)
+    {
+        var orderText = $"{order.Description} {order.DetailedDescription}".ToLowerInvariant();
+        var missing = new List<string>();
+
+        AddMissingIfRequested(
+            missing,
+            orderText,
+            computer.KeyboardId.HasValue,
+            "keyboard",
+            "keyboard",
+            "tangentbord",
+            "complete package",
+            "complete setup",
+            "full setup",
+            "desk package",
+            "desk bundle");
+
+        AddMissingIfRequested(
+            missing,
+            orderText,
+            computer.MouseId.HasValue,
+            "mouse",
+            "mouse",
+            "mus",
+            "complete package",
+            "complete setup",
+            "full setup",
+            "desk package",
+            "desk bundle");
+
+        AddMissingIfRequested(
+            missing,
+            orderText,
+            computer.HeadphonesId.HasValue,
+            "headset",
+            "headset",
+            "headphones",
+            "horlurar",
+            "complete gaming package",
+            "streaming kit",
+            "complete setup");
+
+        AddMissingIfRequested(
+            missing,
+            orderText,
+            computer.SpeakerIds?.Any() == true || computer.Speakers?.Any() == true,
+            "speakers",
+            "speakers",
+            "speaker",
+            "hogtalare",
+            "sound system",
+            "complete desktop package",
+            "complete setup");
+
+        if (!missing.Any())
+        {
+            return Task.FromResult(new ResponseDTO
+            {
+                IsSuccess = true,
+                Message = string.Empty
+            });
+        }
+
+        return Task.FromResult(new ResponseDTO
+        {
+            IsSuccess = false,
+            Message = $"{_reviewTextService.GetRandomText("PeripheralsMissing")} Missing: {string.Join(", ", missing)}."
+        });
+    }
+
+    private static void AddMissingIfRequested(
+        List<string> missing,
+        string orderText,
+        bool isIncluded,
+        string label,
+        params string[] keywords)
+    {
+        if (!isIncluded && keywords.Any(keyword => ContainsKeyword(orderText, keyword)))
+        {
+            missing.Add(label);
+        }
+    }
+
+    private static bool ContainsKeyword(string text, string keyword)
+    {
+        return keyword.Contains(' ')
+            ? text.Contains(keyword)
+            : Regex.IsMatch(text, $@"\b{Regex.Escape(keyword)}\b", RegexOptions.IgnoreCase);
     }
 }

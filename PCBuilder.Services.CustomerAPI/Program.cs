@@ -103,6 +103,7 @@ using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<CustomerDbContext>();
     DbSeederCustomer.SeedCustomers(db);
+    DbSeederOrder.SeedOrders(db);
 }
 
 app.UseHttpsRedirection();

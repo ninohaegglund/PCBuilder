@@ -13,6 +13,7 @@
     var walletBalanceText = Model.WalletBalance.HasValue
         ? $"{Model.WalletBalance.Value:N2} kr"
         : "N/A";
+    var clearSavedCart = TempData["ClearShopCart"] as bool? == true;
 
     var totalCount =
         cpuCount +
@@ -41,8 +42,10 @@
         ("PSU", "Power Supplies"),
         ("CPUCooler", "CPU Coolers"),
         ("CaseFan", "Case Fans"),
-        ("InternalStorage", "Internal Storage"),
-        ("ExternalStorage", "External Storage"),
+        ("InternalSSD", "Internal SSDs"),
+        ("InternalHDD", "Internal HDDs"),
+        ("ExternalSSD", "External SSDs"),
+        ("ExternalHDD", "External HDDs"),
         ("Monitor", "Monitors"),
         ("Keyboard", "Keyboards"),
         ("Mouse", "Mice"),
@@ -83,6 +86,25 @@
         }
         return Math.Ceiling(maxPrice);
     }
+
+    IEnumerable<dynamic> GetByStorageType(IEnumerable<dynamic>? items, string storageType)
+    {
+        if (items == null)
+        {
+            return Enumerable.Empty<dynamic>();
+        }
+
+        return items.Where(item =>
+        {
+            var type = item?.GetType().GetProperty("Type")?.GetValue(item)?.ToString();
+            return string.Equals(type, storageType, StringComparison.OrdinalIgnoreCase);
+        });
+    }
+
+    var internalSsds = GetByStorageType(components?.InternalStorages, "SSD").ToList();
+    var internalHdds = GetByStorageType(components?.InternalStorages, "HDD").ToList();
+    var externalSsds = GetByStorageType(components?.ExternalStorages, "SSD").ToList();
+    var externalHdds = GetByStorageType(components?.ExternalStorages, "HDD").ToList();
 
     var manufacturers = GetManufacturerNames(
         components?.Cpus,
@@ -132,9 +154,19 @@
                     Buy parts, spend from your wallet, and keep your inventory ready for customer builds.
                 </p>
             </div>
-            <a asp-controller="Inventory" asp-action="Index" class="btn btn-warning btn-lg">
-                <i class="bi bi-box-seam-fill me-2"></i>Inventory
-            </a>
+            <div class="d-flex flex-wrap gap-2">
+                <button class="btn btn-light btn-lg"
+                        type="button"
+                        data-bs-toggle="offcanvas"
+                        data-bs-target="#shopCartPanel"
+                        aria-controls="shopCartPanel">
+                    <i class="bi bi-cart-fill me-2"></i>Cart
+                    <span id="shopCartCount" class="badge text-bg-primary ms-1">0</span>
+                </button>
+                <a asp-controller="Inventory" asp-action="Index" class="btn btn-warning btn-lg">
+                    <i class="bi bi-box-seam-fill me-2"></i>Inventory
+                </a>
+            </div>
         </div>
     </div>
 
@@ -251,14 +283,49 @@
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Power Supplies", "PSU", "bi-lightning-charge", components.Psus)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("CPU Coolers", "CPUCooler", "bi-fan", components.CpuCoolers)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Case Fans", "CaseFan", "bi-fan", components.CaseFans)' />
-                <partial name="_ShopSection" model='new ShopSectionViewModel("Internal Storage", "InternalStorage", "bi-device-hdd", components.InternalStorages)' />
-                <partial name="_ShopSection" model='new ShopSectionViewModel("External Storage", "ExternalStorage", "bi-hdd", components.ExternalStorages)' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Internal SSDs", "InternalStorage", "bi-device-ssd", internalSsds, "InternalSSD", "Internal Storage / SSD")' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("Internal HDDs", "InternalStorage", "bi-device-hdd", internalHdds, "InternalHDD", "Internal Storage / HDD")' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("External SSDs", "ExternalStorage", "bi-device-ssd", externalSsds, "ExternalSSD", "External Storage / SSD")' />
+                <partial name="_ShopSection" model='new ShopSectionViewModel("External HDDs", "ExternalStorage", "bi-hdd", externalHdds, "ExternalHDD", "External Storage / HDD")' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Monitors", "Monitor", "bi-display", components.Monitors)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Keyboards", "Keyboard", "bi-keyboard", components.Keyboards)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Mice", "Mouse", "bi-mouse", components.Mice)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Headphones", "Headphones", "bi-headphones", components.Headphones)' />
                 <partial name="_ShopSection" model='new ShopSectionViewModel("Speakers", "Speakers", "bi-speaker", components.Speakers)' />
             }
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="shopCartPanel" aria-labelledby="shopCartPanelLabel">
+    <div class="offcanvas-header">
+        <div>
+            <h5 class="offcanvas-title fw-bold" id="shopCartPanelLabel">
+                <i class="bi bi-cart-fill me-2"></i>Shopping Cart
+            </h5>
+            <small class="text-muted">Buy several components in one checkout</small>
+        </div>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body d-flex flex-column">
+        <div id="shopCartItems" class="vstack gap-2"></div>
+        <div id="shopCartEmpty" class="alert alert-light border">
+            Your cart is empty.
+        </div>
+
+        <div class="border-top pt-3 mt-auto">
+            <div class="d-flex justify-content-between align-items-center fs-5 fw-bold mb-3">
+                <span>Total</span>
+                <span id="shopCartTotal">0 kr</span>
+            </div>
+
+            <form asp-controller="Shop" asp-action="BuyCart" method="post" id="shopCartForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="cartJson" id="shopCartJson" />
+                <button id="shopCartCheckout" class="btn btn-primary w-100" type="submit" disabled>
+                    <i class="bi bi-bag-check-fill me-2"></i>Checkout
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
@@ -269,6 +336,36 @@
         const priceLabel = document.getElementById("shopPriceLabel");
         const resetButton = document.getElementById("shopFilterReset");
         const countLabel = document.getElementById("shopFilterCount");
+        const shopCartStorageKey = "pcbuilder.shopCart.v1";
+        const clearSavedCart = @clearSavedCart.ToString().ToLowerInvariant();
+
+        function loadSavedCart() {
+            if (clearSavedCart) {
+                localStorage.removeItem(shopCartStorageKey);
+                return [];
+            }
+
+            try {
+                const savedCart = JSON.parse(localStorage.getItem(shopCartStorageKey) || "[]");
+                return Array.isArray(savedCart)
+                    ? savedCart.filter(function (item) {
+                        return item &&
+                            item.componentType &&
+                            Number(item.componentId) > 0 &&
+                            Number(item.purchasePrice) > 0 &&
+                            Number(item.quantity) > 0;
+                    })
+                    : [];
+            } catch {
+                return [];
+            }
+        }
+
+        const cart = loadSavedCart();
+
+        function saveCart() {
+            localStorage.setItem(shopCartStorageKey, JSON.stringify(cart));
+        }
 
         function applyShopFilters() {
             const selectedType = typeFilter?.value || "";
@@ -277,7 +374,7 @@
             let visibleCount = 0;
 
             document.querySelectorAll("[data-shop-item]").forEach(function (item) {
-                const typeMatches = !selectedType || item.dataset.componentType === selectedType;
+                const typeMatches = !selectedType || item.dataset.shopType === selectedType;
                 const manufacturerMatches = !selectedManufacturer || item.dataset.manufacturer === selectedManufacturer;
                 const priceMatches = Number(item.dataset.price || 0) <= maxSelectedPrice;
                 const isVisible = typeMatches && manufacturerMatches && priceMatches;
@@ -315,5 +412,162 @@
         });
 
         applyShopFilters();
+
+        function renderCart() {
+            const cartItems = document.getElementById("shopCartItems");
+            const emptyCart = document.getElementById("shopCartEmpty");
+            const count = document.getElementById("shopCartCount");
+            const total = document.getElementById("shopCartTotal");
+            const checkout = document.getElementById("shopCartCheckout");
+            const cartJson = document.getElementById("shopCartJson");
+
+            const itemCount = cart.reduce(function (sum, item) {
+                return sum + item.quantity;
+            }, 0);
+            const totalCost = cart.reduce(function (sum, item) {
+                return sum + item.purchasePrice * item.quantity;
+            }, 0);
+
+            if (count) {
+                count.textContent = itemCount.toString();
+            }
+
+            if (total) {
+                total.textContent = totalCost.toLocaleString("sv-SE", { maximumFractionDigits: 0 }) + " kr";
+            }
+
+            if (checkout) {
+                checkout.disabled = itemCount === 0;
+            }
+
+            if (cartJson) {
+                cartJson.value = JSON.stringify(cart);
+            }
+
+            saveCart();
+
+            if (!cartItems || !emptyCart) {
+                return;
+            }
+
+            cartItems.innerHTML = "";
+            emptyCart.classList.toggle("d-none", itemCount > 0);
+
+            cart.forEach(function (item) {
+                const row = document.createElement("div");
+                row.className = "card";
+
+                const body = document.createElement("div");
+                body.className = "card-body p-3";
+
+                const top = document.createElement("div");
+                top.className = "d-flex justify-content-between gap-2";
+
+                const text = document.createElement("div");
+                const name = document.createElement("div");
+                name.className = "fw-bold";
+                name.textContent = item.name;
+                const meta = document.createElement("small");
+                meta.className = "text-muted";
+                meta.textContent = `${item.componentType} - ${item.purchasePrice.toLocaleString("sv-SE", { maximumFractionDigits: 0 })} kr each`;
+                text.appendChild(name);
+                text.appendChild(meta);
+
+                const remove = document.createElement("button");
+                remove.className = "btn btn-sm btn-outline-danger";
+                remove.type = "button";
+                remove.innerHTML = '<i class="bi bi-trash"></i>';
+                remove.addEventListener("click", function () {
+                    const index = cart.findIndex(function (cartItem) {
+                        return cartItem.componentType === item.componentType && cartItem.componentId === item.componentId;
+                    });
+                    if (index >= 0) {
+                        cart.splice(index, 1);
+                        renderCart();
+                    }
+                });
+
+                top.appendChild(text);
+                top.appendChild(remove);
+
+                const controls = document.createElement("div");
+                controls.className = "d-flex align-items-center gap-2 mt-3";
+
+                const minus = document.createElement("button");
+                minus.className = "btn btn-sm btn-outline-secondary";
+                minus.type = "button";
+                minus.textContent = "-";
+                minus.addEventListener("click", function () {
+                    item.quantity -= 1;
+                    if (item.quantity <= 0) {
+                        const index = cart.indexOf(item);
+                        cart.splice(index, 1);
+                    }
+                    renderCart();
+                });
+
+                const quantity = document.createElement("span");
+                quantity.className = "badge text-bg-primary";
+                quantity.textContent = item.quantity.toString();
+
+                const plus = document.createElement("button");
+                plus.className = "btn btn-sm btn-outline-secondary";
+                plus.type = "button";
+                plus.textContent = "+";
+                plus.addEventListener("click", function () {
+                    item.quantity += 1;
+                    renderCart();
+                });
+
+                const lineTotal = document.createElement("span");
+                lineTotal.className = "ms-auto fw-semibold";
+                lineTotal.textContent = (item.purchasePrice * item.quantity).toLocaleString("sv-SE", { maximumFractionDigits: 0 }) + " kr";
+
+                controls.appendChild(minus);
+                controls.appendChild(quantity);
+                controls.appendChild(plus);
+                controls.appendChild(lineTotal);
+
+                body.appendChild(top);
+                body.appendChild(controls);
+                row.appendChild(body);
+                cartItems.appendChild(row);
+            });
+        }
+
+        document.querySelectorAll("[data-cart-add]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                const componentType = button.dataset.componentType || "";
+                const componentId = Number(button.dataset.componentId || 0);
+                const existing = cart.find(function (item) {
+                    return item.componentType === componentType && item.componentId === componentId;
+                });
+
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({
+                        componentType,
+                        componentId,
+                        name: button.dataset.componentName || "Component",
+                        purchasePrice: Number(button.dataset.purchasePrice || 0),
+                        quantity: 1
+                    });
+                }
+
+                button.classList.remove("btn-primary");
+                button.classList.add("btn-success");
+                button.innerHTML = '<i class="bi bi-check-lg me-2"></i>Added';
+                window.setTimeout(function () {
+                    button.classList.remove("btn-success");
+                    button.classList.add("btn-primary");
+                    button.innerHTML = '<i class="bi bi-cart-plus me-2"></i>Add to Cart';
+                }, 900);
+
+                renderCart();
+            });
+        });
+
+        renderCart();
     </script>
 }

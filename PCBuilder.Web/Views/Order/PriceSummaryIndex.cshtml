@@ -49,7 +49,8 @@
         ["Cooling"] = "Cooling and noise",
         ["PSU"] = "Power supply",
         ["Efficiency"] = "Power efficiency",
-        ["Budget"] = "Customer budget"
+        ["Budget"] = "Customer budget",
+        ["PeripheralRequirements"] = "Requested accessories"
     };
 
     if (!string.IsNullOrWhiteSpace(reviewJson))
@@ -58,7 +59,7 @@
         if (reviewResponse?.Result != null)
         {
             var resultString = reviewResponse.Result as string;
-            if (reviewResponse.IsSuccess && !string.IsNullOrWhiteSpace(resultString) && !resultString.TrimStart().StartsWith("{"))
+            if (!string.IsNullOrWhiteSpace(resultString) && !resultString.TrimStart().StartsWith("{"))
             {
                 reviewText = resultString;
             }
@@ -233,11 +234,20 @@
 
                     </div>
 
+                    <div id="saleBudgetWarning" class="alert alert-warning rounded-4 mt-3 mb-0 d-none"></div>
+
                     <hr class="my-4" />
 
                     <!-- FINISH BUTTON -->
-                    <div class="text-center">
+                    <div class="d-flex flex-column flex-sm-row justify-content-center gap-2">
+                        <a asp-controller="Computer"
+                           asp-action="CreateComputerIndex"
+                           asp-route-orderId="@Model.Order.Id"
+                           class="btn btn-outline-primary btn-lg px-5 py-3 rounded-4 shadow-sm">
+                            Back to Build
+                        </a>
                         <button type="submit"
+                                id="finishBuildButton"
                                 form="finishBuildForm"
                                 class="btn btn-success btn-lg px-5 py-3 rounded-4 shadow">
                             Finish Build
@@ -256,8 +266,8 @@
                                 <h2 class="fw-bold mb-1">Sale Summary</h2>
                                 <p class="text-muted mb-0">Order #@Model.Order.Id is completed.</p>
                             </div>
-                            <a asp-controller="Order" asp-action="OrderIndex" class="btn btn-outline-primary rounded-4 align-self-md-start">
-                                Back to Orders
+                            <a href="@Url.Action(isCompleted ? "OrderHistory" : "OrderIndex", "Order")" class="btn btn-outline-primary rounded-4 align-self-md-start">
+                                @(isCompleted ? "Back to History" : "Back to Orders")
                             </a>
                         </div>
 
@@ -293,7 +303,7 @@
                         else if (reviewChecks != null)
                         {
                             <div class="list-group list-group-flush">
-                                @foreach (var check in reviewChecks.Properties())
+                                @foreach (var check in reviewChecks.Properties().Where(property => property.Value.Type == JTokenType.Object))
                                 {
                                     var checkBody = check.Value as JObject;
                                     var passed = checkBody?["isSuccess"]?.Value<bool>()
@@ -426,7 +436,7 @@
                     else if (reviewChecks != null)
                     {
                         <div class="list-group list-group-flush">
-                            @foreach (var check in reviewChecks.Properties())
+                            @foreach (var check in reviewChecks.Properties().Where(property => property.Value.Type == JTokenType.Object))
                             {
                                 var checkBody = check.Value as JObject;
                                 var passed = checkBody?["isSuccess"]?.Value<bool>()
@@ -461,8 +471,8 @@
                 </div>
 
                 <div class="modal-footer">
-                    <a asp-controller="Order" asp-action="OrderIndex" class="btn btn-primary rounded-4 px-4">
-                        Back to Orders
+                    <a href="@Url.Action(isCompleted ? "OrderHistory" : "OrderIndex", "Order")" class="btn btn-primary rounded-4 px-4">
+                        @(isCompleted ? "Back to History" : "Back to Orders")
                     </a>
                     <button type="button" class="btn btn-outline-secondary rounded-4 px-4" data-bs-dismiss="modal">
                         Stay Here
@@ -483,8 +493,11 @@
             const salePrice = document.getElementById("salePrice");
             const salePricePreview = document.getElementById("salePricePreview");
             const sellingPriceInput = document.getElementById("sellingPriceInput");
+            const finishBuildButton = document.getElementById("finishBuildButton");
 
             const componentCost = Number("@Model.Computer.TotalPrice.ToString(System.Globalization.CultureInfo.InvariantCulture)");
+            const customerBudget = Number("@Model.Order.Budget.ToString(System.Globalization.CultureInfo.InvariantCulture)");
+            const saleBudgetWarning = document.getElementById("saleBudgetWarning");
 
             function updateSellingPrice() {
                 const markup = parseInt(slider.value);
@@ -501,6 +514,32 @@
                 salePricePreview.innerText = formattedPrice;
 
                 sellingPriceInput.value = roundedPrice.toString();
+
+                if (saleBudgetWarning && customerBudget > 0) {
+                    const softLimit = customerBudget * 1.05;
+                    const hardLimit = customerBudget * 1.15;
+
+                    if (roundedPrice > hardLimit) {
+                        saleBudgetWarning.className = "alert alert-danger rounded-4 mt-3 mb-0";
+                        saleBudgetWarning.textContent = "This sale price is too far over the customer budget. The customer will refuse to pay.";
+                    } else if (roundedPrice > softLimit) {
+                        saleBudgetWarning.className = "alert alert-warning rounded-4 mt-3 mb-0";
+                        saleBudgetWarning.textContent = "This sale price is a bit over budget. A small stretch can pass, but it is risky.";
+                    } else {
+                        saleBudgetWarning.className = "alert alert-warning rounded-4 mt-3 mb-0 d-none";
+                        saleBudgetWarning.textContent = "";
+                    }
+
+                    if (finishBuildButton) {
+                        const customerWillRefuse = roundedPrice > hardLimit;
+                        finishBuildButton.disabled = customerWillRefuse;
+                        finishBuildButton.classList.toggle("btn-success", !customerWillRefuse);
+                        finishBuildButton.classList.toggle("btn-secondary", customerWillRefuse);
+                        finishBuildButton.title = customerWillRefuse
+                            ? "Lower the price or go back to the build and use cheaper parts."
+                            : "";
+                    }
+                }
             }
 
             slider.addEventListener("input", updateSellingPrice);

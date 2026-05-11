@@ -63,8 +63,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link playful-nav-link" asp-controller="Computer" asp-action="CreateComputerIndex">
-                                <i class="bi bi-wrench-adjustable-circle me-1"></i>Custom Build
+                            <a class="nav-link playful-nav-link" asp-controller="Reviews" asp-action="Index">
+                                <i class="bi bi-star-fill me-1"></i>Reviews
                             </a>
                         </li>
                         <li class="nav-item">
@@ -152,6 +152,14 @@
                                            asp-controller="Order"
                                            asp-action="OrderIndex">
                                             <i class="bi bi-bag-check-fill me-2"></i>Orders
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a class="dropdown-item playful-user-dropdown-item"
+                                           asp-controller="Reviews"
+                                           asp-action="Index">
+                                            <i class="bi bi-star-fill me-2"></i>Reviews
                                         </a>
                                     </li>
 

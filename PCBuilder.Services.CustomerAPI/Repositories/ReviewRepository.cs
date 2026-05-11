@@ -25,4 +25,24 @@ public class ReviewRepository : IReviewRepository
         var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == id);
         return review;
     }
+
+    public async Task<List<Review>> GetReviewsByIds(IEnumerable<int> ids)
+    {
+        var reviewIds = ids.ToHashSet();
+        return await _context.Reviews
+            .Where(r => reviewIds.Contains(r.Id))
+            .ToListAsync();
+    }
+
+    public async Task AddReview(Review review)
+    {
+        await _context.Reviews.AddAsync(review);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task UpdateReview(Review review)
+    {
+        _context.Reviews.Update(review);
+        await _context.SaveChangesAsync();
+    }
 }

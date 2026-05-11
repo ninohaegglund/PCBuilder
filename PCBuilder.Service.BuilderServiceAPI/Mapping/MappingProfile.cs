@@ -23,6 +23,8 @@ public class MappingProfile : Profile
         // ───────── Komponenter: Model → DTO ─────────
         CreateMap<Cpu, CPUDto>();
         CreateMap<VideoCard, GPUDto>();
+        CreateMap<MemoryKit, RAMDto>()
+            .ForMember(dest => dest.CapacityPerModuleGB, opt => opt.MapFrom(src => src.CapacityPerModuleGB));
         CreateMap<Motherboard, MotherboardDto>();
         CreateMap<Case, CaseDto>();
         CreateMap<PowerSupply, PSUDto>();

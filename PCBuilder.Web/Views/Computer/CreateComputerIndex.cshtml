@@ -1,6 +1,9 @@
 ﻿@model PCBuilder.Service.BuilderServiceAPI.DTO.Response.ComputerCreateDTO
 
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using PCBuilder.Service.ComponentsAPI.Models.DTOs
+@using PCBuilder.Web.ViewModels.Shop
+@using System.Globalization
 
 @{
     ViewData["Title"] = "Build Computer";
@@ -18,6 +21,144 @@
     var selectedCaseFanIds = Model?.CaseFanIds ?? new List<int>();
     var selectedMonitorIds = Model?.MonitorIds ?? new List<int>();
     var selectedSpeakerIds = Model?.SpeakerIds ?? new List<int>();
+    var compatibilityDataJson = ViewBag.BuildCompatibilityDataJson as string ?? "{}";
+    var shopComponents = ViewBag.ShopComponents as AllComponentsDto;
+    var buildReturnUrl = Context.Request.Path + Context.Request.QueryString;
+    var clearSavedBuildCart = TempData["ClearShopCart"] as bool? == true;
+    decimal acceptedOrderBudget = 0m;
+    if (ViewBag.AcceptedOrderBudget is decimal budget)
+    {
+        acceptedOrderBudget = budget;
+    }
+    var showBuildHints = ViewBag.AcceptedOrderId != null && acceptedOrderBudget > 0;
+    var acceptedOrderText = $"{ViewBag.AcceptedOrderDescription} {ViewBag.AcceptedOrderDetailedDescription}";
+    var acceptedOrderTextJson = System.Text.Json.JsonSerializer.Serialize(acceptedOrderText);
+
+    IEnumerable<dynamic> GetByStorageType(IEnumerable<dynamic>? items, string storageType)
+    {
+        if (items == null)
+        {
+            return Enumerable.Empty<dynamic>();
+        }
+
+        return items.Where(item =>
+        {
+            var type = item?.GetType().GetProperty("Type")?.GetValue(item)?.ToString();
+            return string.Equals(type, storageType, StringComparison.OrdinalIgnoreCase);
+        });
+    }
+
+    IEnumerable<string> GetManufacturerNames(params IEnumerable<dynamic>?[] groups)
+    {
+        foreach (var group in groups)
+        {
+            if (group == null) continue;
+            foreach (var item in group)
+            {
+                var value = item?.GetType().GetProperty("ManufacturerName")?.GetValue(item)?.ToString();
+                if (!string.IsNullOrWhiteSpace(value))
+                {
+                    yield return value;
+                }
+            }
+        }
+    }
+
+    decimal GetMaxPrice(params IEnumerable<dynamic>?[] groups)
+    {
+        var maxPrice = 0m;
+        foreach (var group in groups)
+        {
+            if (group == null) continue;
+            foreach (var item in group)
+            {
+                var rawValue = item?.GetType().GetProperty("Price")?.GetValue(item);
+                if (rawValue is decimal price && price > maxPrice)
+                {
+                    maxPrice = price;
+                }
+            }
+        }
+
+        return Math.Ceiling(maxPrice);
+    }
+
+    var buildShopSections = new List<ShopSectionViewModel>();
+    var buildShopManufacturers = new List<string>();
+    var buildShopMaxPrice = 0m;
+
+    if (shopComponents != null)
+    {
+        var internalSsds = GetByStorageType(shopComponents.InternalStorages, "SSD").ToList();
+        var internalHdds = GetByStorageType(shopComponents.InternalStorages, "HDD").ToList();
+        var externalSsds = GetByStorageType(shopComponents.ExternalStorages, "SSD").ToList();
+        var externalHdds = GetByStorageType(shopComponents.ExternalStorages, "HDD").ToList();
+
+        buildShopSections = new List<ShopSectionViewModel>
+        {
+            new("CPUs", "CPU", "bi-cpu", shopComponents.Cpus),
+            new("Video Cards", "GPU", "bi-gpu-card", shopComponents.Gpus),
+            new("Memory Kits", "RAM", "bi-memory", shopComponents.Rams),
+            new("Motherboards", "Motherboard", "bi-motherboard", shopComponents.Motherboards),
+            new("Cases", "Case", "bi-pc", shopComponents.Cases),
+            new("Power Supplies", "PSU", "bi-lightning-charge", shopComponents.Psus),
+            new("CPU Coolers", "CPUCooler", "bi-fan", shopComponents.CpuCoolers),
+            new("Case Fans", "CaseFan", "bi-fan", shopComponents.CaseFans),
+            new("Internal SSDs", "InternalStorage", "bi-device-ssd", internalSsds, "InternalSSD", "Internal Storage / SSD"),
+            new("Internal HDDs", "InternalStorage", "bi-device-hdd", internalHdds, "InternalHDD", "Internal Storage / HDD"),
+            new("External SSDs", "ExternalStorage", "bi-device-ssd", externalSsds, "ExternalSSD", "External Storage / SSD"),
+            new("External HDDs", "ExternalStorage", "bi-hdd", externalHdds, "ExternalHDD", "External Storage / HDD"),
+            new("Monitors", "Monitor", "bi-display", shopComponents.Monitors),
+            new("Keyboards", "Keyboard", "bi-keyboard", shopComponents.Keyboards),
+            new("Mice", "Mouse", "bi-mouse", shopComponents.Mice),
+            new("Headphones", "Headphones", "bi-headphones", shopComponents.Headphones),
+            new("Speakers", "Speakers", "bi-speaker", shopComponents.Speakers)
+        };
+
+        buildShopManufacturers = GetManufacturerNames(
+            shopComponents.Cpus,
+            shopComponents.Gpus,
+            shopComponents.Rams,
+            shopComponents.Motherboards,
+            shopComponents.Cases,
+            shopComponents.Psus,
+            shopComponents.CpuCoolers,
+            shopComponents.CaseFans,
+            shopComponents.InternalStorages,
+            shopComponents.ExternalStorages,
+            shopComponents.Monitors,
+            shopComponents.Keyboards,
+            shopComponents.Mice,
+            shopComponents.Headphones,
+            shopComponents.Speakers)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .OrderBy(x => x)
+            .ToList();
+
+        buildShopMaxPrice = GetMaxPrice(
+            shopComponents.Cpus,
+            shopComponents.Gpus,
+            shopComponents.Rams,
+            shopComponents.Motherboards,
+            shopComponents.Cases,
+            shopComponents.Psus,
+            shopComponents.CpuCoolers,
+            shopComponents.CaseFans,
+            shopComponents.InternalStorages,
+            shopComponents.ExternalStorages,
+            shopComponents.Monitors,
+            shopComponents.Keyboards,
+            shopComponents.Mice,
+            shopComponents.Headphones,
+            shopComponents.Speakers);
+    }
+
+    var buildShopTotalCount = buildShopSections.Sum(x => x.Items.Count());
+    var buildShopTypes = buildShopSections
+        .Where(x => x.Items.Any())
+        .Select(x => new { x.FilterType, x.Title })
+        .DistinctBy(x => x.FilterType)
+        .ToList();
 }
 
 <form asp-action="CreateComputerIndex" method="post">
@@ -36,13 +177,22 @@
                 <p class="mb-0 text-muted">
                     Choose parts, peripherals, and accessories for your custom setup.
                 </p>
-                <button class="btn btn-outline-primary mt-3"
-                        type="button"
-                        data-bs-toggle="offcanvas"
-                        data-bs-target="#buildInventoryPanel"
-                        aria-controls="buildInventoryPanel">
-                    <i class="bi bi-box-seam me-2"></i>Show Inventory
-                </button>
+                <div class="d-flex flex-column flex-sm-row justify-content-center gap-2 mt-3">
+                    <button class="btn btn-outline-primary"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#buildInventoryPanel"
+                            aria-controls="buildInventoryPanel">
+                        <i class="bi bi-box-seam me-2"></i>Show Inventory
+                    </button>
+                    <button class="btn btn-warning"
+                            type="button"
+                            data-bs-toggle="modal"
+                            data-bs-target="#buildShopModal">
+                        <i class="bi bi-cart-plus-fill me-2"></i>Buy Parts
+                        <span id="buildShopCartCount" class="badge text-bg-light ms-1">0</span>
+                    </button>
+                </div>
             </div>
 
             <div class="builder-body">
@@ -75,6 +225,22 @@
                 {
                     <div class="alert alert-warning border-0 shadow-sm" role="alert">
                         @ViewBag.OrderInfoError
+                    </div>
+                }
+
+                @if (showBuildHints)
+                {
+                    <div id="buildHintPanel" class="card border shadow-sm mb-4">
+                        <div class="card-header bg-light d-flex flex-column flex-md-row justify-content-between gap-2">
+                            <div class="fw-bold">
+                                <i class="bi bi-ui-checks-grid me-2 text-primary"></i>Build checklist
+                            </div>
+                            <span id="buildCostHint" class="small fw-semibold text-muted"></span>
+                        </div>
+                        <div class="list-group list-group-flush" id="buildHintList"></div>
+                        <div class="card-footer bg-white small text-muted">
+                            Small budget slips can pass, but going far above the customer budget will hurt the review.
+                        </div>
                     </div>
                 }
 
@@ -248,7 +414,7 @@
             <div class="builder-footer">
                 <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
                     <div class="fw-bold fs-5">
-                        Total Price: <span class="fw-bold">@((Model?.TotalPrice ?? 0).ToString("N2")) kr</span>
+                        Total Price: <span id="liveBuildTotal" class="fw-bold">@((Model?.TotalPrice ?? 0).ToString("N2")) kr</span>
                     </div>
 
                     <div class="d-flex flex-column flex-sm-row gap-2 ms-md-auto">
@@ -312,8 +478,742 @@
     </div>
 </div>
 
+<div class="modal fade build-shop-modal" id="buildShopModal" tabindex="-1" aria-labelledby="buildShopModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title fw-bold" id="buildShopModalLabel">
+                        <i class="bi bi-cart-plus-fill me-2"></i>Buy Parts
+                    </h5>
+                    <small class="text-muted">Add components while you are still looking at the build.</small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                @if (buildShopTotalCount == 0)
+                {
+                    <div class="alert alert-warning mb-0">
+                        No shop components are available right now.
+                    </div>
+                }
+                else
+                {
+                    <div class="row g-3">
+                        <div class="col-lg-8">
+                            <div class="build-shop-filters mb-3">
+                                <div class="row g-2 align-items-end">
+                                    <div class="col-md-4">
+                                        <label for="buildShopTypeFilter" class="form-label fw-bold">Type</label>
+                                        <select id="buildShopTypeFilter" class="form-select">
+                                            <option value="">All types</option>
+                                            @foreach (var type in buildShopTypes)
+                                            {
+                                                <option value="@type.FilterType">@type.Title</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="buildShopManufacturerFilter" class="form-label fw-bold">Brand</label>
+                                        <select id="buildShopManufacturerFilter" class="form-select">
+                                            <option value="">All brands</option>
+                                            @foreach (var manufacturer in buildShopManufacturers)
+                                            {
+                                                <option value="@manufacturer">@manufacturer</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="d-flex justify-content-between align-items-center gap-2">
+                                            <label for="buildShopPriceFilter" class="form-label fw-bold mb-0">Max price</label>
+                                            <span id="buildShopPriceLabel" class="small fw-semibold">@buildShopMaxPrice.ToString("N0") kr</span>
+                                        </div>
+                                        <input id="buildShopPriceFilter"
+                                               class="form-range"
+                                               type="range"
+                                               min="0"
+                                               max="@buildShopMaxPrice.ToString(CultureInfo.InvariantCulture)"
+                                               value="@buildShopMaxPrice.ToString(CultureInfo.InvariantCulture)"
+                                               step="100" />
+                                    </div>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center gap-2 mt-3">
+                                    <button id="buildShopFilterReset" type="button" class="btn btn-sm btn-outline-secondary">
+                                        <i class="bi bi-arrow-counterclockwise me-1"></i>Reset
+                                    </button>
+                                    <span id="buildShopFilterCount" class="badge text-bg-info">@buildShopTotalCount items visible</span>
+                                </div>
+                            </div>
+
+                            <div class="build-shop-list">
+                                @foreach (var shopSection in buildShopSections.Where(x => x.Items.Any()))
+                                {
+                                    <section class="build-shop-section"
+                                             data-build-shop-section
+                                             data-shop-type="@shopSection.FilterType">
+                                        <div class="build-shop-section-title">
+                                            <i class="bi @shopSection.Icon me-2"></i>@shopSection.Title
+                                        </div>
+
+                                        @foreach (var item in shopSection.Items)
+                                        {
+                                            var manufacturerName = item.ManufacturerName?.ToString() ?? string.Empty;
+                                            var itemType = item.GetType().GetProperty("Type")?.GetValue(item)?.ToString() ?? string.Empty;
+                                            decimal price = item.Price ?? 0m;
+
+                                            <div class="build-shop-item"
+                                                 data-build-shop-item
+                                                 data-shop-type="@shopSection.FilterType"
+                                                 data-component-type="@shopSection.ComponentType"
+                                                 data-manufacturer="@manufacturerName"
+                                                 data-price="@price.ToString(CultureInfo.InvariantCulture)">
+                                                <div class="build-shop-item-icon">
+                                                    <i class="bi @shopSection.Icon"></i>
+                                                </div>
+                                                <div class="build-shop-item-body">
+                                                    <div class="fw-bold">@item.Name</div>
+                                                    <div class="small text-muted">
+                                                        @manufacturerName
+                                                        @if (!string.IsNullOrWhiteSpace(itemType))
+                                                        {
+                                                            <span> - @itemType</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                                <div class="build-shop-item-action">
+                                                    <div class="fw-bold text-success text-end">@price.ToString("N0") kr</div>
+                                                    <button class="btn btn-sm btn-primary"
+                                                            type="button"
+                                                            data-build-cart-add
+                                                            data-component-type="@shopSection.ComponentType"
+                                                            data-component-id="@item.Id"
+                                                            data-component-name="@item.Name"
+                                                            data-purchase-price="@price.ToString(CultureInfo.InvariantCulture)">
+                                                        <i class="bi bi-cart-plus me-1"></i>Add
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        }
+                                    </section>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="build-shop-cart">
+                                <div class="d-flex align-items-center justify-content-between gap-2 mb-3">
+                                    <div class="fw-bold">
+                                        <i class="bi bi-bag-check-fill me-2"></i>Cart
+                                    </div>
+                                    <span id="buildShopCartSideCount" class="badge text-bg-primary">0</span>
+                                </div>
+
+                                <div id="buildShopCartItems" class="vstack gap-2"></div>
+                                <div id="buildShopCartEmpty" class="alert alert-light border mb-3">
+                                    Cart is empty.
+                                </div>
+
+                                <div class="border-top pt-3 mt-3">
+                                    <div class="d-flex justify-content-between align-items-center fs-5 fw-bold mb-3">
+                                        <span>Total</span>
+                                        <span id="buildShopCartTotal">0 kr</span>
+                                    </div>
+
+                                    <form asp-controller="Shop" asp-action="BuyCart" method="post" id="buildShopCartForm">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="cartJson" id="buildShopCartJson" />
+                                        <input type="hidden" name="returnUrl" value="@buildReturnUrl" />
+                                        <button id="buildShopCartCheckout" class="btn btn-primary w-100" type="submit" disabled>
+                                            <i class="bi bi-bag-check-fill me-2"></i>Checkout and return
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        const buildCompatibilityData = @Html.Raw(compatibilityDataJson);
+        const acceptedOrderBudget = Number("@acceptedOrderBudget.ToString(CultureInfo.InvariantCulture)");
+        const acceptedOrderText = @Html.Raw(acceptedOrderTextJson);
+        const acceptedOrderTextLower = acceptedOrderText.toLowerCase();
+        const buildShopCartStorageKey = "pcbuilder.shopCart.v1";
+        const clearSavedBuildCart = @clearSavedBuildCart.ToString().ToLowerInvariant();
+        const buildDraftStorageKey = `pcbuilder.buildDraft.${window.location.pathname}${window.location.search}`;
+
+        function loadBuildShopCart() {
+            if (clearSavedBuildCart) {
+                localStorage.removeItem(buildShopCartStorageKey);
+                return [];
+            }
+
+            try {
+                const savedCart = JSON.parse(localStorage.getItem(buildShopCartStorageKey) || "[]");
+                return Array.isArray(savedCart)
+                    ? savedCart.filter(function (item) {
+                        return item &&
+                            item.componentType &&
+                            Number(item.componentId) > 0 &&
+                            Number(item.purchasePrice) > 0 &&
+                            Number(item.quantity) > 0;
+                    })
+                    : [];
+            } catch {
+                return [];
+            }
+        }
+
+        const buildShopCart = loadBuildShopCart();
+
+        function saveBuildShopCart() {
+            localStorage.setItem(buildShopCartStorageKey, JSON.stringify(buildShopCart));
+        }
+
+        function renderBuildShopCart() {
+            const cartItems = document.getElementById("buildShopCartItems");
+            const emptyCart = document.getElementById("buildShopCartEmpty");
+            const headerCount = document.getElementById("buildShopCartCount");
+            const sideCount = document.getElementById("buildShopCartSideCount");
+            const total = document.getElementById("buildShopCartTotal");
+            const checkout = document.getElementById("buildShopCartCheckout");
+            const cartJson = document.getElementById("buildShopCartJson");
+
+            const itemCount = buildShopCart.reduce(function (sum, item) {
+                return sum + item.quantity;
+            }, 0);
+            const totalCost = buildShopCart.reduce(function (sum, item) {
+                return sum + item.purchasePrice * item.quantity;
+            }, 0);
+
+            [headerCount, sideCount].forEach(function (element) {
+                if (element) {
+                    element.textContent = itemCount.toString();
+                }
+            });
+
+            if (total) {
+                total.textContent = totalCost.toLocaleString("sv-SE", { maximumFractionDigits: 0 }) + " kr";
+            }
+
+            if (checkout) {
+                checkout.disabled = itemCount === 0;
+            }
+
+            if (cartJson) {
+                cartJson.value = JSON.stringify(buildShopCart);
+            }
+
+            saveBuildShopCart();
+
+            if (!cartItems || !emptyCart) {
+                return;
+            }
+
+            cartItems.innerHTML = "";
+            emptyCart.classList.toggle("d-none", itemCount > 0);
+
+            buildShopCart.forEach(function (item) {
+                const row = document.createElement("div");
+                row.className = "build-shop-cart-row";
+
+                const top = document.createElement("div");
+                top.className = "d-flex justify-content-between align-items-start gap-2";
+
+                const text = document.createElement("div");
+                const name = document.createElement("div");
+                name.className = "fw-bold";
+                name.textContent = item.name;
+                const meta = document.createElement("small");
+                meta.className = "text-muted";
+                meta.textContent = `${item.componentType} - ${item.purchasePrice.toLocaleString("sv-SE", { maximumFractionDigits: 0 })} kr each`;
+                text.appendChild(name);
+                text.appendChild(meta);
+
+                const remove = document.createElement("button");
+                remove.className = "btn btn-sm btn-outline-danger";
+                remove.type = "button";
+                remove.innerHTML = '<i class="bi bi-trash"></i>';
+                remove.addEventListener("click", function () {
+                    const index = buildShopCart.findIndex(function (cartItem) {
+                        return cartItem.componentType === item.componentType && cartItem.componentId === item.componentId;
+                    });
+                    if (index >= 0) {
+                        buildShopCart.splice(index, 1);
+                        renderBuildShopCart();
+                    }
+                });
+
+                top.appendChild(text);
+                top.appendChild(remove);
+
+                const controls = document.createElement("div");
+                controls.className = "d-flex align-items-center gap-2 mt-2";
+
+                const minus = document.createElement("button");
+                minus.className = "btn btn-sm btn-outline-secondary";
+                minus.type = "button";
+                minus.textContent = "-";
+                minus.addEventListener("click", function () {
+                    item.quantity -= 1;
+                    if (item.quantity <= 0) {
+                        const index = buildShopCart.indexOf(item);
+                        buildShopCart.splice(index, 1);
+                    }
+                    renderBuildShopCart();
+                });
+
+                const quantity = document.createElement("span");
+                quantity.className = "badge text-bg-primary";
+                quantity.textContent = item.quantity.toString();
+
+                const plus = document.createElement("button");
+                plus.className = "btn btn-sm btn-outline-secondary";
+                plus.type = "button";
+                plus.textContent = "+";
+                plus.addEventListener("click", function () {
+                    item.quantity += 1;
+                    renderBuildShopCart();
+                });
+
+                const lineTotal = document.createElement("span");
+                lineTotal.className = "ms-auto fw-semibold";
+                lineTotal.textContent = (item.purchasePrice * item.quantity).toLocaleString("sv-SE", { maximumFractionDigits: 0 }) + " kr";
+
+                controls.appendChild(minus);
+                controls.appendChild(quantity);
+                controls.appendChild(plus);
+                controls.appendChild(lineTotal);
+
+                row.appendChild(top);
+                row.appendChild(controls);
+                cartItems.appendChild(row);
+            });
+        }
+
+        function applyBuildShopFilters() {
+            const typeFilter = document.getElementById("buildShopTypeFilter");
+            const manufacturerFilter = document.getElementById("buildShopManufacturerFilter");
+            const priceFilter = document.getElementById("buildShopPriceFilter");
+            const priceLabel = document.getElementById("buildShopPriceLabel");
+            const countLabel = document.getElementById("buildShopFilterCount");
+
+            const selectedType = typeFilter?.value || "";
+            const selectedManufacturer = manufacturerFilter?.value || "";
+            const maxSelectedPrice = Number(priceFilter?.value || 0);
+            let visibleCount = 0;
+
+            document.querySelectorAll("[data-build-shop-item]").forEach(function (item) {
+                const typeMatches = !selectedType || item.dataset.shopType === selectedType;
+                const manufacturerMatches = !selectedManufacturer || item.dataset.manufacturer === selectedManufacturer;
+                const priceMatches = Number(item.dataset.price || 0) <= maxSelectedPrice;
+                const isVisible = typeMatches && manufacturerMatches && priceMatches;
+
+                item.classList.toggle("d-none", !isVisible);
+                if (isVisible) {
+                    visibleCount += 1;
+                }
+            });
+
+            document.querySelectorAll("[data-build-shop-section]").forEach(function (section) {
+                const hasVisibleItems = section.querySelectorAll("[data-build-shop-item]:not(.d-none)").length > 0;
+                section.classList.toggle("d-none", !hasVisibleItems);
+            });
+
+            if (priceLabel && priceFilter) {
+                priceLabel.textContent = Number(priceFilter.value).toLocaleString("sv-SE", { maximumFractionDigits: 0 }) + " kr";
+            }
+
+            if (countLabel) {
+                countLabel.textContent = visibleCount.toLocaleString("sv-SE") + " items visible";
+            }
+        }
+
+        function saveBuildDraftBeforeShopCheckout() {
+            const singleFields = ["Name", "CPUId", "MotherboardId", "PSUId", "CaseId", "CpuCoolerId", "KeyboardId", "MouseId", "HeadsetId"];
+            const multiFields = ["GPUIds", "RAMIds", "StorageIds", "CaseFanIds", "MonitorIds", "SpeakerIds"];
+            const draft = { single: {}, multi: {} };
+
+            singleFields.forEach(function (id) {
+                const element = document.getElementById(id);
+                if (element) {
+                    draft.single[id] = element.value;
+                }
+            });
+
+            multiFields.forEach(function (name) {
+                draft.multi[name] = Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                    .map(function (input) { return input.value; });
+            });
+
+            sessionStorage.setItem(buildDraftStorageKey, JSON.stringify(draft));
+        }
+
+        function restoreBuildDraftAfterShopCheckout() {
+            const rawDraft = sessionStorage.getItem(buildDraftStorageKey);
+            if (!rawDraft) {
+                return;
+            }
+
+            sessionStorage.removeItem(buildDraftStorageKey);
+
+            try {
+                const draft = JSON.parse(rawDraft);
+                Object.entries(draft.single || {}).forEach(function ([id, value]) {
+                    const element = document.getElementById(id);
+                    if (element) {
+                        element.value = value;
+                    }
+                });
+
+                Object.entries(draft.multi || {}).forEach(function ([name, values]) {
+                    const selectedValues = new Set(Array.isArray(values) ? values.map(String) : []);
+                    document.querySelectorAll(`input[name="${name}"]`).forEach(function (input) {
+                        input.checked = selectedValues.has(input.value);
+                    });
+                });
+            } catch {
+                return;
+            }
+        }
+
+        document.querySelectorAll("[data-build-cart-add]").forEach(function (button) {
+            button.addEventListener("click", function () {
+                const componentType = button.dataset.componentType || "";
+                const componentId = Number(button.dataset.componentId || 0);
+                const existing = buildShopCart.find(function (item) {
+                    return item.componentType === componentType && item.componentId === componentId;
+                });
+
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    buildShopCart.push({
+                        componentType,
+                        componentId,
+                        name: button.dataset.componentName || "Component",
+                        purchasePrice: Number(button.dataset.purchasePrice || 0),
+                        quantity: 1
+                    });
+                }
+
+                button.classList.remove("btn-primary");
+                button.classList.add("btn-success");
+                button.innerHTML = '<i class="bi bi-check-lg me-1"></i>Added';
+                window.setTimeout(function () {
+                    button.classList.remove("btn-success");
+                    button.classList.add("btn-primary");
+                    button.innerHTML = '<i class="bi bi-cart-plus me-1"></i>Add';
+                }, 900);
+
+                renderBuildShopCart();
+            });
+        });
+
+        ["buildShopTypeFilter", "buildShopManufacturerFilter", "buildShopPriceFilter"].forEach(function (id) {
+            const element = document.getElementById(id);
+            element?.addEventListener("input", applyBuildShopFilters);
+            element?.addEventListener("change", applyBuildShopFilters);
+        });
+
+        document.getElementById("buildShopFilterReset")?.addEventListener("click", function () {
+            const typeFilter = document.getElementById("buildShopTypeFilter");
+            const manufacturerFilter = document.getElementById("buildShopManufacturerFilter");
+            const priceFilter = document.getElementById("buildShopPriceFilter");
+
+            if (typeFilter) typeFilter.value = "";
+            if (manufacturerFilter) manufacturerFilter.value = "";
+            if (priceFilter) priceFilter.value = priceFilter.max;
+            applyBuildShopFilters();
+        });
+
+        document.getElementById("buildShopCartForm")?.addEventListener("submit", saveBuildDraftBeforeShopCheckout);
+
+        function findBuildItem(groupName, id) {
+            const numericId = Number(id);
+            return (buildCompatibilityData[groupName] || []).find(function (item) {
+                return Number(item.id) === numericId;
+            });
+        }
+
+        function selectedBuildIds(name, allowNegative = false) {
+            return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+                .map(function (input) { return Number(input.value); })
+                .filter(function (value) { return allowNegative ? value !== 0 : value > 0; });
+        }
+
+        function selectedBuildItems(groupName, inputName, allowNegative = false) {
+            return selectedBuildIds(inputName, allowNegative)
+                .map(function (id) { return findBuildItem(groupName, id); })
+                .filter(Boolean);
+        }
+
+        function orderMentions(keywords) {
+            return keywords.some(function (keyword) {
+                if (keyword.includes(" ")) {
+                    return acceptedOrderTextLower.includes(keyword);
+                }
+
+                const escapedKeyword = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                return new RegExp(`\\b${escapedKeyword}\\b`).test(acceptedOrderTextLower);
+            });
+        }
+
+        const requiredPeripherals = {
+            keyboard: orderMentions(["keyboard", "tangentbord", "complete package", "complete setup", "full setup", "desk package", "desk bundle"]),
+            mouse: orderMentions(["mouse", "mus", "complete package", "complete setup", "full setup", "desk package", "desk bundle"]),
+            headset: orderMentions(["headset", "headphones", "horlurar", "complete gaming package", "streaming kit", "complete setup"]),
+            speakers: orderMentions(["speakers", "speaker", "hogtalare", "sound system", "complete desktop package", "complete setup"])
+        };
+
+        function selectedSingleBuildItem(groupName, elementId) {
+            const element = document.getElementById(elementId);
+            return element ? findBuildItem(groupName, element.value) : null;
+        }
+
+        function sumPrices(items) {
+            return items.reduce(function (sum, item) {
+                return sum + Number(item?.price || 0);
+            }, 0);
+        }
+
+        function getSelectedBuildState() {
+            const cpu = selectedSingleBuildItem("cpus", "CPUId");
+            const motherboard = selectedSingleBuildItem("motherboards", "MotherboardId");
+            const psu = selectedSingleBuildItem("psus", "PSUId");
+            const pcCase = selectedSingleBuildItem("cases", "CaseId");
+            const cooler = selectedSingleBuildItem("cpuCoolers", "CpuCoolerId");
+            const keyboard = selectedSingleBuildItem("keyboards", "KeyboardId");
+            const mouse = selectedSingleBuildItem("mice", "MouseId");
+            const headset = selectedSingleBuildItem("headsets", "HeadsetId");
+            const gpus = selectedBuildItems("gpus", "GPUIds");
+            const rams = selectedBuildItems("rams", "RAMIds");
+            const storages = selectedBuildItems("storages", "StorageIds", true);
+            const caseFans = selectedBuildItems("caseFans", "CaseFanIds");
+            const monitors = selectedBuildItems("monitors", "MonitorIds");
+            const speakers = selectedBuildItems("speakers", "SpeakerIds");
+            const selectedItems = [
+                cpu,
+                motherboard,
+                psu,
+                pcCase,
+                cooler,
+                keyboard,
+                mouse,
+                headset,
+                ...gpus,
+                ...rams,
+                ...storages,
+                ...caseFans,
+                ...monitors,
+                ...speakers
+            ].filter(Boolean);
+
+            return {
+                cpu,
+                motherboard,
+                psu,
+                pcCase,
+                cooler,
+                keyboard,
+                mouse,
+                headset,
+                gpus,
+                rams,
+                storages,
+                caseFans,
+                monitors,
+                speakers,
+                estimatedCost: sumPrices(selectedItems)
+            };
+        }
+
+        function checklistItem(status, title, detail) {
+            return { status, title, detail };
+        }
+
+        function statusDisplay(status) {
+            if (status === "pass") {
+                return { icon: "bi-check-circle-fill", text: "text-success", label: "OK" };
+            }
+
+            if (status === "fail") {
+                return { icon: "bi-x-circle-fill", text: "text-danger", label: "Fix" };
+            }
+
+            if (status === "warn") {
+                return { icon: "bi-exclamation-triangle-fill", text: "text-warning", label: "Check" };
+            }
+
+            return { icon: "bi-circle", text: "text-muted", label: "Todo" };
+        }
+
+        function addPeripheralRequirement(items, isRequired, isSelected, title, missingDetail) {
+            if (!isRequired) {
+                return;
+            }
+
+            items.push(isSelected
+                ? checklistItem("pass", title, "Included for this customer.")
+                : checklistItem("fail", title, missingDetail));
+        }
+
+        function buildChecklist(state) {
+            const items = [];
+            const remainingBudget = acceptedOrderBudget - state.estimatedCost;
+
+            if (state.estimatedCost <= 0) {
+                items.push(checklistItem("todo", "Keep parts inside budget", "Pick parts to compare the build cost against the customer budget."));
+            } else if (state.estimatedCost > acceptedOrderBudget * 1.1) {
+                items.push(checklistItem("fail", "Keep parts inside budget", `This is ${Math.round(state.estimatedCost - acceptedOrderBudget).toLocaleString("sv-SE")} kr over budget. The customer will be unhappy.`));
+            } else if (state.estimatedCost > acceptedOrderBudget) {
+                items.push(checklistItem("warn", "Keep parts inside budget", `Slightly over budget by ${Math.round(state.estimatedCost - acceptedOrderBudget).toLocaleString("sv-SE")} kr. It can pass, but the sale price needs care.`));
+            } else if (state.estimatedCost > acceptedOrderBudget * 0.85) {
+                items.push(checklistItem("warn", "Keep parts inside budget", `Only ${Math.round(remainingBudget).toLocaleString("sv-SE")} kr left before the budget. Profit may be tight.`));
+            } else {
+                items.push(checklistItem("pass", "Keep parts inside budget", `${Math.round(remainingBudget).toLocaleString("sv-SE")} kr left before the customer's budget.`));
+            }
+
+            if (!state.gpus.length || !state.pcCase) {
+                items.push(checklistItem("todo", "GPU fits in the case", "Pick a GPU and a case to check physical fit."));
+            } else {
+                const tooLongGpu = state.gpus.find(function (gpu) {
+                    return Number(gpu.lengthMm || 0) > 0 &&
+                        Number(state.pcCase.maxGpuLengthMm || 0) > 0 &&
+                        Number(gpu.lengthMm) > Number(state.pcCase.maxGpuLengthMm);
+                });
+
+                items.push(tooLongGpu
+                    ? checklistItem("fail", "GPU fits in the case", `${tooLongGpu.name} is ${tooLongGpu.lengthMm} mm, but ${state.pcCase.name} supports ${state.pcCase.maxGpuLengthMm} mm.`)
+                    : checklistItem("pass", "GPU fits in the case", "Selected GPU length looks safe for the selected case."));
+            }
+
+            const cpuTdp = Number(state.cpu?.tdp || 0);
+            const gpuTdp = state.gpus.reduce(function (sum, gpu) {
+                return sum + Number(gpu?.tdp || 0);
+            }, 0);
+            const estimatedPowerDraw = cpuTdp + gpuTdp + 80 + state.caseFans.length * 5 + state.storages.length * 8;
+            const recommendedPsu = Math.ceil(estimatedPowerDraw * 1.35);
+
+            if (!state.psu || estimatedPowerDraw <= 80) {
+                items.push(checklistItem("todo", "PSU has enough headroom", "Pick CPU, GPU, and PSU to estimate power."));
+            } else if (Number(state.psu.wattage || 0) < estimatedPowerDraw) {
+                items.push(checklistItem("fail", "PSU has enough headroom", `${state.psu.name} is weaker than the estimated ${estimatedPowerDraw}W draw.`));
+            } else if (Number(state.psu.wattage || 0) < recommendedPsu) {
+                items.push(checklistItem("warn", "PSU has enough headroom", `${recommendedPsu}W is recommended for comfortable headroom. Selected PSU is ${state.psu.wattage}W.`));
+            } else {
+                items.push(checklistItem("pass", "PSU has enough headroom", `Estimated ${estimatedPowerDraw}W draw with ${state.psu.wattage}W PSU.`));
+            }
+
+            if (!state.cpu || !state.cooler) {
+                items.push(checklistItem("todo", "CPU cooling is enough", "Pick a CPU and cooler to check cooling."));
+            } else if (Number(state.cooler.maxTdpWatts || 0) > 0 && Number(state.cooler.maxTdpWatts) < cpuTdp) {
+                items.push(checklistItem("warn", "CPU cooling is enough", `${state.cooler.name} may be weak for ${state.cpu.name}. CPU TDP is ${cpuTdp}W.`));
+            } else {
+                items.push(checklistItem("pass", "CPU cooling is enough", "Cooler capacity looks reasonable."));
+            }
+
+            if (!state.cooler || !state.pcCase) {
+                items.push(checklistItem("todo", "Cooler fits in the case", "Pick a cooler and case to check height."));
+            } else if (Number(state.cooler.heightMm || 0) > 0 &&
+                Number(state.pcCase.maxCpuCoolerHeightMm || 0) > 0 &&
+                Number(state.cooler.heightMm) > Number(state.pcCase.maxCpuCoolerHeightMm)) {
+                items.push(checklistItem("fail", "Cooler fits in the case", `${state.cooler.name} is ${state.cooler.heightMm} mm tall, but ${state.pcCase.name} supports ${state.pcCase.maxCpuCoolerHeightMm} mm.`));
+            } else {
+                items.push(checklistItem("pass", "Cooler fits in the case", "Cooler height looks safe."));
+            }
+
+            items.push(state.rams.length > 0
+                ? checklistItem("pass", "RAM selected", "Memory is included.")
+                : checklistItem("todo", "RAM selected", "Add at least one RAM kit."));
+
+            items.push(state.storages.length > 0
+                ? checklistItem("pass", "Storage selected", "Storage is included.")
+                : checklistItem("todo", "Storage selected", "Add storage so the build feels complete."));
+
+            addPeripheralRequirement(items, requiredPeripherals.keyboard, !!state.keyboard, "Keyboard requested", "The customer asked for a keyboard.");
+            addPeripheralRequirement(items, requiredPeripherals.mouse, !!state.mouse, "Mouse requested", "The customer asked for a mouse.");
+            addPeripheralRequirement(items, requiredPeripherals.headset, !!state.headset, "Headset requested", "The customer asked for a headset or headphones.");
+            addPeripheralRequirement(items, requiredPeripherals.speakers, state.speakers.length > 0, "Speakers requested", "The customer asked for speakers.");
+
+            return items;
+        }
+
+        function renderChecklist(items, estimatedCost) {
+            const list = document.getElementById("buildHintList");
+            const costHint = document.getElementById("buildCostHint");
+
+            if (!list || !costHint) {
+                return;
+            }
+
+            costHint.textContent = estimatedCost > 0
+                ? `Estimated parts: ${Math.round(estimatedCost).toLocaleString("sv-SE")} kr`
+                : "";
+
+            list.innerHTML = "";
+
+            items.forEach(function (item) {
+                const display = statusDisplay(item.status);
+                const row = document.createElement("div");
+                row.className = "list-group-item d-flex align-items-start gap-3";
+
+                const icon = document.createElement("i");
+                icon.className = `bi ${display.icon} ${display.text} fs-5 mt-1`;
+
+                const content = document.createElement("div");
+                content.className = "flex-grow-1";
+
+                const title = document.createElement("div");
+                title.className = "fw-semibold";
+                title.textContent = item.title;
+
+                const detail = document.createElement("div");
+                detail.className = "small text-muted";
+                detail.textContent = item.detail;
+
+                const badge = document.createElement("span");
+                badge.className = `badge rounded-pill ${item.status === "pass" ? "text-bg-success" : item.status === "fail" ? "text-bg-danger" : item.status === "warn" ? "text-bg-warning" : "text-bg-secondary"}`;
+                badge.textContent = display.label;
+
+                content.appendChild(title);
+                content.appendChild(detail);
+                row.appendChild(icon);
+                row.appendChild(content);
+                row.appendChild(badge);
+                list.appendChild(row);
+            });
+        }
+
+        function updateBuildUi() {
+            const state = getSelectedBuildState();
+            const total = document.getElementById("liveBuildTotal");
+            if (total) {
+                total.textContent = `${state.estimatedCost.toLocaleString("sv-SE", { maximumFractionDigits: 0 })} kr`;
+            }
+
+            if (acceptedOrderBudget > 0) {
+                renderChecklist(buildChecklist(state), state.estimatedCost);
+            }
+        }
+
+        document.querySelectorAll("select, input[type='checkbox']").forEach(function (element) {
+            element.addEventListener("change", updateBuildUi);
+        });
+
+        applyBuildShopFilters();
+        renderBuildShopCart();
+        restoreBuildDraftAfterShopCheckout();
+        updateBuildUi();
+    </script>
 }

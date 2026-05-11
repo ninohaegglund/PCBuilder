@@ -11,17 +11,26 @@ namespace PCBuilder.Services.CustomerAPI.Services;
 
 public class OrderService : IOrderService
 {
+    private const decimal CustomerRefusalBudgetMultiplier = 1.15m;
 
     private readonly IMapper _mapper;
     private readonly IOrderRepository _orderRepository;
     private readonly ICustomerRepository _customerRepository;
+    private readonly IReviewRepository _reviewRepository;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public OrderService(IOrderRepository orderRepository, ICustomerRepository customerRepository, IMapper mapper, IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
+    public OrderService(
+        IOrderRepository orderRepository,
+        ICustomerRepository customerRepository,
+        IReviewRepository reviewRepository,
+        IMapper mapper,
+        IHttpClientFactory httpClientFactory,
+        IHttpContextAccessor httpContextAccessor)
     {
         _orderRepository = orderRepository;
         _customerRepository = customerRepository;
+        _reviewRepository = reviewRepository;
         _mapper = mapper;
         _httpClientFactory = httpClientFactory;
         _httpContextAccessor = httpContextAccessor;
@@ -41,9 +50,43 @@ public class OrderService : IOrderService
             }
 
             var orders = await _orderRepository.GetAllOrders();
+            var message = string.Empty;
             if (!IsCurrentUserAdmin())
             {
-                orders = orders.Where(x => x.UserId == userId).ToList();
+                var reviewStats = await GetReviewStatsAsync(orders, userId.Value);
+                var isGameOver = IsGameOver(reviewStats);
+
+                var unlockedBudgetCap = GetUnlockedBudgetCap(reviewStats);
+                var pendingLimit = GetVisiblePendingLimit(reviewStats);
+
+                var assignedOrders = orders
+                    .Where(x => x.UserId == userId)
+                    .ToList();
+
+                var visibleOpenOrders = isGameOver
+                    ? new List<Models.Order>()
+                    : orders
+                        .Where(x =>
+                            !x.UserId.HasValue &&
+                            x.Status == Models.OrderStatus.Pending &&
+                            x.Budget <= unlockedBudgetCap)
+                        .OrderBy(x => x.Budget)
+                        .ThenBy(x => x.CreatedAt)
+                        .Take(pendingLimit)
+                        .ToList();
+
+                if (isGameOver && assignedOrders.All(x => x.Status != Models.OrderStatus.InProgress))
+                {
+                    message = "GAME_OVER";
+                }
+
+                orders = assignedOrders
+                    .Concat(visibleOpenOrders)
+                    .DistinctBy(x => x.Id)
+                    .OrderBy(x => x.Status == Models.OrderStatus.InProgress ? 0 : x.Status == Models.OrderStatus.Pending ? 1 : 2)
+                    .ThenBy(x => x.Budget)
+                    .ThenByDescending(x => x.CreatedAt)
+                    .ToList();
             }
 
             var orderDTOs = new List<OrderListDTO>();
@@ -57,6 +100,7 @@ public class OrderService : IOrderService
                     Id = order.Id,
                     CustomerId = order.CustomerId,
                     UserId = order.UserId,
+                    ReviewId = order.ReviewId,
                     CustomerName = customer?.Name ?? "Unknown customer",
                     CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
                     ComputerId = order.ComputerId,
@@ -74,7 +118,8 @@ public class OrderService : IOrderService
             return new ResponseDTO
             {
                 IsSuccess = true,
-                Result = orderDTOs
+                Result = orderDTOs,
+                Message = message
             };
         }
         catch (Exception ex)
@@ -127,6 +172,7 @@ public class OrderService : IOrderService
                 Id = order.Id,
                 CustomerId = order.CustomerId,
                 UserId = order.UserId,
+                ReviewId = order.ReviewId,
                 CustomerName = customer?.Name ?? "Unknown customer",
                 CustomerImageUrl = customer?.ImageUrl ?? string.Empty,
                 ComputerId = order.ComputerId,
@@ -417,6 +463,25 @@ public class OrderService : IOrderService
                 };
             }
 
+            if (sellingPrice <= 0)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = "Sale price must be greater than 0 kr."
+                };
+            }
+
+            var refusalLimit = order.Budget * CustomerRefusalBudgetMultiplier;
+            if (order.Budget > 0 && sellingPrice > refusalLimit)
+            {
+                return new ResponseDTO
+                {
+                    IsSuccess = false,
+                    Message = $"The customer refuses to pay {sellingPrice:N0} kr. Their absolute limit is about {refusalLimit:N0} kr."
+                };
+            }
+
             if (!order.ComputerId.HasValue)
             {
                 return new ResponseDTO
@@ -539,4 +604,79 @@ public class OrderService : IOrderService
     {
         return _httpContextAccessor.HttpContext?.User.IsInRole("Admin") == true;
     }
+
+    private async Task<ReviewStats> GetReviewStatsAsync(IEnumerable<Models.Order> orders, Guid userId)
+    {
+        var reviewIds = orders
+            .Where(x =>
+                x.UserId == userId &&
+                x.Status == Models.OrderStatus.Completed &&
+                x.ReviewId > 0)
+            .Select(x => x.ReviewId)
+            .Distinct()
+            .ToList();
+
+        if (!reviewIds.Any())
+        {
+            return new ReviewStats(0, 0m);
+        }
+
+        var reviews = await _reviewRepository.GetReviewsByIds(reviewIds);
+        return reviews.Any()
+            ? new ReviewStats(reviews.Count, (decimal)reviews.Average(x => x.Rating))
+            : new ReviewStats(0, 0m);
+    }
+
+    private static decimal GetUnlockedBudgetCap(ReviewStats reviewStats)
+    {
+        if (reviewStats.Count == 0)
+        {
+            return 13000m;
+        }
+
+        if (reviewStats.Count < 3 && reviewStats.AverageRating < 2.5m)
+        {
+            return 13000m;
+        }
+
+        return reviewStats.AverageRating switch
+        {
+            < 2.5m => 0m,
+            < 3.0m => 13000m,
+            < 3.5m => 17500m,
+            < 4.0m => 22000m,
+            < 4.5m => 34000m,
+            _ => decimal.MaxValue
+        };
+    }
+
+    private static int GetVisiblePendingLimit(ReviewStats reviewStats)
+    {
+        if (reviewStats.Count == 0)
+        {
+            return 2;
+        }
+
+        if (reviewStats.Count < 3 && reviewStats.AverageRating < 2.5m)
+        {
+            return 1;
+        }
+
+        return reviewStats.AverageRating switch
+        {
+            < 2.5m => 0,
+            < 3.0m => 1,
+            < 3.5m => 2,
+            < 4.0m => 3,
+            < 4.5m => 5,
+            _ => 8
+        };
+    }
+
+    private static bool IsGameOver(ReviewStats reviewStats)
+    {
+        return reviewStats.Count >= 3 && reviewStats.AverageRating < 2.5m;
+    }
+
+    private sealed record ReviewStats(int Count, decimal AverageRating);
 }

@@ -21,6 +21,30 @@ public class InventoryService : IInventoryService
         var items = await _inventoryRepository.GetByUserIdAsync(userId);
 
         return items
+            .Where(x => x.Quantity > 0)
+            .GroupBy(x => new
+            {
+                ComponentType = x.ComponentType.Trim().ToUpperInvariant(),
+                x.ComponentId
+            })
+            .Select(group =>
+            {
+                var latestItem = group
+                    .OrderByDescending(x => x.PurchasedAt)
+                    .ThenByDescending(x => x.Id)
+                    .First();
+
+                return new InventoryItem
+                {
+                    Id = latestItem.Id,
+                    UserId = latestItem.UserId,
+                    ComponentType = latestItem.ComponentType,
+                    ComponentId = latestItem.ComponentId,
+                    Quantity = group.Sum(x => x.Quantity),
+                    PurchasePrice = latestItem.PurchasePrice,
+                    PurchasedAt = latestItem.PurchasedAt
+                };
+            })
             .OrderBy(x => x.ComponentType)
             .ThenBy(x => x.ComponentId)
             .Select(MapToDto)
