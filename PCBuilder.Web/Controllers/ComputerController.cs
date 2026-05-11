@@ -163,7 +163,9 @@ public class ComputerController : Controller
                 TempData["error"] = "Build saved, but no order was connected for price summary.";
             }
 
-            return RedirectToAction("ComputerIndex");
+            return orderId.HasValue
+                ? RedirectToAction("ComputerIndex", new { orderId = orderId.Value })
+                : RedirectToAction("ComputerIndex");
         }
         else
         {
@@ -176,37 +178,83 @@ public class ComputerController : Controller
         return View(computer);
     }
 
-    public async Task<IActionResult> ComputerIndex()
+    public async Task<IActionResult> ComputerIndex(int? orderId)
     {
-        var response = await _computerService.GetAllComputersAsync();
-
-        if (response == null || !response.IsSuccess)
+        if (!TryGetCurrentUserId(out var currentUserId))
         {
-            TempData["error"] = response?.Result?.ToString() ?? "Failed to load computers.";
+            TempData["error"] = "You must be logged in to view computers.";
             return View(new List<ComputerDTO>());
         }
 
-        var list = response.Result switch
-        {
-            List<ComputerDTO> typed => typed,
-            JsonElement json => System.Text.Json.JsonSerializer.Deserialize<List<ComputerDTO>>(json.GetRawText()) ?? new List<ComputerDTO>(),
-            _ => new List<ComputerDTO>()
-        };
+        var ordersResponse = orderId.HasValue
+            ? await _orderService.GetOrderByIdAsync(orderId.Value)
+            : await _orderService.GetAllOrdersAsync();
 
-        return View(list);
+        if (ordersResponse == null || !ordersResponse.IsSuccess || ordersResponse.Result == null)
+        {
+            TempData["error"] = ordersResponse?.Message ?? "Failed to load linked orders.";
+            return View(new List<ComputerDTO>());
+        }
+
+        var linkedOrders = orderId.HasValue
+            ? ToSingleOrderList(ordersResponse.Result)
+            : ToOrderList(ordersResponse.Result);
+
+        var computerIds = linkedOrders
+            .Where(x => x.UserId == currentUserId && x.ComputerId.HasValue)
+            .Select(x => x.ComputerId!.Value)
+            .Distinct()
+            .ToList();
+
+        if (orderId.HasValue && !computerIds.Any())
+        {
+            TempData["error"] = "No computer is connected to this order for your user.";
+            return View(new List<ComputerDTO>());
+        }
+
+        var computers = new List<ComputerDTO>();
+
+        foreach (var computerId in computerIds)
+        {
+            var computerResponse = await _computerService.GetComputerByIdAsync(computerId);
+            if (computerResponse == null || !computerResponse.IsSuccess || computerResponse.Result == null)
+            {
+                continue;
+            }
+
+            var computer = ToComputer(computerResponse.Result);
+            if (computer != null)
+            {
+                computers.Add(computer);
+            }
+        }
+
+        return View(computers);
     }
 
     public async Task<IActionResult> ComponentsIndex(int id)
     {
+        var linkedOrder = await GetLinkedOrderByComputerIdAsync(id);
+        if (linkedOrder == null)
+        {
+            TempData["error"] = "Computer is not connected to one of your orders.";
+            return RedirectToAction(nameof(ComputerIndex));
+        }
+
         ResponseDTO? response = await _computerService.GetComputerByIdAsync(id);
 
         ComputerDTO? computer = null;
-        if (response != null && response.Result != null)
+        if (response != null && response.IsSuccess && response.Result != null)
         {
-            computer = response.Result as ComputerDTO;
+            computer = ToComputer(response.Result);
         }
 
-        var linkedOrder = await GetLinkedOrderByComputerIdAsync(id);
+        if (computer == null)
+        {
+            TempData["error"] = response?.Message ?? response?.Result?.ToString() ?? "Computer could not be loaded.";
+            return RedirectToAction(nameof(ComputerIndex));
+        }
+
         ViewBag.LinkedOrderId = linkedOrder?.Id;
         ViewBag.IsLinkedToOrder = linkedOrder != null;
 
@@ -216,24 +264,14 @@ public class ComputerController : Controller
     public async Task<IActionResult> DeleteComputer(int id)
     {
         var linkedOrder = await GetLinkedOrderByComputerIdAsync(id);
-        if (linkedOrder != null)
-        {
-            TempData["error"] = $"Computer is linked to order #{linkedOrder.Id} and cannot be deleted.";
-            return RedirectToAction(nameof(ComponentsIndex), new { id });
-        }
 
-        ResponseDTO? response = await _computerService.DeleteComputerAsync(id);
+        TempData["error"] = linkedOrder == null
+            ? "Computer is not connected to one of your orders."
+            : $"Computer is linked to order #{linkedOrder.Id} and cannot be deleted.";
 
-        if (response != null && response.IsSuccess)
-        {
-            TempData["success"] = "Computer deleted successfully.";
-        }
-        else
-        {
-            TempData["error"] = response?.Result?.ToString() ?? "Failed to delete computer.";
-        }
-
-        return RedirectToAction("ComputerIndex");
+        return linkedOrder == null
+            ? RedirectToAction(nameof(ComputerIndex))
+            : RedirectToAction(nameof(ComponentsIndex), new { id });
     }
 
     private async Task<OrderListDTO?> GetLinkedOrderByComputerIdAsync(int computerId)
@@ -244,10 +282,42 @@ public class ComputerController : Controller
             return null;
         }
 
-        var orders = NewtonsoftJson.JsonConvert.DeserializeObject<List<OrderListDTO>>(
-            NewtonsoftJson.JsonConvert.SerializeObject(ordersResponse.Result));
+        var orders = ToOrderList(ordersResponse.Result);
 
-        return orders?.FirstOrDefault(x => x.ComputerId == computerId);
+        if (!TryGetCurrentUserId(out var currentUserId))
+        {
+            return null;
+        }
+
+        return orders.FirstOrDefault(x => x.UserId == currentUserId && x.ComputerId == computerId);
+    }
+
+    private bool TryGetCurrentUserId(out Guid userId)
+    {
+        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        return Guid.TryParse(userIdClaim, out userId);
+    }
+
+    private static List<OrderListDTO> ToSingleOrderList(object result)
+    {
+        var order = NewtonsoftJson.JsonConvert.DeserializeObject<OrderListDTO>(
+            NewtonsoftJson.JsonConvert.SerializeObject(result));
+
+        return order == null
+            ? new List<OrderListDTO>()
+            : new List<OrderListDTO> { order };
+    }
+
+    private static List<OrderListDTO> ToOrderList(object result)
+    {
+        return NewtonsoftJson.JsonConvert.DeserializeObject<List<OrderListDTO>>(
+            NewtonsoftJson.JsonConvert.SerializeObject(result)) ?? new List<OrderListDTO>();
+    }
+
+    private static ComputerDTO? ToComputer(object result)
+    {
+        return NewtonsoftJson.JsonConvert.DeserializeObject<ComputerDTO>(
+            NewtonsoftJson.JsonConvert.SerializeObject(result));
     }
 
     private void PopulateComponentSelectLists(AllComponentsDto allComponents, List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto> inventoryItems)
@@ -293,8 +363,7 @@ public class ComputerController : Controller
 
     private async Task<List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto>> GetCurrentInventoryAsync()
     {
-        var userIdClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        if (!Guid.TryParse(userIdClaim, out var userId))
+        if (!TryGetCurrentUserId(out var userId))
         {
             return new List<PCBuilder.Services.InventoryAPI.DTO.InventoryItemDto>();
         }
